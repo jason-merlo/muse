@@ -53,11 +53,9 @@ const char strobe = D0;
 const char rst = D1;
 const char led_dat = D2;
 const char ps_on = D3;
-const char pwr_led = D4;
 
 // Digital Inputs
-const char pwr_ok = D5;
-const char pwr_sw = D6;
+const char pwr_sw = D4;
 
 // Analog Inputs (0-4096)
 const char audio_r = A0;
