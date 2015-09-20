@@ -26,6 +26,7 @@
 #define STRIP_LENGTH      70
 #define NUM_STRIPS_RIGHT  4
 #define NUM_STRIPS_LEFT   4
+#define BINS_TO_LEDS      (70.0f/4096.0f)
 
 struct audio_bins {
     // Audio bins
@@ -95,6 +96,9 @@ void setup() {
     bar0.begin();
     bar0.show();
 
+    int bins_avg = 0;
+
+    // Main loop
     while (1) {
         delay(25);
         Serial.println("------right-----");
@@ -112,12 +116,19 @@ void setup() {
           Serial.println();
         }
 
+        bins_avg = 0;
+
+        for (int i = 0; i < NUM_BINS; i++)
+          bins_avg += bins.left[i];
+
+        bins_avg /= NUM_BINS;
+
         // Show LED bar
         for (int i = 0; i < bar0.numPixels(); i++) {
-          if (i < (float)bins.right[2] * (70.0f/4096.0f))
-            bar0.setPixelColor(i, 255, 255, 255);
+          if (i < (float)bins.right[1] * BINS_TO_LEDS)
+            bar0.setPixelColor(i, bins.right[4] / 16, bins.right[5] / 16, bins.right[6] / 16);
           else
-            bar0.setPixelColor(i, 115, 0, 140);
+            bar0.setPixelColor(i, 115, 0, 115);
         }
         bar0.show();
     }
@@ -159,7 +170,6 @@ void sample_freq(audio_bins* bins) {
         bins->left[i] = analogRead(audio_l);
         bins->right[i] = analogRead(audio_r);
 
-        delay(1);
         digitalWrite(strobe, HIGH);
         delay(1); // allow for EQ mux to fully switch
     }
