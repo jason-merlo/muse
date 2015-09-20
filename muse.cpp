@@ -7,6 +7,8 @@
  *  Main program for muse visulizer
  */
 
+ // TODO add moving average to bins
+
  /* ======================= includes ================================= */
 
  #include "application.h"
@@ -16,13 +18,27 @@
 
  /* ======================= Defines ================================== */
 
+// Frequency detection
 #define NUM_BINS  7
+
+// LED bars
+#define LED_TYPE          WS2812B
+#define STRIP_LENGTH      70
+#define NUM_STRIPS_RIGHT  4
+#define NUM_STRIPS_LEFT   4
 
 struct audio_bins {
     // Audio bins
+    // [63Hz][160Hz][400Hz][1kHz][2.5kHz][6.25kHz][16kHz][160kHz]
     int left[NUM_BINS];
     int right[NUM_BINS];
 };
+
+/*struct led_bars {
+    // led bars
+    Adafruit_NeoPixel left[NUM_STRIPS_LEFT];
+    Adafruit_NeoPixel right[NUM_STRIPS_RIGHT];
+};*/
 
  /* ======================= prototypes =============================== */
 
@@ -32,8 +48,8 @@ void sample_freq(audio_bins* bins);
  /* ======================= muse.cpp ================================= */
 
  // Digital Outputs
-const char rst = D0;
-const char strobe = D1;
+const char strobe = D0;
+const char rst = D1;
 const char led_dat = D2;
 const char ps_on = D3;
 const char pwr_led = D4;
@@ -67,19 +83,43 @@ void setup() {
     // Declare memory for audio bin structure
     struct audio_bins bins;
 
+    // Declare memory for led bars structure
+    //struct led_bars bars;
+
+    // Initialize LEDs
+    //for (int i = 0; i < NUM_STRIPS_RIGHT; i++) {
+    //  bars.right[i] = Adafruit_NeoPixel(STRIP_LENGTH, led_dat, LED_TYPE);
+    //}
+
+    Adafruit_NeoPixel bar0 = Adafruit_NeoPixel(STRIP_LENGTH, led_dat, LED_TYPE);
+    bar0.begin();
+    bar0.show();
+
     while (1) {
-        delay(1);
-        Serial.println("-------------");
+        delay(25);
+        Serial.println("------right-----");
+
+        // Check for PS_OK signal, turn on LED
+        //digitalWrite(pwr_led, digitalRead(pwr_ok));
 
         // Sample frequency bins
         sample_freq(&bins);
 
         // Print to serial terminal
         for (int i = 0; i < NUM_BINS; i++) {
-          Serial.print(bins.right[i]);
-          Serial.print("\t");
-          Serial.println(bins.left[i]);
+          for (int j = 0; j < (int)(bins.right[i]/51.2); j++)
+            Serial.print("=");
+          Serial.println();
         }
+
+        // Show LED bar
+        for (int i = 0; i < bar0.numPixels(); i++) {
+          if (i < (float)bins.right[2] * (70.0f/4096.0f))
+            bar0.setPixelColor(i, 255, 255, 255);
+          else
+            bar0.setPixelColor(i, 115, 0, 140);
+        }
+        bar0.show();
     }
 }
 
@@ -119,6 +159,7 @@ void sample_freq(audio_bins* bins) {
         bins->left[i] = analogRead(audio_l);
         bins->right[i] = analogRead(audio_r);
 
+        delay(1);
         digitalWrite(strobe, HIGH);
         delay(1); // allow for EQ mux to fully switch
     }
