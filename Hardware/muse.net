@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /Users/jasonmerlo/Projects/Muse/Hardware/muse.sch)
-    (date "Tuesday, September 22, 2015 'AMt' 01:37:31 AM")
+    (date "Tuesday, September 22, 2015 'PMt' 03:40:39 PM")
     (tool "Eeschema (2015-09-17 BZR 6202)-product")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -113,13 +113,13 @@
       (tstamp 55FF287F))
     (comp (ref Q3)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF34FD))
     (comp (ref Q1)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF35C8))
@@ -143,7 +143,7 @@
       (tstamp 55FF378C))
     (comp (ref Q5)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF3CD6))
@@ -167,13 +167,13 @@
       (tstamp 55FF28DA))
     (comp (ref Q4)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF35C6))
     (comp (ref Q2)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF35CC))
@@ -197,7 +197,7 @@
       (tstamp 55FF35DE))
     (comp (ref Q6)
       (value FQP30N06L)
-      (footprint Transistors_TO-220:TO-220_Neutral123_Horizontal_LargePads)
+      (footprint Transistors_TO-220:TO-220_Neutral123_Vertical_LargePads)
       (libsource (lib device) (part Q_NMOS_GDS))
       (sheetpath (names /) (tstamps /))
       (tstamp 55FF35E4))
@@ -298,20 +298,48 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5600D11A)))
   (libparts
-    (libpart (lib device) (part C)
-      (description "Unpolarized capacitor")
+    (libpart (lib conn) (part CONN_01X08)
       (footprints
-        (fp C?)
-        (fp C_????_*)
-        (fp C_????)
-        (fp SMD*_c)
-        (fp Capacitor*))
+        (fp Pin_Header_Straight_1X08)
+        (fp Pin_Header_Angled_1X08)
+        (fp Socket_Strip_Straight_1X08)
+        (fp Socket_Strip_Angled_1X08))
       (fields
-        (field (name Reference) C)
-        (field (name Value) C))
+        (field (name Reference) P)
+        (field (name Value) CONN_01X08))
       (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name P2) (type passive))
+        (pin (num 3) (name P3) (type passive))
+        (pin (num 4) (name P4) (type passive))
+        (pin (num 5) (name P5) (type passive))
+        (pin (num 6) (name P6) (type passive))
+        (pin (num 7) (name P7) (type passive))
+        (pin (num 8) (name P8) (type passive))))
+    (libpart (lib conn) (part CONN_01X03)
+      (footprints
+        (fp Pin_Header_Straight_1X03)
+        (fp Pin_Header_Angled_1X03)
+        (fp Socket_Strip_Straight_1X03)
+        (fp Socket_Strip_Angled_1X03))
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_01X03))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name P2) (type passive))
+        (pin (num 3) (name P3) (type passive))))
+    (libpart (lib conn) (part CONN_01X01)
+      (footprints
+        (fp Pin_Header_Straight_1X01)
+        (fp Pin_Header_Angled_1X01)
+        (fp Socket_Strip_Straight_1X01)
+        (fp Socket_Strip_Angled_1X01))
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_01X01))
+      (pins
+        (pin (num 1) (name P1) (type passive))))
     (libpart (lib device) (part D)
       (description Diode)
       (footprints
@@ -341,6 +369,20 @@
       (pins
         (pin (num 1) (name K) (type passive))
         (pin (num 2) (name A) (type passive))))
+    (libpart (lib device) (part C)
+      (description "Unpolarized capacitor")
+      (footprints
+        (fp C?)
+        (fp C_????_*)
+        (fp C_????)
+        (fp SMD*_c)
+        (fp Capacitor*))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
     (libpart (lib device) (part Q_NMOS_GDS)
       (description "Transistor N-MOSFET (general)")
       (fields
@@ -399,6 +441,19 @@
         (pin (num 22) (name 3V3*) (type input))
         (pin (num 23) (name RST) (type input))
         (pin (num 24) (name 3V3) (type input))))
+    (libpart (lib conn) (part RCA_Stero_Jack)
+      (footprints
+        (fp Pin_Header_Straight_1X03)
+        (fp Pin_Header_Angled_1X03)
+        (fp Socket_Strip_Straight_1X03)
+        (fp Socket_Strip_Angled_1X03))
+      (fields
+        (field (name Reference) P)
+        (field (name Value) RCA_Stero_Jack))
+      (pins
+        (pin (num 1) (name Left) (type passive))
+        (pin (num 2) (name GND) (type passive))
+        (pin (num 3) (name P3) (type passive))))
     (libpart (lib audio) (part MSGEQ7)
       (fields
         (field (name Reference) U)
@@ -437,62 +492,7 @@
         (pin (num 13) (name G) (type input))
         (pin (num 14) (name SER) (type input))
         (pin (num 15) (name QA) (type 3state))
-        (pin (num 16) (name VCC) (type power_in))))
-    (libpart (lib conn) (part CONN_01X01)
-      (footprints
-        (fp Pin_Header_Straight_1X01)
-        (fp Pin_Header_Angled_1X01)
-        (fp Socket_Strip_Straight_1X01)
-        (fp Socket_Strip_Angled_1X01))
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_01X01))
-      (pins
-        (pin (num 1) (name P1) (type passive))))
-    (libpart (lib conn) (part CONN_01X03)
-      (footprints
-        (fp Pin_Header_Straight_1X03)
-        (fp Pin_Header_Angled_1X03)
-        (fp Socket_Strip_Straight_1X03)
-        (fp Socket_Strip_Angled_1X03))
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_01X03))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name P2) (type passive))
-        (pin (num 3) (name P3) (type passive))))
-    (libpart (lib conn) (part CONN_01X08)
-      (footprints
-        (fp Pin_Header_Straight_1X08)
-        (fp Pin_Header_Angled_1X08)
-        (fp Socket_Strip_Straight_1X08)
-        (fp Socket_Strip_Angled_1X08))
-      (fields
-        (field (name Reference) P)
-        (field (name Value) CONN_01X08))
-      (pins
-        (pin (num 1) (name P1) (type passive))
-        (pin (num 2) (name P2) (type passive))
-        (pin (num 3) (name P3) (type passive))
-        (pin (num 4) (name P4) (type passive))
-        (pin (num 5) (name P5) (type passive))
-        (pin (num 6) (name P6) (type passive))
-        (pin (num 7) (name P7) (type passive))
-        (pin (num 8) (name P8) (type passive))))
-    (libpart (lib conn) (part RCA_Stero_Jack)
-      (footprints
-        (fp Pin_Header_Straight_1X03)
-        (fp Pin_Header_Angled_1X03)
-        (fp Socket_Strip_Straight_1X03)
-        (fp Socket_Strip_Angled_1X03))
-      (fields
-        (field (name Reference) P)
-        (field (name Value) RCA_Stero_Jack))
-      (pins
-        (pin (num 1) (name Left) (type passive))
-        (pin (num 2) (name GND) (type passive))
-        (pin (num 3) (name P3) (type passive)))))
+        (pin (num 16) (name VCC) (type power_in)))))
   (libraries
     (library (logical device)
       (uri "/Library/Application Support/kicad/library/device.lib"))
