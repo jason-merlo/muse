@@ -34,10 +34,10 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "Muse Core"
+Date "2015-09-20"
+Rev "1.0"
+Comp "Jason Merlo"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -1377,47 +1377,47 @@ RCA Audio
 $Comp
 L CONN_01X08 P?
 U 1 1 55FFBAFD
-P 6550 1800
-F 0 "P?" H 6550 2250 50  0000 C CNN
-F 1 "LED_Signal" V 6650 1800 50  0000 C CNN
-F 2 "" H 6550 1800 60  0000 C CNN
-F 3 "" H 6550 1800 60  0000 C CNN
-	1    6550 1800
+P 6750 1450
+F 0 "P?" H 6750 1900 50  0000 C CNN
+F 1 "LED_Signal" V 6850 1450 50  0000 C CNN
+F 2 "" H 6750 1450 60  0000 C CNN
+F 3 "" H 6750 1450 60  0000 C CNN
+	1    6750 1450
 	1    0    0    -1  
 $EndComp
-Text Label 6000 1450 0    60   ~ 0
+Text Label 6200 1100 0    60   ~ 0
 LED_0
-Text Label 6000 1550 0    60   ~ 0
+Text Label 6200 1200 0    60   ~ 0
 LED_1
-Text Label 6000 1650 0    60   ~ 0
+Text Label 6200 1300 0    60   ~ 0
 LED_2
-Text Label 6000 1750 0    60   ~ 0
+Text Label 6200 1400 0    60   ~ 0
 LED_3
-Text Label 6000 1850 0    60   ~ 0
+Text Label 6200 1500 0    60   ~ 0
 LED_4
-Text Label 6000 1950 0    60   ~ 0
+Text Label 6200 1600 0    60   ~ 0
 LED_5
-Text Label 6000 2050 0    60   ~ 0
+Text Label 6200 1700 0    60   ~ 0
 LED_6
-Text Label 6000 2150 0    60   ~ 0
+Text Label 6200 1800 0    60   ~ 0
 LED_7
 Wire Wire Line
-	6000 1450 6350 1450
+	6200 1100 6550 1100
 Wire Wire Line
-	6000 1550 6350 1550
+	6200 1200 6550 1200
 Wire Wire Line
-	6000 1650 6350 1650
+	6200 1300 6550 1300
 Wire Wire Line
-	6000 1750 6350 1750
+	6200 1400 6550 1400
 Wire Wire Line
-	6000 1850 6350 1850
+	6200 1500 6550 1500
 Wire Wire Line
-	6000 1950 6350 1950
+	6200 1600 6550 1600
 Wire Wire Line
-	6000 2050 6350 2050
+	6200 1700 6550 1700
 Wire Wire Line
-	6000 2150 6350 2150
-Text Notes 5800 750  0    60   ~ 0
+	6200 1800 6550 1800
+Text Notes 6100 750  0    60   ~ 0
 Addressable LED\nSignal Connections
 $Comp
 L SWITCH_INV SW?
@@ -1458,4 +1458,58 @@ F 3 "" H 7150 2950 60  0000 C CNN
 $EndComp
 Wire Wire Line
 	6950 2950 6850 2950
+Text Notes 5700 2250 0    60   ~ 0
+Power Switch
+$Comp
+L LED D?
+U 1 1 55FFDAEC
+P 6250 2500
+F 0 "D?" H 6250 2600 50  0000 C CNN
+F 1 "PWR_LED" H 6250 2400 50  0000 C CNN
+F 2 "" H 6250 2500 60  0000 C CNN
+F 3 "" H 6250 2500 60  0000 C CNN
+	1    6250 2500
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X01 P?
+U 1 1 55FFDC75
+P 5750 2500
+F 0 "P?" H 5750 2600 50  0000 C CNN
+F 1 "ATX_PWR_OK" H 5750 2350 50  0000 C CNN
+F 2 "" H 5750 2500 60  0000 C CNN
+F 3 "" H 5750 2500 60  0000 C CNN
+	1    5750 2500
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R?
+U 1 1 55FFDDBC
+P 6700 2500
+F 0 "R?" V 6780 2500 50  0000 C CNN
+F 1 "470" V 6700 2500 50  0000 C CNN
+F 2 "" V 6630 2500 30  0000 C CNN
+F 3 "" H 6700 2500 30  0000 C CNN
+	1    6700 2500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5950 2500 6050 2500
+Wire Wire Line
+	6450 2500 6550 2500
+$Comp
+L GND #PWR?
+U 1 1 55FFE488
+P 7150 2550
+F 0 "#PWR?" H 7150 2300 50  0001 C CNN
+F 1 "GND" H 7150 2400 50  0000 C CNN
+F 2 "" H 7150 2550 60  0000 C CNN
+F 3 "" H 7150 2550 60  0000 C CNN
+	1    7150 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 2500 7150 2500
+Wire Wire Line
+	7150 2500 7150 2550
 $EndSCHEMATC
