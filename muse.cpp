@@ -21,8 +21,8 @@ SYSTEM_MODE(AUTOMATIC);
 
 // Frequency detection
 #define NUM_BINS  7
-#define LEFT_NOISE_THRESHOLD  118
-#define RIGHT_NOISE_THRESHOLD 305
+#define LEFT_NOISE_THRESHOLD  0 //118
+#define RIGHT_NOISE_THRESHOLD 0 //308
 #define HISTORESIS_FACTOR 1.0f/2.0f
 #define BINS_MAX          4096.0f
 
@@ -50,7 +50,7 @@ Adafruit_NeoPixel right[NUM_STRIPS_RIGHT];
 
 void init_eq();
 void sample_freq(audio_bins* bins);
-uint32_t Wheel(byte WheelPos);
+uint32_t Wheel(byte WheelPos, float intensity);
 
 /* ======================= muse.cpp ================================= */
 
@@ -105,12 +105,12 @@ void loop() {
 
   // Show LED bar
   for (int i = 0; i < bar0.numPixels(); i++) {
-    if (i < (float)(bins.right[1]-RIGHT_NOISE_THRESHOLD) * (BINS_TO_LEDS/2))
+    if (i < (pow((float)(bins.right[1]-RIGHT_NOISE_THRESHOLD)/(float)(BINS_MAX-RIGHT_NOISE_THRESHOLD), 2)) * (STRIP_LENGTH/2))
       bar0.setPixelColor(i, bins.right[0] / 16, bins.right[1] / 16, bins.right[2] / 16);
-    else if (i > (float)(BINS_MAX * BINS_TO_LEDS) - ((float)(bins.left[1]-LEFT_NOISE_THRESHOLD) * (BINS_TO_LEDS/2) + 4))
+    else if (i > (float)(BINS_MAX * BINS_TO_LEDS) - ((pow((float)(bins.left[1]-LEFT_NOISE_THRESHOLD)/(float)(BINS_MAX-LEFT_NOISE_THRESHOLD), 2)) * (STRIP_LENGTH/2.0)) - 4)
       bar0.setPixelColor(i, bins.left[0] / 16, bins.left[1] / 16, bins.left[2] / 16);
     else
-      bar0.setPixelColor(i, Wheel((int)color_shift_counter));
+      bar0.setPixelColor(i, Wheel((int)color_shift_counter, pow((bins.left[0]-LEFT_NOISE_THRESHOLD+bins.right[0]-RIGHT_NOISE_THRESHOLD)/8192.0f, 2)));
   }
   bar0.show();
 };
@@ -145,8 +145,8 @@ void sample_freq(audio_bins* bins) {
     digitalWrite(strobe, LOW);
     delayMicroseconds(40); // allow for EQ mux to fully switch
 
-    bins->left[i]  = analogRead(audio_l);
-    bins->right[i] = analogRead(audio_r);
+    bins->left[i]  = analogRead(audio_l) * 0.8 + bins->left[i]  * 0.2;
+    bins->right[i] = analogRead(audio_r) * 0.8 + bins->right[i] * 0.2;
 
     digitalWrite(strobe, HIGH);
     delay(1); // allow for EQ mux to fully switch
@@ -155,14 +155,14 @@ void sample_freq(audio_bins* bins) {
 
 // Input a value 0 to 255 to get a color value.
 // The colours are a transition r - g - b - back to r.
-uint32_t Wheel(byte WheelPos) {
+uint32_t Wheel(byte WheelPos, float intensity) {
   if(WheelPos < 85) {
-   return bar0.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+   return bar0.Color((WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity, 0);
   } else if(WheelPos < 170) {
    WheelPos -= 85;
-   return bar0.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+   return bar0.Color((255 - WheelPos * 3) * intensity, 0, (WheelPos * 3) * intensity);
   } else {
    WheelPos -= 170;
-   return bar0.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+   return bar0.Color(0, (WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity);
   }
 }
