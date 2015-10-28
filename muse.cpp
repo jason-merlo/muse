@@ -1,19 +1,19 @@
 /*
-*  Written by Jason Merlo
-*  Last update 9/15/2015
-*
-*  muse.cpp
-*
-*  Main program for muse visulizer
-*/
+ *  Written by Jason Merlo
+ *  Last update 9/15/2015
+ *
+ *  muse.cpp
+ *
+ *  Main program for muse visulizer
+ */
 
 // TODO add moving average to bins
 
 /* ======================= includes ================================= */
-
 #include "application.h"
 #include "neopixel.h"
 #include "math.h"
+#include "bar_matrix.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
@@ -29,8 +29,7 @@ SYSTEM_MODE(AUTOMATIC);
 // LED bars
 #define LED_TYPE          WS2812B
 #define STRIP_LENGTH      70
-#define NUM_STRIPS_RIGHT  4
-#define NUM_STRIPS_LEFT   4
+#define NUM_BARS          8
 #define BINS_TO_LEDS      (70.0f/(BINS_MAX - 240))
 
 struct audio_bins {
@@ -40,85 +39,81 @@ struct audio_bins {
   int right[NUM_BINS];
 };
 
-/*struct led_bars {
-// led bars
-Adafruit_NeoPixel left[NUM_STRIPS_LEFT];
-Adafruit_NeoPixel right[NUM_STRIPS_RIGHT];
-};*/
-
 /* ======================= prototypes =============================== */
 
 void init_eq();
 void sample_freq(audio_bins* bins);
 uint32_t Wheel(byte WheelPos, float intensity);
+uint32_t Color(uint8_t r, uint8_t g, uint8_t b);
 
-/* ======================= muse.cpp ================================= */
+/* ======================= Pin Decls. =============================== */
 
 // Digital Outputs
-const char strobe = D0;
-const char rst = D1;
-const char led_dat = D2;
-const char ps_on = D3;
+static const char ps_on   = A2;
+static const char rst     = A3;
+static const char strobe  = A4;
+
+// RGB LED Strip Control Shift Register
+static const char sr_lat  = A5;
+static const char sr_clk  = A6;
+static const char sr_dat  = A7;
 
 // Digital Inputs
-const char pwr_sw = D4;
+static const char pwr_sw = D4;
 
 // Analog Inputs (0-4096)
-const char audio_r = A0;
-const char audio_l = A1;
+static const char audio_r = A0;
+static const char audio_l = A1;
 
 // Declare memory for audio bin structure
-struct audio_bins bins;
+static struct audio_bins bins;
 
-// Visualizer variables
-float color_shift_counter = 0;
+// Declare matrix pins
+static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 
-Adafruit_NeoPixel bar0 = Adafruit_NeoPixel(STRIP_LENGTH, led_dat, LED_TYPE);
+// Declare matrix variables
+static Bar_Matrix* matrix;
+static unsigned long** display;
 
 /*
-*  Description: Main function - initialize program and loop
-*/
+ *  setup - initialize program and loop
+ */
 void setup() {
-  // Set pin modes
+  // Set outpus
+  pinMode(ps_on, OUTPUT);
   pinMode(rst, OUTPUT);
   pinMode(strobe, OUTPUT);
-  pinMode(ps_on, OUTPUT);
+  pinMode(sr_lat, OUTPUT);
+  pinMode(sr_clk, OUTPUT);
+  pinMode(sr_dat, OUTPUT);
 
+  // Set inputs
   pinMode(pwr_sw, INPUT);
   pinMode(audio_l, INPUT);
   pinMode(audio_r, INPUT);
 
-  // Initialize led bar
-  bar0.begin();
-  bar0.show();
+  // Create new bar matrix inistance
+  matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, VERTICAL, LED_TYPE, matrix_pins);
+  display = matrix->get_instance();
 }
 
-// Appease Arduino :p
+/*
+ *  loop
+ */
 void loop() {
-  if (color_shift_counter >= 255)
-    color_shift_counter = 0;
-
-  color_shift_counter += 0.125;
-
-  // Sample frequency bins
-  sample_freq(&bins);
-
-  // Show LED bar
-  for (int i = 0; i < bar0.numPixels(); i++) {
-    if (i < (pow((float)(bins.right[1]-RIGHT_NOISE_THRESHOLD)/(float)(BINS_MAX-RIGHT_NOISE_THRESHOLD), 2)) * (STRIP_LENGTH/2))
-      bar0.setPixelColor(i, bins.right[0] / 16, bins.right[1] / 16, bins.right[2] / 16);
-    else if (i > (float)(BINS_MAX * BINS_TO_LEDS) - ((pow((float)(bins.left[1]-LEFT_NOISE_THRESHOLD)/(float)(BINS_MAX-LEFT_NOISE_THRESHOLD), 2)) * (STRIP_LENGTH/2.0)) - 4)
-      bar0.setPixelColor(i, bins.left[0] / 16, bins.left[1] / 16, bins.left[2] / 16);
-    else
-      bar0.setPixelColor(i, Wheel((int)color_shift_counter, pow((bins.left[0]-LEFT_NOISE_THRESHOLD+bins.right[0]-RIGHT_NOISE_THRESHOLD)/8192.0f, 2)));
+  for (int i = 0; i < NUM_BARS; i++) {
+    for (int j = 0; j < STRIP_LENGTH; j++)
+      display[i][j] = Color(255, 255, 255);
   }
-  bar0.show();
-};
+
+  matrix->update_matrix();
+  delay(100);
+}
 
 /*
-*  Description: Sends reset sequence to MSGEQ7's allowing for data reading to
-*  begin
-*/
+ *  Description: Sends reset sequence to MSGEQ7's allowing for data reading to
+ *  begin
+ */
 void init_eq() {
   /*  Reset sequence:
   *
@@ -137,9 +132,9 @@ void init_eq() {
 }
 
 /*
-*  Description: Reads bins from MSGEQ7's and stores them to struct
-*  Parameters:  [audio_bins]* bins - frequency bins read from chip
-*/
+ *  Description: Reads bins from MSGEQ7's and stores them to struct
+ *  Parameters:  [audio_bins]* bins - frequency bins read from chip
+ */
 void sample_freq(audio_bins* bins) {
   for (int i = 0; i < NUM_BINS; i++) {
     digitalWrite(strobe, LOW);
@@ -153,16 +148,26 @@ void sample_freq(audio_bins* bins) {
   }
 }
 
+//
+// -- copied from neopixel library -- //
+//
+
 // Input a value 0 to 255 to get a color value.
 // The colours are a transition r - g - b - back to r.
-uint32_t Wheel(byte WheelPos, float intensity) {
+uint32_t Wheel(Adafruit_NeoPixel bar, byte WheelPos, float intensity) {
   if(WheelPos < 85) {
-   return bar0.Color((WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity, 0);
+   return bar.Color((WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity, 0);
   } else if(WheelPos < 170) {
    WheelPos -= 85;
-   return bar0.Color((255 - WheelPos * 3) * intensity, 0, (WheelPos * 3) * intensity);
+   return bar.Color((255 - WheelPos * 3) * intensity, 0, (WheelPos * 3) * intensity);
   } else {
    WheelPos -= 170;
-   return bar0.Color(0, (WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity);
+   return bar.Color(0, (WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity);
   }
+}
+
+// Convert separate R,G,B into packed 32-bit RGB color.
+// Packed format is always RGB, regardless of LED strand color order.
+uint32_t Color(uint8_t r, uint8_t g, uint8_t b) {
+  return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
 }
