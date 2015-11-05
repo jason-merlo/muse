@@ -13,10 +13,13 @@ class Bar_Matrix {
     Bar_Matrix(short num_bars, short bar_len, bool orientation, char led_type, const char* pins);
 
     void
-      update_matrix();
+      purple_matrix(),
+      clear_matrix(),
+      visualizer_wheel(float WheelPos),
+      visualizer_bars();
 
-    unsigned long**
-      get_instance();
+      uint32_t
+        Wheel(Adafruit_NeoPixel bar, byte WheelPos, float intensity);
 
   private:
   void

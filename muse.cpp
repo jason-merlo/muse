@@ -73,8 +73,8 @@ static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 
 // Declare matrix variables
 static Bar_Matrix* matrix;
-static unsigned long** display;
 
+//Adafruit_NeoPixel* bar;
 /*
  *  setup - initialize program and loop
  */
@@ -94,20 +94,19 @@ void setup() {
 
   // Create new bar matrix inistance
   matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, VERTICAL, LED_TYPE, matrix_pins);
-  display = matrix->get_instance();
+
+  //bar = new Adafruit_NeoPixel(STRIP_LENGTH, matrix_pins[3], LED_TYPE);
+  //bar->begin();
+  //bar->show();
 }
 
 /*
  *  loop
  */
 void loop() {
-  for (int i = 0; i < NUM_BARS; i++) {
-    for (int j = 0; j < STRIP_LENGTH; j++)
-      display[i][j] = Color(255, 255, 255);
+  for (float i = 0; i < 255; i+=0.05) {
+    matrix->visualizer_wheel(i);
   }
-
-  matrix->update_matrix();
-  delay(100);
 }
 
 /*
@@ -146,28 +145,4 @@ void sample_freq(audio_bins* bins) {
     digitalWrite(strobe, HIGH);
     delay(1); // allow for EQ mux to fully switch
   }
-}
-
-//
-// -- copied from neopixel library -- //
-//
-
-// Input a value 0 to 255 to get a color value.
-// The colours are a transition r - g - b - back to r.
-uint32_t Wheel(Adafruit_NeoPixel bar, byte WheelPos, float intensity) {
-  if(WheelPos < 85) {
-   return bar.Color((WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity, 0);
-  } else if(WheelPos < 170) {
-   WheelPos -= 85;
-   return bar.Color((255 - WheelPos * 3) * intensity, 0, (WheelPos * 3) * intensity);
-  } else {
-   WheelPos -= 170;
-   return bar.Color(0, (WheelPos * 3) * intensity, (255 - WheelPos * 3) * intensity);
-  }
-}
-
-// Convert separate R,G,B into packed 32-bit RGB color.
-// Packed format is always RGB, regardless of LED strand color order.
-uint32_t Color(uint8_t r, uint8_t g, uint8_t b) {
-  return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
 }
