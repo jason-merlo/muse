@@ -3,6 +3,9 @@
 
 #include "application.h"
 #include "neopixel.h"
+#include "muse.h"
+
+#include "math.h"
 
 // Define bar orientations
 #define HORIZONTAL  0
@@ -16,7 +19,7 @@ class Bar_Matrix {
       purple_matrix(),
       clear_matrix(),
       visualizer_wheel(float WheelPos),
-      visualizer_bars();
+      visualizer_bars(audio_bins* bins);
 
       uint32_t
         Wheel(Adafruit_NeoPixel bar, byte WheelPos, float intensity);

@@ -84,6 +84,20 @@ void Bar_Matrix::visualizer_wheel(float WheelPos) {
   }
 }
 
-void Bar_Matrix::visualizer_bars() {
-
+/* WARNING: Non-scalable code below */
+/* TODO fix Non-scalable code */
+void Bar_Matrix::visualizer_bars(audio_bins* bins) {
+  for (char i = 0; i < disp_width; i++) {
+    for (char j = 0; j < disp_height; j++) {
+      // get bin
+      int level = (i < disp_width/2) ? bins->left[i] : bins->left[disp_width - i];
+      // set bar
+      if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH))
+        bars[i]->setPixelColor(j, 0, 255, 0);
+      else
+        bars[i]->setPixelColor(j, 255, 0, 255);
+    }
+    // Show bar
+    bars[i]->show();
+  }
 }
