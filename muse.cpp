@@ -137,6 +137,6 @@ void sample_freq(audio_bins* bins) {
     bins->right[i] = analogRead(audio_r) * 0.8 + bins->right[i] * 0.2;
 
     digitalWrite(strobe, HIGH);
-    delay(1); // allow for EQ mux to fully switch
+    delayMicroseconds(40); // allow for EQ mux to fully switch
   }
 }
