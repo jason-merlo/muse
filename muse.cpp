@@ -101,7 +101,7 @@ void loop() {
 
   // DO NOT REMOVE: Keeps the core from being unresponsive to OTA
   // update, requiring hard reset
-  delay(1.15);
+  //delay(1.15);
 }
 
 /* ================================================================== *

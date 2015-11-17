@@ -1,3 +1,15 @@
+/* ================================================================== *
+ *  Written by Jason Merlo
+ *
+ *  updates:
+ *  11/17/2015
+ *
+ *  File: muse.h
+ *
+ *  Description: Header for muse visualizer containing function flags,
+ *  program constants, structs, and prototypes
+ * ================================================================== */
+
 #ifndef MUSE_H
 #define MUSE_H
 
@@ -39,12 +51,12 @@ struct audio_bins {
 
 // Struct to hold color values
 struct Color_Value {
-  char r, g, b;
+  unsigned int c;
   float h, s, v;
 
   // TODO: add code to convert from HSV to RGB and vice versa in
   //       constructor.
-  Color_Value(char red, char green, char blue) : r(red), g(green), b(blue) {}
+  Color_Value(char red, char green, char blue) : c((red << 16) | (green << 8) | blue) {}
   Color_Value(float hue, float saturation, float value) : h(hue), s(saturation), v(value) {}
 } ;
 
