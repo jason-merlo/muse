@@ -94,14 +94,14 @@ void loop() {
   #endif
 
   #if ENABLE_BARS
-  matrix->decay();
+  matrix->decay(0.75);
   matrix->visualizer_bars(&bins);
   matrix->show_all();
   #endif
 
   // DO NOT REMOVE: Keeps the core from being unresponsive to OTA
   // update, requiring hard reset
-  delay(10);
+  delay(1.15);
 }
 
 /* ================================================================== *

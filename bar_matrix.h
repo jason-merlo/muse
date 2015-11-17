@@ -21,7 +21,7 @@ class Bar_Matrix {
       visualizer_wheel(float WheelPos, float intensity),
       visualizer_bars(audio_bins* bins),
       show_all(),
-      decay();
+      decay(float factor);
 
     int
       wheel(float h, float s, float v);

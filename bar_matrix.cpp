@@ -104,12 +104,13 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins) {
 /* ================================================================== *
  * Function: decay
  * Description: slowly fades out matrix values
+ * Parameters: [float] factor - decay factor to be multiplied by
  * ================================================================== */
-void Bar_Matrix::decay() {
+void Bar_Matrix::decay(float factor) {
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
       unsigned int color = bars[i]->getPixelColor(j);
-      bars[i]->setPixelColor(j, (char)(color >> 16), (char)(color >> 8), (char)(color));
+      bars[i]->setPixelColor(j, (char)(color >> 16) * factor, (char)(color >> 8) * factor , (char)(color) * factor);
     }
   }
 }
