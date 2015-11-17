@@ -1,3 +1,14 @@
+/* ================================================================== *
+ *  Written by Jason Merlo
+ *
+ *  updates:
+ *  11/17/2015
+ *
+ *  File: bar_matrix.cpp
+ *
+ *  Description: Class to control LED bar matrix and run visualizers
+ * ================================================================== */
+
 #include "bar_matrix.h"
 
 // Display variables
