@@ -20,18 +20,16 @@
 
 class Bar_Matrix {
   public:
-    Bar_Matrix(short num_bars, short bar_len, bool orientation, char led_type, const char* pins);
+    Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins);
 
     void
       clear_matrix(),
-      fill_matrix(Color_Value* color),
+      fill_matrix(Color_Value color),
       visualizer_wheel(float WheelPos, float intensity),
-      visualizer_bars(audio_bins* bins),
+      visualizer_bars(audio_bins* bins, float in_factor, float out_factor),
       show_all(),
-      decay(float factor);
-
-    int
-      wheel(float h, float s, float v);
+      decay(float factor),
+      mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b);
 
   private:
   void

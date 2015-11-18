@@ -79,7 +79,7 @@ void setup() {
 
   // Create new bar matrix inistance
   #if ENABLE_BARS
-  matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, VERTICAL, LED_TYPE, matrix_pins);
+  matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
   #endif
 }
 
@@ -94,8 +94,7 @@ void loop() {
   #endif
 
   #if ENABLE_BARS
-  matrix->decay(0.75);
-  matrix->visualizer_bars(&bins);
+  matrix->visualizer_bars(&bins, 0.35, 0.85);
   matrix->show_all();
   #endif
 }

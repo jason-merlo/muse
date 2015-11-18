@@ -52,13 +52,13 @@ struct audio_bins {
 // Struct to hold color values
 struct Color_Value {
   unsigned int c;
-  float h, s, v;
+  unsigned char r, g, b;
 
   // TODO: add code to convert from HSV to RGB and vice versa in
   //       constructor.
-  Color_Value(char red, char green, char blue) : c((red << 16) | (green << 8) | blue) {}
-  Color_Value(float hue, float saturation, float value) : h(hue), s(saturation), v(value) {}
-} ;
+  Color_Value(unsigned char red, unsigned char green, unsigned char blue) :
+    c((red << 16) | (green << 8) | blue), r(red), g(green), b(blue) {}
+};
 
 /* ======================= prototypes =============================== */
 
