@@ -10,6 +10,7 @@
  * ================================================================== */
 
 #include "bar_matrix.h"
+#include "math.h"
 
 // Display variables
 short disp_width;
@@ -94,17 +95,25 @@ void Bar_Matrix::visualizer_wheel(float hue, float intensity) {
  * Description: Sets all pixel values to given color value
  * Parameters: [audio_bins]* bins - frequency bins read from chip
  * ================================================================== */
-void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor) {
+void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
   decay(out_factor);
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
       // get bin
-      int level = (i < disp_width/2) ? bins->left[i] : bins->left[(disp_width/2) - 1 - (i-disp_width/2)];
+      //int level = (i < disp_width/2) ? bar_levels[i] : bar_levels[7-i];
+      int level = (i < disp_width/2) ? bins->left[i+1] : bins->left[((disp_width/2) - 1 - (i-disp_width/2))+1];
       // set bar
       if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH)) {
-        mix_pixel(i, j, in_factor, bins->left[0]/16,
+      //if (j < (float)(level)/(float)(BINS_MAX) * (STRIP_LENGTH)) {
+        const float pi = 3.141592;
+        float val = level*2*pi/4096.0;
+        mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255, cos(val - 4*pi/3)*255);
+        /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255, cos(val - 4*pi/3)*255);*/
+
+        /*mix_pixel(i, j, in_factor, bins->left[0]/16,
                                    bins->left[1]/16,
-                                   bins->left[2]/16);
+                                   bins->left[2]/16);*/
+
         /*mix_pixel(i, j, in_factor, bins->left[0]/(64-(bins->left[1]/128)),
                                    bins->left[1]/(64-(bins->left[2]/128)),
                                    bins->left[2]/(64-(bins->left[0]/128)));*/
