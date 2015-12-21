@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name muse_lib)(type KiCad)(uri F:\Projects\Muse\muse_lib.pretty)(options "")(descr ""))
+)
