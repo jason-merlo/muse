@@ -1903,7 +1903,7 @@
     )
   )
 
-  (gr_text "(1.0)" (at 145.923 94.234 90) (layer B.SilkS) (tstamp 560236F3)
+  (gr_text "(2.0)" (at 145.923 94.234 90) (layer B.SilkS) (tstamp 560236F3)
     (effects (font (size 1 1) (thickness 0.2)) (justify left mirror))
   )
   (gr_text "Jason Merlo" (at 148.209 78.359 90) (layer B.SilkS) (tstamp 56023676)
