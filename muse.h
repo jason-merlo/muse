@@ -38,6 +38,7 @@
 #define STRIP_LENGTH      70
 #define NUM_BARS          8
 #define BINS_TO_LEDS      (70.0f/(BINS_MAX - 240))
+#define FREQ_GAIN         1.0f
 
 /* ======================= Structs - General ======================== */
 

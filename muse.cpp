@@ -95,6 +95,7 @@ void loop() {
   #endif
 
   #if ENABLE_BARS
+  matrix->visualizer_wheel(0.25, 10);
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
@@ -139,11 +140,4 @@ void sample_freq(audio_bins* bins) {
     digitalWrite(strobe, HIGH);
     delayMicroseconds(40); // allow for EQ mux to fully switch
   }
-
-/* Stevens dank code
-  bar_levels[0] = (bins->left[0] > bins->left[1]) ? bins->left[0] : bins->left[1];//((float)(bins->left[0] + bins->left[1])) / 1.25;
-  bar_levels[1] = bins->left[2];
-  bar_levels[2] = (bins->left[3] > bins->left[4]) ? bins->left[3] : bins->left[4];//((float)(bins->left[3] + bins->left[4])) / 1.25;
-  bar_levels[3] = (bins->left[5] > bins->left[6]) ? bins->left[5] : bins->left[6];//((float)(bins->left[5] + bins->left[6])) / 1.25;
-  */
 }

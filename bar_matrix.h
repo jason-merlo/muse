@@ -18,6 +18,9 @@
 
 #include "math.h"
 
+// constants
+#define PI        3.141592
+
 class Bar_Matrix {
   public:
     Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins);
@@ -25,7 +28,7 @@ class Bar_Matrix {
     void
       clear_matrix(),
       fill_matrix(Color_Value color),
-      visualizer_wheel(float WheelPos, float intensity),
+      visualizer_wheel(float intensity, float speed),
       visualizer_bars(audio_bins* bins, float in_factor, float out_factor, int* bar_levels),
       show_all(),
       decay(float factor),
