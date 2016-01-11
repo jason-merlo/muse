@@ -20,7 +20,7 @@
 
 #define ENABLE_SERIAL         0
 #define ENABLE_MSGEQ7         1
-#define ENABLE_PSU_CONTROL    0
+#define ENABLE_PSU_CONTROL    1
 #define ENABLE_RGB_SR         0
 #define ENABLE_BARS           1
 
