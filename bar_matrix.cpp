@@ -163,6 +163,42 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
 }
 
 /* ================================================================== *
+ * Function: visualizer_bars_middle
+ * Description: Bars start at the middle and go to the edges.
+ *              One channel fills up, the other fills down.
+ * Parameters: none.
+ * ================================================================== */
+void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
+  decay(out_factor);
+
+  // Left bins, grows downwards
+  for (char i = 0; i < disp_width; i++) {
+    for (char j = 0; j < STRIP_LENGTH/2; j++) {
+      // get bin
+      int level = bins->left[i%(NUM_BARS-1)];
+      level *= FREQ_GAIN;
+      // set bar
+      if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
+        float val = level*2*PI/4096.0;
+        mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+      }
+    }
+
+    // Right bins, grow upwards
+    for (char j = STRIP_LENGTH/2; j < STRIP_LENGTH; j++) {
+      // get bin
+      int level = bins->right[i%(NUM_BARS-1)];
+      level *= FREQ_GAIN;
+      // set bar
+      if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
+        float val = level*2*PI/4096.0;
+        mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+      }
+    }
+  }
+}
+
+/* ================================================================== *
  * Function: decay
  * Description: slowly fades out matrix values
  * Parameters: [float] factor - decay factor to be multiplied by

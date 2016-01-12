@@ -107,7 +107,15 @@ void loop() {
 
   #if ENABLE_WHEEL
   matrix->visualizer_wheel(0.25, 10);
+  #endif
+
+  #if ENABLE_VISUALIZER_BARS
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
+  matrix->show_all();
+  #endif
+
+  #if ENABLE_VISUALIZER_BARS_MIDDLE
+  matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
 

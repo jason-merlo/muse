@@ -23,8 +23,10 @@
 #define ENABLE_PSU_CONTROL    1
 #define ENABLE_RGB_SR         0
 #define ENABLE_BARS           1
-#define ENABLE_BOUNCING       1
+#define ENABLE_BOUNCING       0
 #define ENABLE_WHEEL          0
+#define ENABLE_VISUALIZER_BARS        0
+#define ENABLE_VISUALIZER_BARS_MIDDLE 1
 
 /* ======================= Define - General ========================= */
 
