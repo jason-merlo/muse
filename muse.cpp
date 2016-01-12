@@ -47,7 +47,7 @@ static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 static Bar_Matrix* matrix;
 
 // Variables for bouncing lines
-#if ENABLE_BOUNCING
+#if RUN_BOUNCING_BARS
 static unsigned long bouncing_lines_last_update;
 #endif
 
@@ -90,7 +90,7 @@ void setup() {
   matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
   #endif
 
-  #if ENABLE_BOUNCING
+  #if RUN_BOUNCING_BARS
   bouncing_lines_last_update = 0;
   #endif
 }
@@ -105,21 +105,21 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-  #if ENABLE_WHEEL
+  #if RUN_COLOR_WHEEL
   matrix->visualizer_wheel(0.25, 10);
   #endif
 
-  #if ENABLE_VISUALIZER_BARS
+  #if RUN_VISUALIZER_BARS
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
 
-  #if ENABLE_VISUALIZER_BARS_MIDDLE
+  #if RUN_VISUALIZER_BARS_MIDDLE
   matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
 
-  #if ENABLE_BOUNCING
+  #if RUN_BOUNCING_BARS
   if (millis() - bouncing_lines_last_update > 10) {
     matrix->bouncing_lines();
     matrix->show_all();
