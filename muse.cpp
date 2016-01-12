@@ -20,7 +20,7 @@ SYSTEM_MODE(AUTOMATIC);
 /* ======================= Pin Decls. =============================== */
 
 // Digital Outputs
-//static const char ps_on   = A2;
+static const char ps_on   = TX;
 static const char rst     = A3;
 static const char strobe  = A4;
 
@@ -50,6 +50,7 @@ static Bar_Matrix* matrix;
  *  Function: Setup
  *  Description: initialize program I/O and data structures
  * ================================================================== */
+
 void setup() {
 
   // Open debug terminal
@@ -68,7 +69,8 @@ void setup() {
   // Enables power switch input for PSU and control for
   #if ENABLE_PSU_CONTROL
   pinMode(ps_on, OUTPUT);
-  pinMode(pwr_sw, INPUT);
+  //pinMode(pwr_sw, INPUT);
+  digitalWrite(ps_on, LOW);
   #endif
 
   // Enables pins for shift register to control RGB LED strips
