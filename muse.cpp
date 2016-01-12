@@ -46,6 +46,11 @@ static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 // Declare matrix variables
 static Bar_Matrix* matrix;
 
+// Variables for bouncing lines
+#if ENABLE_BOUNCING
+static unsigned long bouncing_lines_last_update;
+#endif
+
 /* ================================================================== *
  *  Function: Setup
  *  Description: initialize program I/O and data structures
@@ -84,6 +89,10 @@ void setup() {
   #if ENABLE_BARS
   matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
   #endif
+
+  #if ENABLE_BOUNCING
+  bouncing_lines_last_update = 0;
+  #endif
 }
 
 /* ================================================================== *
@@ -96,10 +105,18 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-  #if ENABLE_BARS
+  #if ENABLE_WHEEL
   matrix->visualizer_wheel(0.25, 10);
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
+  #endif
+
+  #if ENABLE_BOUNCING
+  if (millis() - bouncing_lines_last_update > 10) {
+    matrix->bouncing_lines();
+    matrix->show_all();
+    bouncing_lines_last_update = millis();
+  }
   #endif
 }
 

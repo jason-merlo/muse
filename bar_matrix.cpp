@@ -34,10 +34,19 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     display[i] = new unsigned long[disp_height];
 
   bars = new Adafruit_NeoPixel*[num_bars];
-  for(short i = 0; i < num_bars; i++)
+  for(short i = 0; i < num_bars; i++) {
     bars[i] = new Adafruit_NeoPixel(bar_len, pins[i], led_type);
 
+    // Set up variables to track bouncing lines
+    bouncing_line_lengths[i] = random(0, STRIP_LENGTH / 2);
+    bouncing_line_positions[i] = random(0, STRIP_LENGTH);
+    //bouncing_line_positions[i] = (i%2 == 0) ? 0 : STRIP_LENGTH;
+    if (random(1) > .5) bouncing_line_directions[i] = 1;
+    else                bouncing_line_directions[i] = -1;
+  }
+
   init_matrix();
+  clear_matrix();
 }
 
 /* ================================================================== *
@@ -73,6 +82,36 @@ void Bar_Matrix::fill_matrix(Color_Value c) {
   for (int i = 0; i < disp_width; i++) {
     for (int j =0; j< disp_height; j++) {
       bars[i]->setPixelColor(j, c.c);
+    }
+  }
+}
+
+/* ================================================================== *
+ * Function: bouncing_lines
+ * Description: Bounces a solid line of LEDs up and down in each matrix bar
+ * Parameters: none
+ * ================================================================== */
+void Bar_Matrix::bouncing_lines() {
+  for (int i = 0; i < disp_width; i++) {
+    int bottom = bouncing_line_positions[i];
+
+    // Clear the pixel the line just left, light the one it entered
+    if (bouncing_line_directions[i] == 1) {
+      if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 0, 0);
+      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 232, 119, 34);
+    } else {
+      if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 32, 91);
+      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 0, 0, 0);
+    }
+
+    // Move the line
+    bouncing_line_positions[i] += bouncing_line_directions[i];
+
+    // Ensure we are moving in the proper direction
+    if (bouncing_line_positions[i] < -.5*bouncing_line_lengths[i] && bouncing_line_directions[i] < 0) {
+      bouncing_line_directions[i] = 1;
+    } else if (bouncing_line_positions[i] > STRIP_LENGTH-.5*bouncing_line_lengths[i] && bouncing_line_directions[i] > 0) {
+      bouncing_line_directions[i] = -1;
     }
   }
 }

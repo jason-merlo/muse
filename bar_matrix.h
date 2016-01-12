@@ -28,6 +28,7 @@ class Bar_Matrix {
     void
       clear_matrix(),
       fill_matrix(Color_Value color),
+      bouncing_lines(),
       visualizer_wheel(float intensity, float speed),
       visualizer_bars(audio_bins* bins, float in_factor, float out_factor, int* bar_levels),
       show_all(),
@@ -35,6 +36,10 @@ class Bar_Matrix {
       mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b);
 
   private:
+    int bouncing_line_lengths[NUM_BARS];  // Hold the lengths of the bars
+    int bouncing_line_positions[NUM_BARS]; // Hold the position of the bottom of the bouncing lines
+    int bouncing_line_directions[NUM_BARS]; // Hold the direction each line is moving
+
   void
     init_matrix();
 };
