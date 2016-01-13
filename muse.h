@@ -50,8 +50,8 @@
 
 // Screensaver constants
 #define SCREENSAVER_MINIMUM         1000
-#define SCREENSAVER_SECS_TO_PSU_OFF 20
-#define SCREENSAVER_SECS_TO_START   10
+#define SCREENSAVER_SECS_TO_PSU_OFF 30
+#define SCREENSAVER_SECS_TO_START   3
 
 /* ======================= Structs - General ======================== */
 
