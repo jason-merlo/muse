@@ -205,6 +205,8 @@ void init_eq() {
  * ================================================================== */
 void psu_shutdown() {
  if (psu_is_on) {
+   matrix->clear_matrix();
+   matrix->show_all();
    digitalWrite(ps_on, HIGH);
  }
  psu_is_on = false;
@@ -217,6 +219,8 @@ void psu_shutdown() {
   * ================================================================== */
 void psu_startup() {
   if (!psu_is_on) {
+    matrix->clear_matrix();
+    matrix->show_all();
     digitalWrite(ps_on, LOW);
   }
   psu_is_on = true;
