@@ -57,7 +57,7 @@ static unsigned long bouncing_lines_last_update;
 #endif
 
 #if ENABLE_SCREENSAVER
-static unsigned long last_sound_detected;
+static unsigned long last_sound_seconds;
 #endif
 
 /* ================================================================== *
@@ -102,7 +102,7 @@ void setup() {
 
   // Initialize screenaver variables
   #if ENABLE_SCREENSAVER
-  last_sound_detected = 0;
+  last_sound_seconds = Time.now();
   #endif
 
   // Initialize bouncing bars variables
@@ -122,36 +122,33 @@ void loop() {
   #endif
 
   #if ENABLE_SCREENSAVER
-  unsigned long current_millis = millis();
-  // Check to see if any bin is above the minimum to be considered "off"
+  // Check each bin to see if they are below the threshold to be "off"
+  // If any bin is active break and just run the visualizer
   bool any_bin_active = false;
   for (int i = 0; i < NUM_BINS; i++) {
     if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
       any_bin_active = true;
       if (!psu_is_on) { psu_startup(); }
-      last_sound_detected = current_millis;
+      last_sound_seconds = Time.now();
       break;
     }
   }
 
-  // If any bin is not off then we display a visualizer
-  // Else we display the bouncing lines
-  if (any_bin_active || current_millis - last_sound_detected < SCREENSAVER_MILLIS_TO_START) {
+  if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_START) {
+    // Run the visualizer if any bin is active. Insert your favorite visualizer here
     matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
     matrix->show_all();
-  } else {
-    // Turn psu off if we have been waiting for music for too long
-    if (current_millis - last_sound_detected > SCREENSAVER_MILLIS_TO_SHUTDOWN) {
-      if (psu_is_on) { psu_shutdown(); }
-    } else if (!psu_is_on) {
-      psu_startup();
-    }
 
-    // Run the bouncing lines if psu is on
-    if (psu_is_on && current_millis - bouncing_lines_last_update > 10) {
+  } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+    // If we have passed the seconds until psu shutoff, turn it off
+    if (psu_is_on) { psu_shutdown(); }
+
+  } else {
+    // Otherwise we must be in the screensaver time. Run the screensaver
+    if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
       matrix->bouncing_lines();
       matrix->show_all();
-      bouncing_lines_last_update = current_millis;
+      bouncing_lines_last_update = millis();
     }
   }
   #endif

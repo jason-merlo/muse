@@ -49,9 +49,9 @@
 #define FREQ_GAIN         1.0f
 
 // Screensaver constants
-#define SCREENSAVER_MILLIS_TO_SHUTDOWN  10000
-#define SCREENSAVER_MILLIS_TO_START     5000
-#define SCREENSAVER_MINIMUM             1000
+#define SCREENSAVER_MINIMUM         1000
+#define SCREENSAVER_SECS_TO_PSU_OFF 20
+#define SCREENSAVER_SECS_TO_START   10
 
 /* ======================= Structs - General ======================== */
 
