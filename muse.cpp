@@ -46,9 +46,18 @@ static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 // Declare matrix variables
 static Bar_Matrix* matrix;
 
-// Variables for bouncing lines
-#if RUN_BOUNCING_BARS
+/* =============== Per visualizer/feature variables ================= */
+
+#if ENABLE_PSU_CONTROL
+static bool psu_is_on = false;
+#endif
+
+#if RUN_BOUNCING_BARS || ENABLE_SCREENSAVER
 static unsigned long bouncing_lines_last_update;
+#endif
+
+#if ENABLE_SCREENSAVER
+static unsigned long last_sound_detected;
 #endif
 
 /* ================================================================== *
@@ -75,7 +84,8 @@ void setup() {
   #if ENABLE_PSU_CONTROL
   pinMode(ps_on, OUTPUT);
   //pinMode(pwr_sw, INPUT);
-  digitalWrite(ps_on, LOW);
+  psu_is_on = false;
+  psu_startup();
   #endif
 
   // Enables pins for shift register to control RGB LED strips
@@ -90,7 +100,13 @@ void setup() {
   matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
   #endif
 
-  #if RUN_BOUNCING_BARS
+  // Initialize screenaver variables
+  #if ENABLE_SCREENSAVER
+  last_sound_detected = 0;
+  #endif
+
+  // Initialize bouncing bars variables
+  #if RUN_BOUNCING_BARS || ENABLE_SCREENSAVER
   bouncing_lines_last_update = 0;
   #endif
 }
@@ -105,6 +121,49 @@ void loop() {
   sample_freq(&bins);
   #endif
 
+  #if ENABLE_SCREENSAVER
+  unsigned long current_millis = millis();
+  // Check to see if any bin is above the minimum to be considered "off"
+  bool any_bin_active = false;
+  for (int i = 0; i < NUM_BINS; i++) {
+    if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
+      any_bin_active = true;
+      if (!psu_is_on) { psu_startup(); }
+      last_sound_detected = current_millis;
+      break;
+    }
+  }
+
+  // If any bin is not off then we display a visualizer
+  // Else we display the bouncing lines
+  if (any_bin_active || current_millis - last_sound_detected < SCREENSAVER_MILLIS_TO_START) {
+    matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+    matrix->show_all();
+  } else {
+    // Turn psu off if we have been waiting for music for too long
+    if (current_millis - last_sound_detected > SCREENSAVER_MILLIS_TO_SHUTDOWN) {
+      if (psu_is_on) { psu_shutdown(); }
+    } else if (!psu_is_on) {
+      psu_startup();
+    }
+
+    // Run the bouncing lines if psu is on
+    if (psu_is_on && current_millis - bouncing_lines_last_update > 10) {
+      matrix->bouncing_lines();
+      matrix->show_all();
+      bouncing_lines_last_update = current_millis;
+    }
+  }
+  #endif
+
+  #if RUN_BOUNCING_BARS
+  if (millis() - bouncing_lines_last_update > 10) {
+    matrix->bouncing_lines();
+    matrix->show_all();
+    bouncing_lines_last_update = millis();
+  }
+  #endif
+
   #if RUN_COLOR_WHEEL
   matrix->visualizer_wheel(0.25, 10);
   #endif
@@ -117,14 +176,6 @@ void loop() {
   #if RUN_VISUALIZER_BARS_MIDDLE
   matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
-  #endif
-
-  #if RUN_BOUNCING_BARS
-  if (millis() - bouncing_lines_last_update > 10) {
-    matrix->bouncing_lines();
-    matrix->show_all();
-    bouncing_lines_last_update = millis();
-  }
   #endif
 }
 
@@ -148,6 +199,30 @@ void init_eq() {
   digitalWrite(rst, LOW);
   digitalWrite(strobe, HIGH);
   delay(1);
+}
+
+/* ================================================================== *
+ *  Function: psu_shutdown
+ *  Description: turns the psu off, sets psu_is_on to false
+ *  Parameters:  none
+ * ================================================================== */
+void psu_shutdown() {
+ if (psu_is_on) {
+   digitalWrite(ps_on, HIGH);
+ }
+ psu_is_on = false;
+}
+
+ /* ================================================================== *
+  *  Function: psu_startup
+  *  Description: Turns the psu on
+  *  Parameters:  none
+  * ================================================================== */
+void psu_startup() {
+  if (!psu_is_on) {
+    digitalWrite(ps_on, LOW);
+  }
+  psu_is_on = true;
 }
 
 /* ================================================================== *
