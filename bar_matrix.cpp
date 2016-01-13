@@ -98,7 +98,7 @@ void Bar_Matrix::bouncing_lines() {
     // Clear the pixel the line just left, light the one it entered
     if (bouncing_line_directions[i] == 1) {
       if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 0, 0);
-      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 232, 119, 34);
+      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 60, 35, 7);
     } else {
       if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 32, 91);
       bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 0, 0, 0);
