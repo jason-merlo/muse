@@ -140,9 +140,9 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
   float pans[NUM_BINS]; // ratio left to right, 0-1
   float intensities[NUM_BINS]; // ratio low to high, 0-1
   for (char i = 0; i < NUM_BINS; i++)
-    pans[i] = bins->left[i]/bins->right[i];
+    pans[i] = float(bins->left[i])/float(bins->right[i]);
   for (char i = 0; i < NUM_BINS; i++)
-    intensities[i] = ((bins->left[i]+bins->right[i])/2)/4096;
+    intensities[i] = ((float(bins->left[i])+float(bins->right[i]))/2.0f)/4096.0f;
 
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
@@ -150,7 +150,7 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
 
       // Calculate level intensity
       for (char x = 0; x < NUM_BINS; x++) {
-        float distance = pow(distance_x * 1.0f/(abs(pans[x]-(i/disp_width))),2.0f) + pow(distance_y * 1.0f/(abs((x/NUM_BINS)-(j/disp_height))),2.0f);
+        float distance = distance_x * 1.0f/(abs(pans[x]-(i/disp_width))) + distance_y * 1.0f/(abs((x/NUM_BINS)-(j/disp_height)));
         level += intensities[x] * distance;
       }
 

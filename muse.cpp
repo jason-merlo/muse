@@ -134,23 +134,23 @@ void loop() {
     }
   }
 
-  if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_START) {
+  if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_PSU_OFF) {
     // Run the visualizer if any bin is active. Insert your favorite visualizer here
-    matrix->visualizer_pulse(&bins, 0.15, 0.8, .5, .9);
+    matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);;
     matrix->show_all();
 
   } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
     // If we have passed the seconds until psu shutoff, turn it off
     if (psu_is_on) { psu_shutdown(); }
 
-  } else {
+  } /*else {
     // Otherwise we must be in the screensaver time. Run the screensaver
     if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
       matrix->bouncing_lines();
       matrix->show_all();
       bouncing_lines_last_update = millis();
     }
-  }
+  }*/
   #endif
 
   #if RUN_BOUNCING_BARS
@@ -171,8 +171,8 @@ void loop() {
   #endif
 
   #if RUN_VISUALIZER_BARS_MIDDLE
-  matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
-  //matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
+  //matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+  matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
   matrix->show_all();
   #endif
 }
