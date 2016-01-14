@@ -95,7 +95,6 @@ void loop() {
   #endif
 
   #if ENABLE_BARS
-  matrix->visualizer_wheel(0.25, 10);
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
