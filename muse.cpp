@@ -101,7 +101,7 @@ void setup() {
   #endif
 
   // Initialize screenaver variables
-  #if ENABLE_SCREENSAVER
+  #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
   last_sound_seconds = Time.now();
   #endif
 
@@ -121,7 +121,7 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-  #if ENABLE_SCREENSAVER
+  #if ENABLE_AUTO_SHUTDOWN
   // Check each bin to see if they are below the threshold to be "off"
   // If any bin is active break and just run the visualizer
   bool any_bin_active = false;
@@ -153,28 +153,27 @@ void loop() {
   }*/
   #endif
 
-  #if RUN_BOUNCING_BARS
+  switch (visualizer) {
+    case VISUALIZER_WHEEL:
+      matrix->visualizer_wheel(0.25, 10);
+    break;
+    case VISUALIZER_BARS:
+      matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
+    break;
+    case VISUALIZER_BARS_MIDDLE:
+
+  }
+  // TODO make self-contained bouncing lines update
   if (millis() - bouncing_lines_last_update > 10) {
     matrix->bouncing_lines();
     matrix->show_all();
     bouncing_lines_last_update = millis();
   }
-  #endif
 
-  #if RUN_COLOR_WHEEL
-  matrix->visualizer_wheel(0.25, 10);
-  #endif
 
-  #if RUN_VISUALIZER_BARS
-  matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
-  matrix->show_all();
-  #endif
 
-  #if RUN_VISUALIZER_BARS_MIDDLE
   //matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
   matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
-  matrix->show_all();
-  #endif
 }
 
 /* ================================================================== *
@@ -200,34 +199,6 @@ void init_eq() {
 }
 
 /* ================================================================== *
- *  Function: psu_shutdown
- *  Description: turns the psu off, sets psu_is_on to false
- *  Parameters:  none
- * ================================================================== */
-void psu_shutdown() {
- if (psu_is_on) {
-   matrix->clear_matrix();
-   matrix->show_all();
-   digitalWrite(ps_on, HIGH);
- }
- psu_is_on = false;
-}
-
- /* ================================================================== *
-  *  Function: psu_startup
-  *  Description: Turns the psu on
-  *  Parameters:  none
-  * ================================================================== */
-void psu_startup() {
-  if (!psu_is_on) {
-    matrix->clear_matrix();
-    matrix->show_all();
-    digitalWrite(ps_on, LOW);
-  }
-  psu_is_on = true;
-}
-
-/* ================================================================== *
  *  Function: sample_freq
  *  Description: Reads bins from MSGEQ7's and stores them to struct
  *  Parameters:  [audio_bins]* bins - frequency bins read from chip
@@ -244,4 +215,32 @@ void sample_freq(audio_bins* bins) {
     digitalWrite(strobe, HIGH);
     delayMicroseconds(40); // allow for EQ mux to fully switch
   }
+}
+
+/* ================================================================== *
+ *  Function: psu_startup
+ *  Description: Turns the psu on
+ *  Parameters:  none
+ * ================================================================== */
+void psu_startup() {
+ if (!psu_is_on) {
+   matrix->clear_matrix();
+   matrix->show_all();
+   digitalWrite(ps_on, LOW);
+ }
+ psu_is_on = true;
+}
+
+/* ================================================================== *
+ *  Function: psu_shutdown
+ *  Description: turns the psu off, sets psu_is_on to false
+ *  Parameters:  none
+ * ================================================================== */
+void psu_shutdown() {
+ if (psu_is_on) {
+   matrix->clear_matrix();
+   matrix->show_all();
+   digitalWrite(ps_on, HIGH);
+ }
+ psu_is_on = false;
 }
