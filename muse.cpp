@@ -136,7 +136,7 @@ void loop() {
 
   if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_START) {
     // Run the visualizer if any bin is active. Insert your favorite visualizer here
-    matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+    matrix->visualizer_pulse(&bins, 0.15, 0.8, .5, .9);
     matrix->show_all();
 
   } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
@@ -172,6 +172,7 @@ void loop() {
 
   #if RUN_VISUALIZER_BARS_MIDDLE
   matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+  //matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
   matrix->show_all();
   #endif
 }

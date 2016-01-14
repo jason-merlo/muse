@@ -120,13 +120,45 @@ void Bar_Matrix::bouncing_lines() {
  * Function: visualizer_wheel
  * Description: Sets all bars to a color while rotating through all
  *              hues in order of the rainbow
- * Parameters: [float] hue - hue value, or rotation of wheel
- *             [float] intensity - intensity of lights
+ * Parameters: [float] intensity - intensity of lights
+ *             [float] speed - speed wheel rotates at
  * ================================================================== */
 void Bar_Matrix::visualizer_wheel(float intensity, float speed) {
-  // TODO: incorporate internal hue "rotation" algorithm
   float val = fmod(millis()/10000.0f,1.0f)*2.0f*PI;
   fill_matrix(Color_Value(cos(val)*255*intensity, cos(val - 2*PI/3)*255*intensity, cos(val - 4*PI/3)*255*intensity));
+}
+
+/* ================================================================== *
+ * Function: visualizer_pulse
+ * Description: Creates pulses where sound appears to be originating from
+ * Parameters:  None
+ * ================================================================== */
+void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float distance_x, float distance_y) {
+  decay (out_factor);
+
+  // Calculate frequency pan and "fade"
+  float pans[NUM_BINS]; // ratio left to right, 0-1
+  float intensities[NUM_BINS]; // ratio low to high, 0-1
+  for (char i = 0; i < NUM_BINS; i++)
+    pans[i] = bins->left[i]/bins->right[i];
+  for (char i = 0; i < NUM_BINS; i++)
+    intensities[i] = ((bins->left[i]+bins->right[i])/2)/4096;
+
+  for (char i = 0; i < disp_width; i++) {
+    for (char j = 0; j < disp_height; j++) {
+      float level = 0;
+
+      // Calculate level intensity
+      for (char x = 0; x < NUM_BINS; x++) {
+        float distance = pow(distance_x * 1.0f/(abs(pans[x]-(i/disp_width))),2.0f) + pow(distance_y * 1.0f/(abs((x/NUM_BINS)-(j/disp_height))),2.0f);
+        level += intensities[x] * distance;
+      }
+
+      //level *= 2*PI;
+      //mix_pixel(i, j, in_factor, cos(level)*255*level, cos(level - 2*PI/3)*255*level, cos(level - 4*PI/3)*255*level);
+      mix_pixel(i, j, in_factor, level*255, level*255, level*255);
+    }
+  }
 }
 
 /* ================================================================== *
