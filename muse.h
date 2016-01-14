@@ -18,11 +18,19 @@
 
 /* ======================= Define - Flags =========================== */
 
-#define ENABLE_SERIAL         0
-#define ENABLE_MSGEQ7         1
-#define ENABLE_PSU_CONTROL    0
-#define ENABLE_RGB_SR         0
 #define ENABLE_BARS           1
+#define ENABLE_MSGEQ7         1
+#define ENABLE_PSU_CONTROL    1
+#define ENABLE_RGB_SR         0
+#define ENABLE_SCREENSAVER    1
+#define ENABLE_SERIAL         0
+
+/* ========= Define - The thing to display on the lights ============ */
+
+#define RUN_BOUNCING_BARS           0
+#define RUN_COLOR_WHEEL             0
+#define RUN_VISUALIZER_BARS         0
+#define RUN_VISUALIZER_BARS_MIDDLE  0
 
 /* ======================= Define - General ========================= */
 
@@ -39,6 +47,11 @@
 #define NUM_BARS          8
 #define BINS_TO_LEDS      (70.0f/(BINS_MAX - 240))
 #define FREQ_GAIN         1.0f
+
+// Screensaver constants
+#define SCREENSAVER_MINIMUM         1000
+#define SCREENSAVER_SECS_TO_PSU_OFF 30
+#define SCREENSAVER_SECS_TO_START   3
 
 /* ======================= Structs - General ======================== */
 
@@ -64,6 +77,8 @@ struct Color_Value {
 /* ======================= prototypes =============================== */
 
 void init_eq();
+void psu_shutdown();
+void psu_startup();
 void sample_freq(audio_bins* bins);
 uint32_t Wheel(byte WheelPos, float intensity);
 uint32_t Color(uint8_t r, uint8_t g, uint8_t b);
