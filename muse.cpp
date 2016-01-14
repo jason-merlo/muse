@@ -46,7 +46,7 @@ static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 // Declare matrix variables
 static Bar_Matrix* matrix;
 
-/* =============== Per visualizer/feature variables ================= */
+/* =============== Visualizer variables ================= */
 
 #if ENABLE_PSU_CONTROL
 static bool psu_is_on = false;
@@ -121,9 +121,6 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-<<<<<<< HEAD
-  #if ENABLE_BARS
-=======
   #if ENABLE_SCREENSAVER
   // Check each bin to see if they are below the threshold to be "off"
   // If any bin is active break and just run the visualizer
@@ -169,7 +166,6 @@ void loop() {
   #endif
 
   #if RUN_VISUALIZER_BARS
->>>>>>> steven
   matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
   matrix->show_all();
   #endif
