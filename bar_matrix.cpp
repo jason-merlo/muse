@@ -91,21 +91,22 @@ void Bar_Matrix::fill_matrix(Color_Value c) {
  * Description: Bounces a solid line of LEDs up and down in each matrix bar
  * Parameters: none
  * ================================================================== */
-void Bar_Matrix::bouncing_lines() {
+void Bar_Matrix::bouncing_lines(float speed) {
   for (int i = 0; i < disp_width; i++) {
     int bottom = bouncing_line_positions[i];
 
     // Clear the pixel the line just left, light the one it entered
     if (bouncing_line_directions[i] == 1) {
-      if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 0, 0);
-      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 60, 35, 7);
+      if (bottom > 0) mix_pixel(i, bottom-1, 1, 0, 0, 0);
+
+      mix_pixel(i, 1+bottom+bouncing_line_lengths[i], 1, 64, 64, 64);
     } else {
-      if (bottom > 0) bars[i]->setPixelColor(bottom-1, 0, 32, 91);
-      bars[i]->setPixelColor(1+bottom+bouncing_line_lengths[i], 0, 0, 0);
+      if (bottom > 0) mix_pixel(i, bottom-1, 1, 0, 64, 16);
+      mix_pixel(i, 1+bottom+bouncing_line_lengths[i], 1, 0, 0, 0);
     }
 
     // Move the line
-    bouncing_line_positions[i] += bouncing_line_directions[i];
+    bouncing_line_positions[i] += bouncing_line_directions[i] * speed;
 
     // Ensure we are moving in the proper direction
     if (bouncing_line_positions[i] < -.5*bouncing_line_lengths[i] && bouncing_line_directions[i] < 0) {
@@ -235,7 +236,7 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
  * Description: slowly fades out matrix values
  * Parameters: [float] factor - decay factor to be multiplied by
  * ================================================================== */
-void Bar_Matrix::decay(float factor) {
+void Bar_Matrix::decay(double factor) {
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
       unsigned int color = bars[i]->getPixelColor(j);

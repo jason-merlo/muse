@@ -43,8 +43,10 @@ static int bar_levels[4];
 // Declare matrix pins
 static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
 
+#if ENABLE_BARS
 // Declare matrix variables
 static Bar_Matrix* matrix;
+#endif
 
 /* =============== Visualizer variables ================= */
 
@@ -52,11 +54,7 @@ static Bar_Matrix* matrix;
 static bool psu_is_on = false;
 #endif
 
-#if RUN_BOUNCING_BARS || ENABLE_SCREENSAVER
-static unsigned long bouncing_lines_last_update;
-#endif
-
-#if ENABLE_SCREENSAVER
+#if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
 static unsigned long last_sound_seconds;
 #endif
 
@@ -136,8 +134,29 @@ void loop() {
 
   if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_PSU_OFF) {
     // Run the visualizer if any bin is active. Insert your favorite visualizer here
-    matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);;
+
+
+    // Switch case to aid in future web interface
+    switch (VISUALIZER_BARS_MIDDLE) {
+      case VISUALIZER_WHEEL:
+        matrix->visualizer_wheel(0.25, 10);
+      break;
+      case VISUALIZER_BARS:
+        matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
+      break;
+      case VISUALIZER_BARS_MIDDLE:
+       matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+      break;
+      case VISUALIZER_PULSE:
+        matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
+      break;
+      case BOUNCING_LINES:
+        matrix->bouncing_lines(0.75);
+      break;
+    }
     matrix->show_all();
+
+
 
   } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
     // If we have passed the seconds until psu shutoff, turn it off
@@ -152,28 +171,6 @@ void loop() {
     }
   }*/
   #endif
-
-  switch (visualizer) {
-    case VISUALIZER_WHEEL:
-      matrix->visualizer_wheel(0.25, 10);
-    break;
-    case VISUALIZER_BARS:
-      matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
-    break;
-    case VISUALIZER_BARS_MIDDLE:
-
-  }
-  // TODO make self-contained bouncing lines update
-  if (millis() - bouncing_lines_last_update > 10) {
-    matrix->bouncing_lines();
-    matrix->show_all();
-    bouncing_lines_last_update = millis();
-  }
-
-
-
-  //matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
-  matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
 }
 
 /* ================================================================== *
@@ -238,9 +235,9 @@ void psu_startup() {
  * ================================================================== */
 void psu_shutdown() {
  if (psu_is_on) {
+   digitalWrite(ps_on, HIGH);
    matrix->clear_matrix();
    matrix->show_all();
-   digitalWrite(ps_on, HIGH);
  }
  psu_is_on = false;
 }

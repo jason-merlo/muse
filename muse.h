@@ -47,6 +47,13 @@
 #define SCREENSAVER_SECS_TO_PSU_OFF 5
 #define SCREENSAVER_SECS_TO_START   2
 
+/* ======================= Define - Visualziers ===================== */
+#define VISUALIZER_WHEEL          0
+#define VISUALIZER_BARS           1
+#define VISUALIZER_BARS_MIDDLE    2
+#define VISUALIZER_PULSE          3
+#define BOUNCING_LINES            4
+
 /* ======================= Structs - General ======================== */
 
 // Struct to hold MSGEQ7 frequency intensity bins
