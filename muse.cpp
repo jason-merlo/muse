@@ -41,7 +41,8 @@ static struct audio_bins bins;
 static int bar_levels[4];
 
 // Declare matrix pins
-static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+//static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 
 #if ENABLE_BARS
 // Declare matrix variables
@@ -137,22 +138,25 @@ void loop() {
 
 
     // Switch case to aid in future web interface
-    switch (VISUALIZER_BARS_MIDDLE) {
+    switch (VISUALIZER_BARS) {
       case VISUALIZER_WHEEL:
         matrix->visualizer_wheel(0.25, 10);
-      break;
+        break;
       case VISUALIZER_BARS:
-        matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
-      break;
+        matrix->visualizer_bars(&bins, 0.5, 0.5, bar_levels);
+        break;
       case VISUALIZER_BARS_MIDDLE:
        matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
-      break;
+       break;
       case VISUALIZER_PULSE:
         matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
-      break;
+        break;
       case BOUNCING_LINES:
         matrix->bouncing_lines(0.75);
-      break;
+        break;
+      case BAR_TEST:
+        matrix->bar_test();
+        break;
     }
     matrix->show_all();
 

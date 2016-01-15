@@ -53,6 +53,24 @@
 #define VISUALIZER_BARS_MIDDLE    2
 #define VISUALIZER_PULSE          3
 #define BOUNCING_LINES            4
+#define BAR_TEST                  5
+
+/* ======================= Define - EQ Bins ===================== */
+#define LEFT_63                   2 //varified
+#define LEFT_160                  3
+#define LEFT_400                  4 //verified
+#define LEFT_1000                 5
+#define LEFT_2500                 6 //verified
+#define LEFT_6250                 0 //verified
+#define LEFT_16000                1
+
+#define RIGHT_63                  0 //verified
+#define RIGHT_160                 1
+#define RIGHT_400                 2 //verified
+#define RIGHT_1000                3
+#define RIGHT_2500                4 //verified
+#define RIGHT_6250                5 //verified
+#define RIGHT_16000               6
 
 /* ======================= Structs - General ======================== */
 
