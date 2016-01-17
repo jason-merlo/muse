@@ -38,7 +38,6 @@ static const char audio_l = A1;
 
 // Declare memory for audio bin structure
 static struct audio_bins bins;
-static int bar_levels[4];
 
 // Declare matrix pins
 //static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
@@ -143,10 +142,10 @@ void loop() {
         matrix->visualizer_wheel(0.25, 10);
         break;
       case VISUALIZER_BARS:
-        matrix->visualizer_bars(&bins, 0.5, 0.5, bar_levels);
+        matrix->visualizer_bars(&bins, 0.5, 0.5, false);
         break;
       case VISUALIZER_BARS_MIDDLE:
-       matrix->visualizer_bars_middle(&bins, 0.15, 0.8, bar_levels);
+       matrix->visualizer_bars_middle(&bins, 0.15, 0.8);
        break;
       case VISUALIZER_PULSE:
         matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);

@@ -177,12 +177,20 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
  * Description: Sets all pixel values to given color value
  * Parameters: [audio_bins]* bins - frequency bins read from chip
  * ================================================================== */
-void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
+void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe) {
   decay(out_factor);
+  float bass_level = 0;
+
+  if (strobe)
+    bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/4096.0f)+0.7f) * 5 * 255.0f;
+
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
       // get bin
       //int level = (i < disp_width/2) ? bar_levels[i] : bar_levels[7-i];
+
+      if (strobe)
+        mix_pixel(i, j, 0.5f, bass_level, bass_level, bass_level);
 
       // Set bar levels
       int level = 0;
@@ -240,7 +248,7 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
  *              One channel fills up, the other fills down.
  * Parameters: none.
  * ================================================================== */
-void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
+void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor) {
   decay(out_factor);
 
   // Right bins, grows downwards
