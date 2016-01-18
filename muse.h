@@ -56,13 +56,13 @@
 #define BAR_TEST                  5
 
 /* ======================= Define - EQ Bins ===================== */
-#define LEFT_63                   2 //varified
-#define LEFT_160                  3
-#define LEFT_400                  4 //verified
-#define LEFT_1000                 5
-#define LEFT_2500                 6 //verified
-#define LEFT_6250                 0 //verified
-#define LEFT_16000                1
+#define LEFT_63                   0 //varified
+#define LEFT_160                  1
+#define LEFT_400                  2 //verified
+#define LEFT_1000                 3
+#define LEFT_2500                 4 //verified
+#define LEFT_6250                 5 //verified
+#define LEFT_16000                6
 
 #define RIGHT_63                  0 //verified
 #define RIGHT_160                 1

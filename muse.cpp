@@ -76,6 +76,7 @@ void setup() {
   pinMode(strobe, OUTPUT);
   pinMode(audio_l, INPUT);
   pinMode(audio_r, INPUT);
+  init_eq();
   #endif
 
   // Enables power switch input for PSU and control for
