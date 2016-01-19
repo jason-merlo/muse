@@ -15,6 +15,8 @@
 #include "application.h"
 #include "neopixel.h"
 
+#include "webpage.h"
+
 SYSTEM_MODE(AUTOMATIC);
 
 /* ======================= Pin Decls. =============================== */
@@ -57,6 +59,10 @@ static bool psu_is_on = false;
 #if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
 static unsigned long last_sound_seconds;
 #endif
+
+/* =============== TCP Server variables ================== */
+TCPClient tcp_client;
+TCPServer tcp_server = TCPServer(80);
 
 /* ================================================================== *
  *  Function: Setup
@@ -103,11 +109,6 @@ void setup() {
   #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
   last_sound_seconds = Time.now();
   #endif
-
-  // Initialize bouncing bars variables
-  #if RUN_BOUNCING_BARS || ENABLE_SCREENSAVER
-  bouncing_lines_last_update = 0;
-  #endif
 }
 
 /* ================================================================== *
@@ -118,6 +119,15 @@ void loop() {
   // Sample frequency bins
   #if ENABLE_MSGEQ7
   sample_freq(&bins);
+  #endif
+
+  // Serve webpage
+  #if ENABLE_WEB_SERVER
+  if (tcp_client.connected() && tcp_client.available()) {
+      serve_webpage();
+  } else {
+      tcp_client = tcp_server.available();
+  }
   #endif
 
   // Check each bin to see if they are below the threshold to be "off"
@@ -137,7 +147,7 @@ void loop() {
 
 
     // Switch case to aid in future web interface
-    switch (VISUALIZER_WHEEL) {
+    switch (VISUALIZER_BARS) {
       case VISUALIZER_WHEEL:
         matrix->visualizer_wheel(0.25, 10);
         break;
@@ -161,7 +171,9 @@ void loop() {
 
 
 
-  } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+  }
+
+  if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
     #if ENABLE_AUTO_SHUTDOWN
     // If we have passed the seconds until psu shutoff, turn it off
     if (psu_is_on) { psu_shutdown(); }
@@ -239,9 +251,25 @@ void psu_startup() {
  * ================================================================== */
 void psu_shutdown() {
   if (psu_is_on) {
-   digitalWrite(ps_on, HIGH);
-   matrix->clear_matrix();
-   matrix->show_all();
-   }
-   psu_is_on = false;
+    digitalWrite(ps_on, HIGH);
+    matrix->clear_matrix();
+    matrix->show_all();
+  }
+  psu_is_on = false;
+}
+
+/* ================================================================== *
+ *  Function: serve_webpage
+ *  Description: Sends webpage data to client over TCP
+ *  Parameters:  none
+ * ================================================================== */
+void serve_webpage() {
+    //TODO: read in the request to see what page they want:
+    //TODO: retrieve larger content from flash?
+
+    tcp_client.print(webpage);
+    tcp_client.println("\n\n");
+    tcp_client.flush();
+    tcp_client.stop();
+    delayMicroseconds(50);
 }
