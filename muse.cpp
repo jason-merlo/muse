@@ -120,7 +120,6 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-  #if ENABLE_AUTO_SHUTDOWN
   // Check each bin to see if they are below the threshold to be "off"
   // If any bin is active break and just run the visualizer
   bool any_bin_active = false;
@@ -133,12 +132,12 @@ void loop() {
     }
   }
 
-  if (any_bin_active || Time.now()-last_sound_seconds < SCREENSAVER_SECS_TO_PSU_OFF) {
+  if (psu_is_on) {
     // Run the visualizer if any bin is active. Insert your favorite visualizer here
 
 
     // Switch case to aid in future web interface
-    switch (VISUALIZER_BARS) {
+    switch (VISUALIZER_WHEEL) {
       case VISUALIZER_WHEEL:
         matrix->visualizer_wheel(0.25, 10);
         break;
@@ -163,9 +162,10 @@ void loop() {
 
 
   } else if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+    #if ENABLE_AUTO_SHUTDOWN
     // If we have passed the seconds until psu shutoff, turn it off
     if (psu_is_on) { psu_shutdown(); }
-
+    #endif
   } /*else {
     // Otherwise we must be in the screensaver time. Run the screensaver
     if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
@@ -174,7 +174,7 @@ void loop() {
       bouncing_lines_last_update = millis();
     }
   }*/
-  #endif
+
 }
 
 /* ================================================================== *
@@ -238,10 +238,10 @@ void psu_startup() {
  *  Parameters:  none
  * ================================================================== */
 void psu_shutdown() {
- if (psu_is_on) {
+  if (psu_is_on) {
    digitalWrite(ps_on, HIGH);
    matrix->clear_matrix();
    matrix->show_all();
- }
- psu_is_on = false;
+   }
+   psu_is_on = false;
 }
