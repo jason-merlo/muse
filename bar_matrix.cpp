@@ -198,6 +198,48 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
   }
 }
 
+void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
+  decay(out_factor);
+
+  for (char i = 0; i < disp_width/2; i++) {
+    int led_index = 0;
+    for (char j = 0; j < STRIP_LENGTH; j+=10) {
+      // get bin
+      int level = bins->left[j/10];
+      level *= FREQ_GAIN;
+      // set bar
+      if (i < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
+        float val = level*2*PI/4096.0;
+        for (int x = 0; x < 10; x++) {
+          mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        }
+      }
+
+      led_index++;
+      led_index = led_index%10;
+    }
+  }
+
+  for (char i = disp_width/2; i < disp_width; i++) {
+    int led_index = 0;
+    for (char j = 0; j < STRIP_LENGTH; j+=10) {
+      // get bin
+      int level = bins->right[j/10];
+      level *= FREQ_GAIN;
+      // set bar
+      if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
+        float val = level*2*PI/4096.0;
+        for (int x = 0; x < 10; x++) {
+          mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        }
+      }
+
+      led_index++;
+      led_index = led_index%10;
+    }
+  }
+}
+
 /* ================================================================== *
  * Function: decay
  * Description: slowly fades out matrix values
