@@ -353,8 +353,8 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
     for (short j = disp_height - 1; j > 0; j-=speed) {
       // Move wave up
       unsigned int color = bars[i]->getPixelColor(j-1);
-      for (int i = 0; i < speed; i++)
-        mix_pixel(i, j+i, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
+      for (int k = 0; k < speed; k++)
+        mix_pixel(i, j+k, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
     }
 
     // Set bar levels
@@ -391,7 +391,7 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
     float val = level*2*PI/4096.0;
     //float intensity = (pow((float)(level)/(float)(BINS_MAX), 2))*255;
     float intensity = (level)/(BINS_MAX)*255.0f;
-    mix_pixel(i, 0, in_factor, cos(val - 4*PI/3)*intensity, cos(val - 2*PI/3)*intensity, cos(val)*intensity);
+    mix_pixel(i, 0, in_factor, cos(val - 2*PI/3)*intensity, cos(val - 4*PI/3)*intensity, cos(val)*intensity);
 
     //bars[i]->setPixelColor(0, cos(val - 2*PI/3)*intensity, cos(val)*intensity, cos(val - 4*PI/3)*intensity);
 

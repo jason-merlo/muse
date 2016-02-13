@@ -45,7 +45,7 @@
 
 // Screensaver constants
 #define SCREENSAVER_MINIMUM         1000
-#define SCREENSAVER_SECS_TO_PSU_OFF 5
+#define SCREENSAVER_SECS_TO_PSU_OFF 15
 #define SCREENSAVER_SECS_TO_START   2
 
 /* ======================= Define - Visualziers ===================== */

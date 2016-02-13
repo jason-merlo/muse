@@ -161,7 +161,7 @@ void loop() {
         matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
         break;
       case VISUALIZER_PLASMA:
-        matrix->visualizer_plasma(&bins, 0.5, 0.96, 2);
+        matrix->visualizer_plasma(&bins, 0.5, 0.94, 4);
         break;
       case BOUNCING_LINES:
         matrix->bouncing_lines(0.75);
