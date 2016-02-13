@@ -33,7 +33,7 @@ class Bar_Matrix {
       visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe),
       visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor),
       visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float decay_x, float decay_y),
-      visualizer_plasma(audio_bins* bins, float in_factor, float out_factor),
+      visualizer_plasma(audio_bins* bins, float in_factor, float out_factor, int speed),
       bar_test(),
       pixel_test(),
       show_all(),

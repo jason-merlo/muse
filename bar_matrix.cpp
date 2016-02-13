@@ -346,15 +346,15 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
  * Description: slowly fades out matrix values
  * Parameters: [float] factor - decay factor to be multiplied by
  * ================================================================== */
-void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_factor) {
+void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_factor, int speed) {
   decay(out_factor);
 
   for (char i = 0; i < disp_width; i++) {
-    for (short j = disp_height - 1; j > 0; j-=2) {
+    for (short j = disp_height - 1; j > 0; j-=speed) {
       // Move wave up
       unsigned int color = bars[i]->getPixelColor(j-1);
-      mix_pixel(i, j, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
-      mix_pixel(i, j+1, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
+      for (int i = 0; i < speed; i++)
+        mix_pixel(i, j+i, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
     }
 
     // Set bar levels
