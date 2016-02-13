@@ -147,7 +147,7 @@ void loop() {
 
 
     // Switch case to aid in future web interface
-    switch (VISUALIZER_PLASMA) {
+    switch (VISUALIZER_BARS_MIDDLE) {
       case VISUALIZER_WHEEL:
         matrix->visualizer_wheel(0.25, 10);
         break;

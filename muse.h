@@ -44,7 +44,7 @@
 #define FREQ_GAIN         1.0f
 
 // Screensaver constants
-#define SCREENSAVER_MINIMUM         1000
+#define SCREENSAVER_MINIMUM         1200
 #define SCREENSAVER_SECS_TO_PSU_OFF 15
 #define SCREENSAVER_SECS_TO_START   2
 
@@ -59,21 +59,13 @@
 #define PIXEL_TEST                7
 
 /* ======================= Define - EQ Bins ===================== */
-#define LEFT_63                   0 //varified
-#define LEFT_160                  1
-#define LEFT_400                  2 //verified
-#define LEFT_1000                 3
-#define LEFT_2500                 4 //verified
-#define LEFT_6250                 5 //verified
-#define LEFT_16000                6
-
-#define RIGHT_63                  0 //verified
-#define RIGHT_160                 1
-#define RIGHT_400                 2 //verified
-#define RIGHT_1000                3
-#define RIGHT_2500                4 //verified
-#define RIGHT_6250                5 //verified
-#define RIGHT_16000               6
+#define FREQ_63                   0
+#define FREQ_160                  1
+#define FREQ_400                  2
+#define FREQ_1000                 3
+#define FREQ_2500                 4
+#define FREQ_6250                 5
+#define FREQ_16000                6
 
 /* ======================= Structs - General ======================== */
 

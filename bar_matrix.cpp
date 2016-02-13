@@ -192,7 +192,7 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
   float bass_level = 0;
 
   if (strobe)
-    bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/4096.0f)+0.7f) * 5 * 255.0f;
+    bass_level = (log(((bins->left[FREQ_63]+bins->right[FREQ_63])/2.0f)/4096.0f)+0.7f) * 5 * 255.0f;
 
   for (char i = 0; i < disp_width; i++) {
     for (char j = 0; j < disp_height; j++) {
@@ -206,28 +206,28 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
       int level = 0;
       switch(i) {
         case 0:
-          level = bins->left[LEFT_160];
+          level = bins->left[FREQ_160];
           break;
         case 1:
-          level = bins->left[LEFT_1000];
+          level = bins->left[FREQ_1000];
           break;
         case 2:
-          level = bins->left[LEFT_6250];
+          level = bins->left[FREQ_2500];
           break;
         case 3:
-          level = bins->left[LEFT_16000];
+          level = bins->left[FREQ_16000];
           break;
         case 4:
-          level = bins->right[RIGHT_16000];
+          level = bins->right[FREQ_16000];
           break;
         case 5:
-          level = bins->right[RIGHT_6250];
+          level = bins->right[FREQ_6250];
           break;
         case 6:
-          level = bins->right[RIGHT_1000];
+          level = bins->right[FREQ_1000];
           break;
         case 7:
-          level = bins->right[RIGHT_160];
+          level = bins->right[FREQ_160];
           break;
       }
 
@@ -269,28 +269,28 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       int level = 0;
       switch(i) {
         case 0:
-          level = bins->left[LEFT_63]; //1kHz
+          level = bins->left[FREQ_63];
           break;
         case 1:
-          level = bins->left[LEFT_160]; //6.25kHz
+          level = bins->left[FREQ_160];
           break;
         case 2:
-          level = bins->left[LEFT_400]; //63Hz
+          level = bins->left[FREQ_400];
           break;
         case 3:
-          level = bins->left[LEFT_1000]; //400Hz
+          level = bins->left[FREQ_1000];
           break;
         case 4:
-          level = bins->right[LEFT_2500]; //400Hz
+          level = bins->right[FREQ_2500];
           break;
         case 5:
-          level = bins->right[LEFT_6250]; //63Hz
+          level = bins->right[FREQ_2500];
           break;
         case 6:
-          //level = bins->right[RIGHT_1000]; //6.25kHz
+          level = (bins->left[FREQ_2500]+bins->left[FREQ_16000])/2;
           break;
         case 7:
-          level = bins->right[LEFT_16000]; //1kHz
+          level = bins->right[FREQ_16000];
           break;
       }
       level *= FREQ_GAIN;
@@ -307,28 +307,28 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       int level = 0;
       switch(i) {
         case 0:
-          level = bins->left[RIGHT_63]; //1kHz
+          level = bins->left[FREQ_63];
           break;
         case 1:
-          level = bins->left[RIGHT_160]; //6.25kHz
+          level = bins->left[FREQ_160];
           break;
         case 2:
-          level = bins->left[RIGHT_400]; //63Hz
+          level = bins->left[FREQ_400];
           break;
         case 3:
-          level = bins->left[RIGHT_1000]; //400Hz
+          level = bins->left[FREQ_1000];
           break;
         case 4:
-          level = bins->right[RIGHT_2500]; //400Hz
+          level = bins->right[FREQ_2500];
           break;
         case 5:
-          level = bins->right[RIGHT_6250]; //63Hz
+          level = bins->right[FREQ_6250];
           break;
         case 6:
-          //level = bins->right[RIGHT_1000]; //6.25kHz
+          level = (bins->right[FREQ_6250]+bins->right[FREQ_16000])/2;
           break;
         case 7:
-          level = bins->right[RIGHT_16000]; //1kHz
+          level = bins->right[FREQ_16000];
           break;
       }
       level *= FREQ_GAIN;
@@ -361,28 +361,28 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
     int level = 0;
     switch(i) {
       case 0:
-        level = bins->left[LEFT_160];
+        level = bins->left[FREQ_160];
         break;
       case 1:
-        level = bins->left[LEFT_1000];
+        level = bins->left[FREQ_1000];
         break;
       case 2:
-        level = bins->left[LEFT_6250];
+        level = bins->left[FREQ_2500];
         break;
       case 3:
-        level = bins->left[LEFT_16000];
+        level = bins->left[FREQ_16000];
         break;
       case 4:
-        level = bins->right[RIGHT_16000];
+        level = bins->right[FREQ_16000];
         break;
       case 5:
-        level = bins->right[RIGHT_6250];
+        level = bins->right[FREQ_6250];
         break;
       case 6:
-        level = bins->right[RIGHT_1000];
+        level = bins->right[FREQ_1000];
         break;
       case 7:
-        level = bins->right[RIGHT_160];
+        level = bins->right[FREQ_160];
         break;
     }
 
