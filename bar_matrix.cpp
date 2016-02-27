@@ -177,10 +177,23 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       // get bin
       int level = bins->left[i%(NUM_BARS-1)];
       level *= FREQ_GAIN;
-      // set bar
+
+      if (i >= NUM_BINS) {
+        level = bins->left[6];
+        level += bins->left[7];
+        level /= 2;
+      }
+
+      //bars[i]->setPixelColor(STRIP_LENGTH/2 - j, 255, 255, 255);
+      //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, 255,255,255);
+
+
+      // Set bar
       if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
         float val = level*2*PI/4096.0;
-        mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val - 2*PI/3)*255, cos(val)*255, cos(val - 4*PI/3)*255);
+      } else {
+        mix_pixel(i, STRIP_LENGTH/2 - j, 1, (char)(bins->left[1]/4096.0), (char)(bins->left[4]/4096.0), (char)(bins->left[6]/4096.0));
       }
     }
 
@@ -189,10 +202,74 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       // get bin
       int level = bins->right[i%(NUM_BARS-1)];
       level *= FREQ_GAIN;
+
+      if (i >= NUM_BINS) {
+        level = bins->right[6];
+        level += bins->right[7];
+        level /= 2;
+      }
+
       // set bar
       if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
         float val = level*2*PI/4096.0;
         mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+      } else {
+        mix_pixel(i, STRIP_LENGTH/2 - j, 1, (char)(bins->right[1]/4096.0), (char)(bins->right[4]/4096.0), (char)(bins->right[6]/4096.0));
+      }
+    }
+  }
+}
+
+void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor, int* bar_levels) {
+  decay(out_factor);
+
+  for (char i = 0; i < disp_width/2; i++) {
+    int led_index = 0;
+    for (char j = 0; j < STRIP_LENGTH; j+=10) {
+      // get bin
+      int level = bins->left[j/10];
+      level *= FREQ_GAIN;
+      // set bar
+      if (i < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
+        float val = level*2*PI/4096.0;
+        for (int x = 0; x < 10; x++) {
+          mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        }
+      }
+
+      led_index++;
+      led_index = led_index%10;
+    }
+  }
+
+  for (char i = disp_width/2; i < disp_width; i++) {
+    int led_index = 0;
+    for (char j = 0; j < STRIP_LENGTH; j+=10) {
+      // get bin
+      int level = bins->right[j/10];
+      level *= FREQ_GAIN;
+      // set bar
+      if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
+        float val = level*2*PI/4096.0;
+        for (int x = 0; x < 10; x++) {
+          mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        }
+      }
+
+      led_index++;
+      led_index = led_index%10;
+    }
+  }
+
+  for (char i = 0; i < disp_width; i++) {
+    for (char j = 0; j < STRIP_LENGTH/2; j++) {
+      // get bin
+      int level = bins->left[i%(NUM_BARS-1)];
+      level *= FREQ_GAIN;
+      // set bar
+      if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
+        float val = level*2*PI/4096.0;
+        //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
       }
     }
   }

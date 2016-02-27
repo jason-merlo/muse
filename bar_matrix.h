@@ -32,6 +32,7 @@ class Bar_Matrix {
       visualizer_wheel(float intensity, float speed),
       visualizer_bars(audio_bins* bins, float in_factor, float out_factor, int* bar_levels),
       visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor, int* bar_levels),
+      visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor, int* bar_levels),
       show_all(),
       decay(float factor),
       mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b);
