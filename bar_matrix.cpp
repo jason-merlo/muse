@@ -18,6 +18,13 @@ short disp_height;
 unsigned long** display;
 Adafruit_NeoPixel** bars;
 
+int sma_values[26];
+int sma_index;
+long sma_total;
+float lpf_values[4];
+int red, green, blue;
+bool beat_on;
+
 /* ================================================================== *
  * Bar_matrix
  *
@@ -44,6 +51,19 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     if (random(1) > .5) bouncing_line_directions[i] = 1;
     else                bouncing_line_directions[i] = -1;
   }
+
+  sma_index = 0;
+  sma_total = 0;
+  red = 0;
+  green = 0;
+  blue = 0;
+
+  lpf_values[0] = 0.0;
+  lpf_values[1] = 0.0;
+  lpf_values[2] = 0.0;
+  lpf_values[3] = 0.0;
+
+  beat_on = false;
 
   init_matrix();
   clear_matrix();
@@ -84,6 +104,41 @@ void Bar_Matrix::fill_matrix(Color_Value c) {
       bars[i]->setPixelColor(j, c.c);
     }
   }
+}
+
+void Bar_Matrix::update_color(audio_bins *bins) {
+  float sma = 0.0;
+  sma_total -= sma_values[sma_index];
+  sma_values[sma_index] = bins->left[0];
+  sma_total += sma_values[sma_index];
+  sma = sma_total / 26.0;
+
+  lpf_values[3] = lpf_values[2];
+  lpf_values[2] = lpf_values[1];
+  lpf_values[1] = lpf_values[0];
+
+  lpf_values[0] = 0.01*lpf_values[1] + 0.65*lpf_values[2] + 0.28*lpf_values[3] + 0.06*(bins->left[LEFT_63]);
+
+  if (!beat_on && sma > .971*lpf_values[0]) {
+    //beat detect
+    blue = (green+red) % 255;
+    green = red;
+    red += random(255);
+    //green += random(255);
+    //blue += random(255);
+
+    //red = red % 255;
+    //green = green % 255;
+    //blue = blue % 255;
+
+    beat_on = true;
+  } else if (beat_on && sma < .97*lpf_values[0]) {
+    //beat reset
+    beat_on = false;
+  }
+
+  sma_index++;
+  sma_index = sma_index % 26;
 }
 
 /* ================================================================== *
@@ -287,7 +342,7 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
           level = bins->right[LEFT_6250]; //63Hz
           break;
         case 6:
-          //level = bins->right[RIGHT_1000]; //6.25kHz
+          level = bins->right[LEFT_1000]; //6.25kHz
           break;
         case 7:
           level = bins->right[LEFT_16000]; //1kHz
@@ -297,7 +352,8 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       // set bar
       if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
         float val = level*2*PI/4096.0;
-        mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, red, green, blue);
       }
     }
 
@@ -325,7 +381,7 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
           level = bins->right[RIGHT_6250]; //63Hz
           break;
         case 6:
-          //level = bins->right[RIGHT_1000]; //6.25kHz
+          level = bins->right[RIGHT_1000]; //6.25kHz
           break;
         case 7:
           level = bins->right[RIGHT_16000]; //1kHz
@@ -335,7 +391,8 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
       // set bar
       if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
         float val = level*2*PI/4096.0;
-        mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        mix_pixel(i, j, in_factor, red, green, blue);
       }
     }
   }

@@ -28,6 +28,7 @@ class Bar_Matrix {
     void
       clear_matrix(),
       fill_matrix(Color_Value color),
+      update_color(audio_bins * bins),
       bouncing_lines(float speed),
       visualizer_wheel(float intensity, float speed),
       visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe),
