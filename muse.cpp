@@ -73,7 +73,7 @@ void setup() {
 
   // Open debug terminal
   #if ENABLE_SERIAL
-  Serial.begin(57600);
+  Serial.begin(9600);
   #endif
 
   // Enables frequency analyzer
@@ -119,6 +119,10 @@ void loop() {
   // Sample frequency bins
   #if ENABLE_MSGEQ7
   sample_freq(&bins);
+  #endif
+
+  #if ENABLE_SERIAL
+  Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
   #endif
 
   // Serve webpage

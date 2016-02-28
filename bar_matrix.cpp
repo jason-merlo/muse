@@ -25,6 +25,15 @@ float lpf_values[4];
 int red, green, blue;
 bool beat_on;
 
+#define SMA_LONG_LENGTH 450
+#define SMA_SHORT_LENGTH 10
+float sma_long_values[SMA_LONG_LENGTH];
+float sma_short_values[SMA_SHORT_LENGTH];
+float sma_long_total;
+float sma_short_total;
+int sma_long_index;
+int sma_short_index;
+
 /* ================================================================== *
  * Bar_matrix
  *
@@ -64,6 +73,11 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
   lpf_values[3] = 0.0;
 
   beat_on = false;
+
+  sma_long_total = 0;
+  sma_long_index = 0;
+  sma_short_total = 0;
+  sma_short_index = 0;
 
   init_matrix();
   clear_matrix();
@@ -106,7 +120,36 @@ void Bar_Matrix::fill_matrix(Color_Value c) {
   }
 }
 
-void Bar_Matrix::update_color(audio_bins *bins) {
+void Bar_Matrix::update_color(audio_bins * bins) {
+  sma_short_total -= sma_short_values[sma_short_index];
+  sma_short_values[sma_short_index] = bins->left[0] * bins->left[0];
+  sma_short_total += sma_short_values[sma_short_index];
+  float sma_short = sma_short_total / SMA_SHORT_LENGTH;
+
+  sma_long_total -= sma_long_values[sma_long_index];
+  sma_long_values[sma_long_index] = bins->left[0] * bins->left[0];
+  sma_long_total += sma_long_values[sma_long_index];
+  float sma_long = sma_long_total / SMA_LONG_LENGTH;
+
+  if (!beat_on && sma_short > 1.00*sma_long) {
+    //beat detect
+    blue = (green+red) % 255;
+    green = red;
+    red += random(255);
+
+    beat_on = true;
+  } else if (beat_on && sma_short < 1.00*sma_long) {
+    //beat reset
+    beat_on = false;
+  }
+
+  sma_long_index++;
+  sma_long_index = sma_long_index % SMA_LONG_LENGTH;
+  sma_short_index++;
+  sma_short_index = sma_short_index % SMA_SHORT_LENGTH;
+}
+
+/*void Bar_Matrix::update_color(audio_bins *bins) {
   float sma = 0.0;
   sma_total -= sma_values[sma_index];
   sma_values[sma_index] = bins->left[0];
@@ -124,12 +167,6 @@ void Bar_Matrix::update_color(audio_bins *bins) {
     blue = (green+red) % 255;
     green = red;
     red += random(255);
-    //green += random(255);
-    //blue += random(255);
-
-    //red = red % 255;
-    //green = green % 255;
-    //blue = blue % 255;
 
     beat_on = true;
   } else if (beat_on && sma < .97*lpf_values[0]) {
@@ -139,7 +176,7 @@ void Bar_Matrix::update_color(audio_bins *bins) {
 
   sma_index++;
   sma_index = sma_index % 26;
-}
+}*/
 
 /* ================================================================== *
  * Function: bouncing_lines
