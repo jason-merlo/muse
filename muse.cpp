@@ -152,7 +152,7 @@ void loop() {
 
     // Switch case to aid in future web interface
     matrix->update_color(&bins);
-    switch (VISUALIZER_BARS_MIDDLE) {
+    switch (VISUALIZER_BARS) {
       case VISUALIZER_WHEEL:
         matrix->visualizer_wheel(0.25, 10);
         break;
