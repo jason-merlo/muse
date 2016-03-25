@@ -44,9 +44,9 @@
 #define FREQ_GAIN         1.0f
 
 // Screensaver constants
-#define SCREENSAVER_MINIMUM         1000
-#define SCREENSAVER_SECS_TO_PSU_OFF 5
-#define SCREENSAVER_SECS_TO_START   2
+#define SCREENSAVER_MINIMUM         1300
+#define SCREENSAVER_SECS_TO_PSU_OFF 30
+#define SCREENSAVER_SECS_TO_START   10
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_WHEEL          0
@@ -54,9 +54,12 @@
 #define VISUALIZER_BARS_MIDDLE    2
 #define VISUALIZER_PULSE          3
 #define VISUALIZER_PLASMA         4
-#define BOUNCING_LINES            5
-#define BAR_TEST                  6
-#define PIXEL_TEST                7
+#define VISUALIZER_RAINBOW        5
+
+#define BOUNCING_LINES            77
+
+#define BAR_TEST                  88
+#define PIXEL_TEST                99
 
 /* ======================= Define - EQ Bins ===================== */
 #define LEFT_63                   0 //varified

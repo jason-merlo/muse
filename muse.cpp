@@ -147,15 +147,9 @@ void loop() {
   }
 
   if (psu_is_on) {
-    // Run the visualizer if any bin is active. Insert your favorite visualizer here
-
-
     // Switch case to aid in future web interface
     matrix->update_color(&bins);
     switch (VISUALIZER_BARS_MIDDLE) {
-      case VISUALIZER_WHEEL:
-        matrix->visualizer_wheel(0.25, 10);
-        break;
       case VISUALIZER_BARS:
         matrix->visualizer_bars(&bins, 0.15, 0.8, false);
         break;
@@ -168,6 +162,12 @@ void loop() {
       case VISUALIZER_PLASMA:
         matrix->visualizer_plasma(&bins, 0.5, 0.965);
         break;
+      case VISUALIZER_RAINBOW:
+        matrix->visualizer_rainbow(&bins, 0.15, 0.8);
+        break;
+      case VISUALIZER_WHEEL:
+        matrix->visualizer_wheel(0.25, 10);
+        break;
       case BOUNCING_LINES:
         matrix->bouncing_lines(0.75);
         break;
@@ -177,10 +177,8 @@ void loop() {
       case PIXEL_TEST:
         matrix->pixel_test();
     }
+
     matrix->show_all();
-
-
-
   }
 
   if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
