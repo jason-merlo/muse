@@ -345,28 +345,28 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
       int level = 0;
       switch(i) {
         case 0:
-          level = bins->left[LEFT_160];
+          level = bins->left[LEFT_63];
           break;
         case 1:
-          level = bins->left[LEFT_1000];
+          level = bins->left[LEFT_160];
           break;
         case 2:
-          level = bins->left[LEFT_6250];
+          level = bins->left[LEFT_400];
           break;
         case 3:
-          level = bins->left[LEFT_16000];
+          level = bins->left[LEFT_1000];
           break;
         case 4:
-          level = bins->right[RIGHT_16000];
+          level = bins->left[LEFT_2500];
           break;
         case 5:
-          level = bins->right[RIGHT_6250];
+          level = bins->left[LEFT_6250];
           break;
         case 6:
-          level = bins->right[RIGHT_1000];
+          level = bins->left[LEFT_16000];
           break;
         case 7:
-          level = bins->right[RIGHT_160];
+          level = bins->right[RIGHT_63];
           break;
       }
 
@@ -376,7 +376,8 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
       //if (j < (float)(level)/(float)(BINS_MAX) * (STRIP_LENGTH))
 
         float val = level*2*PI/4096.0;
-        mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+        mix_pixel(i, j, in_factor, red, green, blue);
+        //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
         /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255, cos(val - 4*pi/3)*255);*/
 
         /*mix_pixel(i, j, in_factor, bins->left[0]/16,
@@ -499,7 +500,8 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
       if (i < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
         float val = level*2*PI/4096.0;
         for (int x = 0; x < 10; x++) {
-          mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+          //mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+          mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, red, green, blue);//reds[i], greens[i], blues[i]);
         }
       }
 
@@ -518,7 +520,8 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
       if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
         float val = level*2*PI/4096.0;
         for (int x = 0; x < 10; x++) {
-          mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+          //mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+          mix_pixel(i, x*NUM_BARS+led_index, in_factor, red, green, blue);//reds[i], greens[i], blues[i]);
         }
       }
 

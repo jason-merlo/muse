@@ -149,7 +149,7 @@ void loop() {
   if (psu_is_on) {
     // Switch case to aid in future web interface
     matrix->update_color(&bins);
-    switch (VISUALIZER_BARS_MIDDLE) {
+    switch (VISUALIZER_BARS) {
       case VISUALIZER_BARS:
         matrix->visualizer_bars(&bins, 0.15, 0.8, false);
         break;
