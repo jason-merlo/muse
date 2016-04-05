@@ -52,6 +52,10 @@ static Bar_Matrix* matrix;
 
 /* =============== Visualizer variables ================= */
 
+#if ENABLE_WEB_SERVER
+char myIpAddress[24];
+#endif
+
 #if ENABLE_PSU_CONTROL
 static bool psu_is_on = false;
 #endif
@@ -109,6 +113,14 @@ void setup() {
   #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
   last_sound_seconds = Time.now();
   #endif
+
+  #if ENABLE_WEB_SERVER
+  Particle.variable("ipAddress", myIpAddress, STRING);
+  IPAddress myIp = WiFi.localIP();
+  sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
+
+  tcp_server.begin();
+  #endif
 }
 
 /* ================================================================== *
@@ -129,6 +141,7 @@ void loop() {
   #if ENABLE_WEB_SERVER
   if (tcp_client.connected() && tcp_client.available()) {
       serve_webpage();
+      tcp_client.stop();
   } else {
       tcp_client = tcp_server.available();
   }
