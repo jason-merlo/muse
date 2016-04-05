@@ -15,6 +15,8 @@
 #include "application.h"
 #include "neopixel.h"
 
+#include "webpage.h"
+
 SYSTEM_MODE(AUTOMATIC);
 
 /* ======================= Pin Decls. =============================== */
@@ -38,13 +40,29 @@ static const char audio_l = A1;
 
 // Declare memory for audio bin structure
 static struct audio_bins bins;
-static int bar_levels[4];
 
 // Declare matrix pins
-static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+//static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 
+#if ENABLE_BARS
 // Declare matrix variables
 static Bar_Matrix* matrix;
+#endif
+
+/* =============== Visualizer variables ================= */
+
+#if ENABLE_PSU_CONTROL
+static bool psu_is_on = false;
+#endif
+
+#if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
+static unsigned long last_sound_seconds;
+#endif
+
+/* =============== TCP Server variables ================== */
+TCPClient tcp_client;
+TCPServer tcp_server = TCPServer(80);
 
 /* ================================================================== *
  *  Function: Setup
@@ -55,7 +73,7 @@ void setup() {
 
   // Open debug terminal
   #if ENABLE_SERIAL
-  Serial.begin(57600);
+  Serial.begin(9600);
   #endif
 
   // Enables frequency analyzer
@@ -64,13 +82,15 @@ void setup() {
   pinMode(strobe, OUTPUT);
   pinMode(audio_l, INPUT);
   pinMode(audio_r, INPUT);
+  init_eq();
   #endif
 
   // Enables power switch input for PSU and control for
   #if ENABLE_PSU_CONTROL
   pinMode(ps_on, OUTPUT);
   //pinMode(pwr_sw, INPUT);
-  digitalWrite(ps_on, LOW);
+  psu_is_on = false;
+  psu_startup();
   #endif
 
   // Enables pins for shift register to control RGB LED strips
@@ -84,6 +104,11 @@ void setup() {
   #if ENABLE_BARS
   matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
   #endif
+
+  // Initialize screenaver variables
+  #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
+  last_sound_seconds = Time.now();
+  #endif
 }
 
 /* ================================================================== *
@@ -96,11 +121,80 @@ void loop() {
   sample_freq(&bins);
   #endif
 
-  #if ENABLE_BARS
-  matrix->visualizer_wheel(0.25, 10);
-  matrix->visualizer_bars(&bins, 0.15, 0.8, bar_levels);
-  matrix->show_all();
+  #if ENABLE_SERIAL
+  Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
   #endif
+
+  // Serve webpage
+  #if ENABLE_WEB_SERVER
+  if (tcp_client.connected() && tcp_client.available()) {
+      serve_webpage();
+  } else {
+      tcp_client = tcp_server.available();
+  }
+  #endif
+
+  // Check each bin to see if they are below the threshold to be "off"
+  // If any bin is active break and just run the visualizer
+  bool any_bin_active = false;
+  for (int i = 0; i < NUM_BINS; i++) {
+    if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
+      any_bin_active = true;
+      if (!psu_is_on) { psu_startup(); }
+      last_sound_seconds = Time.now();
+      break;
+    }
+  }
+
+  if (psu_is_on) {
+    // Switch case to aid in future web interface
+    matrix->update_color(&bins);
+    switch (VISUALIZER_BARS_MIDDLE) {
+      case VISUALIZER_BARS:
+        matrix->visualizer_bars(&bins, 0.15, 0.8, false);
+        break;
+      case VISUALIZER_BARS_MIDDLE:
+       matrix->visualizer_bars_middle(&bins, 0.15, 0.8);
+       break;
+      case VISUALIZER_PULSE:
+        matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
+        break;
+      case VISUALIZER_PLASMA:
+        matrix->visualizer_plasma(&bins, 0.5, 0.965);
+        break;
+      case VISUALIZER_RAINBOW:
+        matrix->visualizer_rainbow(&bins, 0.15, 0.8);
+        break;
+      case VISUALIZER_WHEEL:
+        matrix->visualizer_wheel(0.25, 10);
+        break;
+      case BOUNCING_LINES:
+        matrix->bouncing_lines(0.75);
+        break;
+      case BAR_TEST:
+        matrix->bar_test();
+        break;
+      case PIXEL_TEST:
+        matrix->pixel_test();
+    }
+
+    matrix->show_all();
+  }
+
+  if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+    #if ENABLE_AUTO_SHUTDOWN
+    // If we have passed the seconds until psu shutoff, turn it off
+    if (psu_is_on) { psu_shutdown(); }
+    #endif
+  } /*else {
+    // Otherwise we must be in the screensaver time. Run the screensaver
+    if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
+      matrix->bouncing_lines();
+      matrix->show_all();
+      bouncing_lines_last_update = millis();
+    }
+  }*/
+
 }
 
 /* ================================================================== *
@@ -142,4 +236,48 @@ void sample_freq(audio_bins* bins) {
     digitalWrite(strobe, HIGH);
     delayMicroseconds(40); // allow for EQ mux to fully switch
   }
+}
+
+/* ================================================================== *
+ *  Function: psu_startup
+ *  Description: Turns the psu on
+ *  Parameters:  none
+ * ================================================================== */
+void psu_startup() {
+ if (!psu_is_on) {
+   matrix->clear_matrix();
+   matrix->show_all();
+   digitalWrite(ps_on, LOW);
+ }
+ psu_is_on = true;
+}
+
+/* ================================================================== *
+ *  Function: psu_shutdown
+ *  Description: turns the psu off, sets psu_is_on to false
+ *  Parameters:  none
+ * ================================================================== */
+void psu_shutdown() {
+  if (psu_is_on) {
+    digitalWrite(ps_on, HIGH);
+    matrix->clear_matrix();
+    matrix->show_all();
+  }
+  psu_is_on = false;
+}
+
+/* ================================================================== *
+ *  Function: serve_webpage
+ *  Description: Sends webpage data to client over TCP
+ *  Parameters:  none
+ * ================================================================== */
+void serve_webpage() {
+    //TODO: read in the request to see what page they want:
+    //TODO: retrieve larger content from flash?
+
+    tcp_client.print(webpage);
+    tcp_client.println("\n\n");
+    tcp_client.flush();
+    tcp_client.stop();
+    delayMicroseconds(50);
 }
