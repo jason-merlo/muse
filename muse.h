@@ -82,20 +82,20 @@
 
 // Struct to hold MSGEQ7 frequency intensity bins
 struct audio_bins {
-  // Audio bins
-  // [63Hz][160Hz][400Hz][1kHz][2.5kHz][6.25kHz][16kHz][160kHz]
-  int left[NUM_BINS];
-  int right[NUM_BINS];
+    // Audio bins
+    // [63Hz][160Hz][400Hz][1kHz][2.5kHz][6.25kHz][16kHz][160kHz]
+    int left[NUM_BINS];
+    int right[NUM_BINS];
 };
 
 // Struct to hold color values
 struct Color_Value {
-  unsigned int c;
-  unsigned char r, g, b;
+    unsigned int c;
+    unsigned char r, g, b;
 
-  // TODO: add code to convert from HSV to RGB and vice versa in
-  //       constructor.
-  Color_Value(unsigned char red, unsigned char green, unsigned char blue) :
+    // TODO: add code to convert from HSV to RGB and vice versa in
+    //       constructor.
+    Color_Value(unsigned char red, unsigned char green, unsigned char blue) :
     c((red << 16) | (green << 8) | blue), r(red), g(green), b(blue) {}
 };
 
