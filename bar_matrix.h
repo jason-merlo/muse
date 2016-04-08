@@ -1,13 +1,13 @@
 /* ================================================================== *
-*  Written by Jason Merlo
-*
-*  updates:
-*  11/17/2015
-*
-*  File: bar_matrix.h
-*
-*  Description: Class declarations for bar matrix
-* ================================================================== */
+ *  Written by Jason Merlo
+ *
+ *  updates:
+ *  11/17/2015
+ *
+ *  File: bar_matrix.h
+ *
+ *  Description: Class declarations for bar matrix
+ * ================================================================== */
 
 #ifndef BAR_MATRIX_H
 #define BAR_MATRIX_H

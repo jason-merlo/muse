@@ -1,13 +1,13 @@
 /* ================================================================== *
-*  Written by Jason Merlo
-*
-*  updates:
-*  11/17/2015
-*
-*  File: bar_matrix.cpp
-*
-*  Description: Class to control LED bar matrix and run visualizers
-* ================================================================== */
+ *  Written by Jason Merlo
+ *
+ *  updates:
+ *  11/17/2015
+ *
+ *  File: bar_matrix.cpp
+ *
+ *  Description: Class to control LED bar matrix and run visualizers
+ * ================================================================== */
 
 #include "bar_matrix.h"
 #include "beat_detection.h"
@@ -23,12 +23,12 @@ Adafruit_NeoPixel** bars;
 Beat_Detection bd;
 
 /* ================================================================== *
-* Bar_matrix
-*
-* num_bars - number of LED bars
-* bar_len - number of leds in each bar (strip length)
-* orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
-* ================================================================== */
+ * Bar_matrix
+ *
+ * num_bars - number of LED bars
+ * bar_len - number of leds in each bar (strip length)
+ * orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
+ * ================================================================== */
 Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const char* pins) {
     disp_width = num_bars; //(orientation) ? num_bars : bar_len;
     disp_height = bar_len; //(orientation) ? bar_len : num_bars;
@@ -54,9 +54,9 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
 }
 
 /* ================================================================== *
-* Function: init_matrix
-* Description: Initializes the matrix to off
-* ================================================================== */
+ * Function: init_matrix
+ * Description: Initializes the matrix to off
+ * ================================================================== */
 void Bar_Matrix::init_matrix() {
     for (int i = 0; i < disp_width; i++) {
         // switch height and width based on orientation
@@ -66,9 +66,9 @@ void Bar_Matrix::init_matrix() {
 }
 
 /* ================================================================== *
-* Function: clear_matrix
-* Description: Sets all pixel values to (0, 0, 0)
-* ================================================================== */
+ * Function: clear_matrix
+ * Description: Sets all pixel values to (0, 0, 0)
+ * ================================================================== */
 void Bar_Matrix::clear_matrix() {
     for (int i = 0; i < disp_width; i++) {
         for (int j =0; j< disp_height; j++) {
@@ -78,10 +78,10 @@ void Bar_Matrix::clear_matrix() {
 }
 
 /* ================================================================== *
-* Function: fill_matrix
-* Description: Sets all pixel values in matrix to given color value
-* Parameters: [Color]* color - color to set matrix to
-* ================================================================== */
+ * Function: fill_matrix
+ * Description: Sets all pixel values in matrix to given color value
+ * Parameters: [Color]* color - color to set matrix to
+ * ================================================================== */
 void Bar_Matrix::fill_matrix(Color_Value c) {
     for (int i = 0; i < disp_width; i++) {
         for (int j =0; j< disp_height; j++) {
@@ -95,10 +95,10 @@ void Bar_Matrix::update_color(audio_bins * bins) {
 }
 
 /* ================================================================== *
-* Function: bouncing_lines
-* Description: Bounces a solid line of LEDs up and down in each matrix bar
-* Parameters: none
-* ================================================================== */
+ * Function: bouncing_lines
+ * Description: Bounces a solid line of LEDs up and down in each matrix bar
+ * Parameters: none
+ * ================================================================== */
 void Bar_Matrix::bouncing_lines(float speed) {
     for (int i = 0; i < disp_width; i++) {
         int bottom = bouncing_line_positions[i];
@@ -125,20 +125,20 @@ void Bar_Matrix::bouncing_lines(float speed) {
 }
 
 /* ================================================================== *
-* Function: bar_test
-* Description: Turns on bars in order to test wiring
-* Parameters: None
-* ================================================================== */
+ * Function: bar_test
+ * Description: Turns on bars in order to test wiring
+ * Parameters: None
+ * ================================================================== */
 void Bar_Matrix::bar_test() {
     for (int i = 0; i < STRIP_LENGTH; i++)
     bars[int(millis()/1000)%8]->setPixelColor(i, 64, 64, 64);
 }
 
 /* ================================================================== *
-* Function: bar_test
-* Description: Turns on lights from top to check length of srip
-* Parameters: None
-* ================================================================== */
+ * Function: bar_test
+ * Description: Turns on lights from top to check length of srip
+ * Parameters: None
+ * ================================================================== */
 void Bar_Matrix::pixel_test() {
     clear_matrix();
     for (int i = 0; i < NUM_BARS; i++)
@@ -146,22 +146,22 @@ void Bar_Matrix::pixel_test() {
 }
 
 /* ================================================================== *
-* Function: visualizer_wheel
-* Description: Sets all bars to a color while rotating through all
-*              hues in order of the rainbow
-* Parameters: [float] intensity - intensity of lights
-*             [float] speed - speed wheel rotates at
-* ================================================================== */
+ * Function: visualizer_wheel
+ * Description: Sets all bars to a color while rotating through all
+ *              hues in order of the rainbow
+ * Parameters: [float] intensity - intensity of lights
+ *             [float] speed - speed wheel rotates at
+ * ================================================================== */
 void Bar_Matrix::visualizer_wheel(float intensity, float speed) {
     float val = fmod(millis()/10000.0f,1.0f)*2.0f*PI;
     fill_matrix(Color_Value(cos(val)*255*intensity, cos(val - 2*PI/3)*255*intensity, cos(val - 4*PI/3)*255*intensity));
 }
 
 /* ================================================================== *
-* Function: visualizer_pulse
-* Description: Creates pulses where sound appears to be originating from
-* Parameters:  None
-* ================================================================== */
+ * Function: visualizer_pulse
+ * Description: Creates pulses where sound appears to be originating from
+ * Parameters:  None
+ * ================================================================== */
 void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float distance_x, float distance_y) {
     decay (out_factor);
 
@@ -191,10 +191,10 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
 }
 
 /* ================================================================== *
-* Function: fill_matrix
-* Description: Sets all pixel values to given color value
-* Parameters: [audio_bins]* bins - frequency bins read from chip
-* ================================================================== */
+ * Function: fill_matrix
+ * Description: Sets all pixel values to given color value
+ * Parameters: [audio_bins]* bins - frequency bins read from chip
+ * ================================================================== */
 void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe) {
     decay(out_factor);
     float bass_level = 0;
@@ -262,11 +262,11 @@ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_fa
 }
 
 /* ================================================================== *
-* Function: visualizer_bars_middle
-* Description: Bars start at the middle and go to the edges.
-*              One channel fills up, the other fills down.
-* Parameters: none.
-* ================================================================== */
+ * Function: visualizer_bars_middle
+ * Description: Bars start at the middle and go to the edges.
+ *              One channel fills up, the other fills down.
+ * Parameters: none.
+ * ================================================================== */
 void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor) {
     decay(out_factor);
 
@@ -414,10 +414,10 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
 }
 
 /* ================================================================== *
-* Function: decay
-* Description: slowly fades out matrix values
-* Parameters: [float] factor - decay factor to be multiplied by
-* ================================================================== */
+ * Function: decay
+ * Description: slowly fades out matrix values
+ * Parameters: [float] factor - decay factor to be multiplied by
+ * ================================================================== */
 void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_factor) {
     decay(out_factor);
 
@@ -471,10 +471,10 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
 }
 
 /* ================================================================== *
-* Function: decay
-* Description: slowly fades out matrix values
-* Parameters: [float] factor - decay factor to be multiplied by
-* ================================================================== */
+ * Function: decay
+ * Description: slowly fades out matrix values
+ * Parameters: [float] factor - decay factor to be multiplied by
+ * ================================================================== */
 void Bar_Matrix::decay(double factor) {
     for (char i = 0; i < disp_width; i++) {
         for (char j = 0; j < disp_height; j++) {
@@ -494,9 +494,9 @@ void Bar_Matrix::mix_pixel(unsigned char bar, unsigned short pixel, float factor
 }
 
 /* ================================================================== *
-* Function: show_all
-* Description: drives pixels in physical matrix to current values
-* ================================================================== */
+ * Function: show_all
+ * Description: drives pixels in physical matrix to current values
+ * ================================================================== */
 void Bar_Matrix::show_all() {
     for (char i = 0; i < disp_width; i++) {
         bars[i]->show();

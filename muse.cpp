@@ -1,13 +1,13 @@
 /* ================================================================== *
-*  Written by Jason Merlo
-*
-*  updates:
-*  11/17/2015
-*
-*  File: muse.cpp
-*
-*  Description: Main program for muse visulizer
-* ================================================================== */
+ *  Written by Jason Merlo
+ *
+ *  updates:
+ *  11/17/2015
+ *
+ *  File: muse.cpp
+ *
+ *  Description: Main program for muse visulizer
+ * ================================================================== */
 
 /* ======================= includes ================================= */
 #include "muse.h"
@@ -65,9 +65,9 @@ TCPClient tcp_client;
 TCPServer tcp_server = TCPServer(80);
 
 /* ================================================================== *
-*  Function: Setup
-*  Description: initialize program I/O and data structures
-* ================================================================== */
+ *  Function: Setup
+ *  Description: initialize program I/O and data structures
+ * ================================================================== */
 
 void setup() {
 
@@ -112,9 +112,9 @@ void setup() {
 }
 
 /* ================================================================== *
-*  Function: loop
-*  Description: Contains main program
-* ================================================================== */
+ *  Function: loop
+ *  Description: Contains main program
+ * ================================================================== */
 void loop() {
     // Sample frequency bins
     #if ENABLE_MSGEQ7
@@ -195,25 +195,24 @@ void loop() {
         matrix->bouncing_lines();
         matrix->show_all();
         bouncing_lines_last_update = millis();
-    }
-}*/
+    }*/
 
-// Delay to make updates from the cloud more responsive
-delay(1);
+    // Delay to make updates from the cloud more responsive
+    delay(1);
 }
 
 /* ================================================================== *
-*  Function: init_eq
-*  Description: Sends reset sequence to MSGEQ7's allowing for data
-*  reading to begin
-* ================================================================== */
+ *  Function: init_eq
+ *  Description: Sends reset sequence to MSGEQ7's allowing for data
+ *  reading to begin
+ * ================================================================== */
 void init_eq() {
     /*  Reset sequence:
-    *
-    *  rst     _|‾‾‾‾‾|__
-    *
-    *  strobe  _|‾‾|__|‾‾
-    */
+     *
+     *  rst     _|‾‾‾‾‾|__
+     *
+     *  strobe  _|‾‾|__|‾‾
+     */
     digitalWrite(rst, HIGH);
     digitalWrite(strobe, HIGH);
     delay(1);
@@ -225,10 +224,10 @@ void init_eq() {
 }
 
 /* ================================================================== *
-*  Function: sample_freq
-*  Description: Reads bins from MSGEQ7's and stores them to struct
-*  Parameters:  [audio_bins]* bins - frequency bins read from chip
-* ================================================================== */
+ *  Function: sample_freq
+ *  Description: Reads bins from MSGEQ7's and stores them to struct
+ *  Parameters:  [audio_bins]* bins - frequency bins read from chip
+ * ================================================================== */
 void sample_freq(audio_bins* bins) {
     for (int i = 0; i < NUM_BINS; i++) {
         digitalWrite(strobe, LOW);
@@ -244,10 +243,10 @@ void sample_freq(audio_bins* bins) {
 }
 
 /* ================================================================== *
-*  Function: psu_startup
-*  Description: Turns the psu on
-*  Parameters:  none
-* ================================================================== */
+ *  Function: psu_startup
+ *  Description: Turns the psu on
+ *  Parameters:  none
+ * ================================================================== */
 void psu_startup() {
     if (!psu_is_on) {
         matrix->clear_matrix();
@@ -258,10 +257,10 @@ void psu_startup() {
 }
 
 /* ================================================================== *
-*  Function: psu_shutdown
-*  Description: turns the psu off, sets psu_is_on to false
-*  Parameters:  none
-* ================================================================== */
+ *  Function: psu_shutdown
+ *  Description: turns the psu off, sets psu_is_on to false
+ *  Parameters:  none
+ * ================================================================== */
 void psu_shutdown() {
     if (psu_is_on) {
         digitalWrite(ps_on, HIGH);
@@ -272,10 +271,10 @@ void psu_shutdown() {
 }
 
 /* ================================================================== *
-*  Function: serve_webpage
-*  Description: Sends webpage data to client over TCP
-*  Parameters:  none
-* ================================================================== */
+ *  Function: serve_webpage
+ *  Description: Sends webpage data to client over TCP
+ *  Parameters:  none
+ * ================================================================== */
 void serve_webpage() {
     //TODO: read in the request to see what page they want:
     //TODO: retrieve larger content from flash?
