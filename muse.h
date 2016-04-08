@@ -49,12 +49,12 @@
 #define SCREENSAVER_SECS_TO_START   10
 
 /* ======================= Define - Visualziers ===================== */
-#define VISUALIZER_WHEEL          0
-#define VISUALIZER_BARS           1
-#define VISUALIZER_BARS_MIDDLE    2
+#define VISUALIZER_BARS           0
+#define VISUALIZER_BARS_MIDDLE    1
+#define VISUALIZER_PLASMA         2
 #define VISUALIZER_PULSE          3
-#define VISUALIZER_PLASMA         4
-#define VISUALIZER_RAINBOW        5
+#define VISUALIZER_RAINBOW        4
+#define VISUALIZER_WHEEL          5
 
 #define BOUNCING_LINES            77
 
@@ -62,20 +62,20 @@
 #define PIXEL_TEST                99
 
 /* ======================= Define - EQ Bins ===================== */
-#define LEFT_63                   0 //varified
+#define LEFT_63                   0
 #define LEFT_160                  1
-#define LEFT_400                  2 //verified
+#define LEFT_400                  2
 #define LEFT_1000                 3
-#define LEFT_2500                 4 //verified
-#define LEFT_6250                 5 //verified
+#define LEFT_2500                 4
+#define LEFT_6250                 5
 #define LEFT_16000                6
 
-#define RIGHT_63                  0 //verified
+#define RIGHT_63                  0
 #define RIGHT_160                 1
-#define RIGHT_400                 2 //verified
+#define RIGHT_400                 2
 #define RIGHT_1000                3
-#define RIGHT_2500                4 //verified
-#define RIGHT_6250                5 //verified
+#define RIGHT_2500                4
+#define RIGHT_6250                5
 #define RIGHT_16000               6
 
 /* ======================= Structs - General ======================== */
