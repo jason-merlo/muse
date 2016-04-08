@@ -19,7 +19,7 @@
 #include "math.h"
 
 // constants
-#define PI        3.141592
+#define PI 3.141592
 
 class Bar_Matrix {
     public:
