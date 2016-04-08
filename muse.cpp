@@ -195,6 +195,8 @@ void loop() {
     }
   }*/
 
+  // Delay to make updates from the cloud more responsive
+  delay(1);
 }
 
 /* ================================================================== *
