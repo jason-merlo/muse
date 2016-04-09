@@ -127,6 +127,12 @@ void Bar_Matrix::show_all() {
     }
 }
 
+/* ================================================================== *
+ * Function: tick
+ * Description: Draws the given visualizer to the bars
+ * Parameters: [audio_bins *] bins - The audio sample bins
+ *             [int] visualizer_type - The visualizer type to drive
+ * ================================================================== */
 void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
     // Update beat detection each round
     bd.tick(bins);
