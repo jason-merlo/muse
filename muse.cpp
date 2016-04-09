@@ -119,6 +119,7 @@ void setup() {
     sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 
     tcp_server.begin();
+    #endif
 }
 
 /* ================================================================== *
