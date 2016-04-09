@@ -74,53 +74,51 @@ TCPServer tcp_server = TCPServer(80);
  * ================================================================== */
 
 void setup() {
+    // Open debug terminal
+    #if ENABLE_SERIAL
+    Serial.begin(9600);
+    #endif
 
-  // Open debug terminal
-  #if ENABLE_SERIAL
-  Serial.begin(9600);
-  #endif
+    // Enables frequency analyzer
+    #if ENABLE_MSGEQ7
+    pinMode(rst, OUTPUT);
+    pinMode(strobe, OUTPUT);
+    pinMode(audio_l, INPUT);
+    pinMode(audio_r, INPUT);
+    init_eq();
+    #endif
 
-  // Enables frequency analyzer
-  #if ENABLE_MSGEQ7
-  pinMode(rst, OUTPUT);
-  pinMode(strobe, OUTPUT);
-  pinMode(audio_l, INPUT);
-  pinMode(audio_r, INPUT);
-  init_eq();
-  #endif
+    // Enables power switch input for PSU and control for
+    #if ENABLE_PSU_CONTROL
+    pinMode(ps_on, OUTPUT);
+    //pinMode(pwr_sw, INPUT);
+    psu_is_on = false;
+    psu_startup();
+    #endif
 
-  // Enables power switch input for PSU and control for
-  #if ENABLE_PSU_CONTROL
-  pinMode(ps_on, OUTPUT);
-  //pinMode(pwr_sw, INPUT);
-  psu_is_on = false;
-  psu_startup();
-  #endif
+    // Enables pins for shift register to control RGB LED strips
+    #if ENABLE_RGB_SR
+    pinMode(sr_lat, OUTPUT);
+    pinMode(sr_clk, OUTPUT);
+    pinMode(sr_dat, OUTPUT);
+    #endif
 
-  // Enables pins for shift register to control RGB LED strips
-  #if ENABLE_RGB_SR
-  pinMode(sr_lat, OUTPUT);
-  pinMode(sr_clk, OUTPUT);
-  pinMode(sr_dat, OUTPUT);
-  #endif
+    // Create new bar matrix inistance
+    #if ENABLE_BARS
+    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
+    #endif
 
-  // Create new bar matrix inistance
-  #if ENABLE_BARS
-  matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
-  #endif
+    // Initialize screenaver variables
+    #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
+    last_sound_seconds = Time.now();
+    #endif
 
-  // Initialize screenaver variables
-  #if ENABLE_AUTO_SHUTDOWN || ENABLE_SCREENSAVER
-  last_sound_seconds = Time.now();
-  #endif
+    #if ENABLE_WEB_SERVER
+    Particle.variable("ipAddress", myIpAddress, STRING);
+    IPAddress myIp = WiFi.localIP();
+    sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 
-  #if ENABLE_WEB_SERVER
-  Particle.variable("ipAddress", myIpAddress, STRING);
-  IPAddress myIp = WiFi.localIP();
-  sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
-
-  tcp_server.begin();
-  #endif
+    tcp_server.begin();
 }
 
 /* ================================================================== *
@@ -128,86 +126,50 @@ void setup() {
  *  Description: Contains main program
  * ================================================================== */
 void loop() {
-  // Sample frequency bins
-  #if ENABLE_MSGEQ7
-  sample_freq(&bins);
-  #endif
-
-  #if ENABLE_SERIAL
-  Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
-  #endif
-
-  // Serve webpage
-  #if ENABLE_WEB_SERVER
-  if (tcp_client.connected() && tcp_client.available()) {
-      serve_webpage();
-      tcp_client.stop();
-  } else {
-      tcp_client = tcp_server.available();
-  }
-  #endif
-
-  // Check each bin to see if they are below the threshold to be "off"
-  // If any bin is active break and just run the visualizer
-  bool any_bin_active = false;
-  for (int i = 0; i < NUM_BINS; i++) {
-    if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
-      any_bin_active = true;
-      if (!psu_is_on) { psu_startup(); }
-      last_sound_seconds = Time.now();
-      break;
-    }
-  }
-
-  if (psu_is_on) {
-    // Switch case to aid in future web interface
-    matrix->update_color(&bins);
-    switch (VISUALIZER_BARS_MIDDLE) {
-      case VISUALIZER_BARS:
-        matrix->visualizer_bars(&bins, 0.15, 0.8, false);
-        break;
-      case VISUALIZER_BARS_MIDDLE:
-       matrix->visualizer_bars_middle(&bins, 0.15, 0.8);
-       break;
-      case VISUALIZER_PULSE:
-        matrix->visualizer_pulse(&bins, 0.15, 0.8, 1.0f, 20.0f);
-        break;
-      case VISUALIZER_PLASMA:
-        matrix->visualizer_plasma(&bins, 0.5, 0.965);
-        break;
-      case VISUALIZER_RAINBOW:
-        matrix->visualizer_rainbow(&bins, 0.15, 0.8);
-        break;
-      case VISUALIZER_WHEEL:
-        matrix->visualizer_wheel(0.25, 10);
-        break;
-      case BOUNCING_LINES:
-        matrix->bouncing_lines(0.75);
-        break;
-      case BAR_TEST:
-        matrix->bar_test();
-        break;
-      case PIXEL_TEST:
-        matrix->pixel_test();
-    }
-
-    matrix->show_all();
-  }
-
-  if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
-    #if ENABLE_AUTO_SHUTDOWN
-    // If we have passed the seconds until psu shutoff, turn it off
-    if (psu_is_on) { psu_shutdown(); }
+    #if ENABLE_SERIAL
+    Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
-  } /*else {
-    // Otherwise we must be in the screensaver time. Run the screensaver
-    if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
-      matrix->bouncing_lines();
-      matrix->show_all();
-      bouncing_lines_last_update = millis();
-    }
-  }*/
 
+    // Serve webpage
+    #if ENABLE_WEB_SERVER
+    if (tcp_client.connected() && tcp_client.available()) {
+        serve_webpage();
+    } else {
+        tcp_client = tcp_server.available();
+    }
+    #endif
+
+    // Check each bin to see if they are below the threshold to be "off"
+    // If any bin is active break and just run the visualizer
+    bool any_bin_active = false;
+    for (int i = 0; i < NUM_BINS; i++) {
+        if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
+            any_bin_active = true;
+            if (!psu_is_on) { psu_startup(); }
+            last_sound_seconds = Time.now();
+            break;
+        }
+    }
+
+    if (psu_is_on) {
+        matrix->tick(&bins, VISUALIZER_BARS_MIDDLE);
+    }
+
+    if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+        #if ENABLE_AUTO_SHUTDOWN
+        // If we have passed the seconds until psu shutoff, turn it off
+        if (psu_is_on) { psu_shutdown(); }
+        #endif
+    } /*else {
+        // Otherwise we must be in the screensaver time. Run the screensaver
+        if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
+        matrix->bouncing_lines();
+        matrix->show_all();
+        bouncing_lines_last_update = millis();
+    }*/
+
+    // Delay to make updates from the cloud more responsive
+    delay(1);
 }
 
 /* ================================================================== *
@@ -216,20 +178,20 @@ void loop() {
  *  reading to begin
  * ================================================================== */
 void init_eq() {
-  /*  Reset sequence:
-  *
-  *  rst     _|‾‾‾‾‾|__
-  *
-  *  strobe  _|‾‾|__|‾‾
-  */
-  digitalWrite(rst, HIGH);
-  digitalWrite(strobe, HIGH);
-  delay(1);
-  digitalWrite(strobe, LOW);
-  delay(1);
-  digitalWrite(rst, LOW);
-  digitalWrite(strobe, HIGH);
-  delay(1);
+    /*  Reset sequence:
+     *
+     *  rst     _|‾‾‾‾‾|__
+     *
+     *  strobe  _|‾‾|__|‾‾
+     */
+    digitalWrite(rst, HIGH);
+    digitalWrite(strobe, HIGH);
+    delay(1);
+    digitalWrite(strobe, LOW);
+    delay(1);
+    digitalWrite(rst, LOW);
+    digitalWrite(strobe, HIGH);
+    delay(1);
 }
 
 /* ================================================================== *
@@ -238,17 +200,17 @@ void init_eq() {
  *  Parameters:  [audio_bins]* bins - frequency bins read from chip
  * ================================================================== */
 void sample_freq(audio_bins* bins) {
-  for (int i = 0; i < NUM_BINS; i++) {
-    digitalWrite(strobe, LOW);
-    delayMicroseconds(40); // allow for EQ mux to fully switch
+    for (int i = 0; i < NUM_BINS; i++) {
+        digitalWrite(strobe, LOW);
+        delayMicroseconds(40); // allow for EQ mux to fully switch
 
-    // Moving average bins with new sample
-    bins->left[i]  = analogRead(audio_l) * 0.8 + bins->left[i]  * 0.2;
-    bins->right[i] = analogRead(audio_r) * 0.8 + bins->right[i] * 0.2;
+        // Moving average bins with new sample
+        bins->left[i]  = analogRead(audio_l) * 0.8 + bins->left[i]  * 0.2;
+        bins->right[i] = analogRead(audio_r) * 0.8 + bins->right[i] * 0.2;
 
-    digitalWrite(strobe, HIGH);
-    delayMicroseconds(40); // allow for EQ mux to fully switch
-  }
+        digitalWrite(strobe, HIGH);
+        delayMicroseconds(40); // allow for EQ mux to fully switch
+    }
 }
 
 /* ================================================================== *
@@ -257,12 +219,12 @@ void sample_freq(audio_bins* bins) {
  *  Parameters:  none
  * ================================================================== */
 void psu_startup() {
- if (!psu_is_on) {
-   matrix->clear_matrix();
-   matrix->show_all();
-   digitalWrite(ps_on, LOW);
- }
- psu_is_on = true;
+    if (!psu_is_on) {
+        matrix->clear_matrix();
+        matrix->show_all();
+        digitalWrite(ps_on, LOW);
+    }
+    psu_is_on = true;
 }
 
 /* ================================================================== *
@@ -271,12 +233,12 @@ void psu_startup() {
  *  Parameters:  none
  * ================================================================== */
 void psu_shutdown() {
-  if (psu_is_on) {
-    digitalWrite(ps_on, HIGH);
-    matrix->clear_matrix();
-    matrix->show_all();
-  }
-  psu_is_on = false;
+    if (psu_is_on) {
+        digitalWrite(ps_on, HIGH);
+        matrix->clear_matrix();
+        matrix->show_all();
+    }
+    psu_is_on = false;
 }
 
 /* ================================================================== *
