@@ -28,7 +28,7 @@ class Bar_Matrix {
         // General functions
         void
             clear_matrix(),
-            update_color(audio_bins * bins),
+            tick(audio_bins * bins, int visualizer_type),
             show_all();
 
         // Misc drawing functions

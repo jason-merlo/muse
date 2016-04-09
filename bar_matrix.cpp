@@ -127,8 +127,43 @@ void Bar_Matrix::show_all() {
     }
 }
 
-void Bar_Matrix::update_color(audio_bins * bins) {
+void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
+    // Update beat detection each round
     bd.tick(bins);
+
+    switch (visualizer_type) {
+        // Visualizers
+        case VISUALIZER_BARS:
+        visualizer_bars(bins, 0.15, 0.8, false);
+        break;
+        case VISUALIZER_BARS_MIDDLE:
+        visualizer_bars_middle(bins, 0.15, 0.8);
+        break;
+        case VISUALIZER_PLASMA:
+        visualizer_plasma(bins, 0.5, 0.965);
+        break;
+        case VISUALIZER_PULSE:
+        visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
+        break;
+        case VISUALIZER_RAINBOW:
+        visualizer_rainbow(bins, 0.15, 0.8);
+        break;
+        case VISUALIZER_WHEEL:
+        visualizer_wheel(0.25, 10);
+        break;
+
+        // Tests and misc
+        case BOUNCING_LINES:
+        bouncing_lines(0.75);
+        break;
+        case BAR_TEST:
+        bar_test();
+        break;
+        case PIXEL_TEST:
+        pixel_test();
+    }
+
+    show_all();
 }
 
 /* ===================== MISC DRAWING FUNCTIONS ===================== */
