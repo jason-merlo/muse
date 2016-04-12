@@ -133,12 +133,15 @@ void loop() {
     #endif
 
     #if ENABLE_SERIAL
-    Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
+    //Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
 
     // Serve webpage
     #if ENABLE_WEB_SERVER
-    if (tcp_client.connected() && tcp_client.available()) {
+    if (tcp_client.connected()){// && tcp_client.available()) {
+        #if ENABLE_SERIAL
+        Serial.printf("Serving webpage\n");
+        #endif
         serve_webpage();
     } else {
         tcp_client = tcp_server.available();
@@ -147,6 +150,7 @@ void loop() {
 
     // Check each bin to see if they are below the threshold to be "off"
     // If any bin is active break and just run the visualizer
+    #if ENABLE_PSU_CONTROL
     bool any_bin_active = false;
     for (int i = 0; i < NUM_BINS; i++) {
         if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
@@ -173,6 +177,7 @@ void loop() {
         matrix->show_all();
         bouncing_lines_last_update = millis();
     }*/
+    #endif
 
     // Delay to make updates from the cloud more responsive
     delay(1);
@@ -225,12 +230,14 @@ void sample_freq(audio_bins* bins) {
  *  Parameters:  none
  * ================================================================== */
 void psu_startup() {
+    #if ENABLE_PSU_CONTROL
     if (!psu_is_on) {
         matrix->clear_matrix();
         matrix->show_all();
         digitalWrite(ps_on, LOW);
     }
     psu_is_on = true;
+    #endif
 }
 
 /* ================================================================== *
@@ -239,12 +246,14 @@ void psu_startup() {
  *  Parameters:  none
  * ================================================================== */
 void psu_shutdown() {
+    #if ENABLE_PSU_CONTROL
     if (psu_is_on) {
         digitalWrite(ps_on, HIGH);
         matrix->clear_matrix();
         matrix->show_all();
     }
     psu_is_on = false;
+    #endif
 }
 
 /* ================================================================== *
@@ -256,9 +265,23 @@ void serve_webpage() {
     //TODO: read in the request to see what page they want:
     //TODO: retrieve larger content from flash?
 
+    tcp_client.println(http_ok);
+    tcp_client.println(http_content_type);
+    tcp_client.print(http_content_length);
+    tcp_client.println(webpage_string.length() + 1);
+    tcp_client.println(http_connection_close);
+    tcp_client.println();
+
+    tcp_client.println(webpage_string);
+    delayMicroseconds(50);
+    tcp_client.flush();
+    tcp_client.stop();
+
+    /*
     tcp_client.print(webpage);
     tcp_client.println("\n\n");
     tcp_client.flush();
     tcp_client.stop();
     delayMicroseconds(50);
+    */
 }
