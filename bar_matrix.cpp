@@ -285,7 +285,7 @@ void Bar_Matrix::pixel_test() {
          float val = level*2*PI/4096.0;
 
          // Select colors
-         switch(1) {
+         switch(bd.num_beats() % 3) {
            case 0:
              red = cos(val)*255;
              green = cos(val - 2*PI/3)*255;

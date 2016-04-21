@@ -26,6 +26,7 @@ class Beat_Detection {
         int r();
         int g();
         int b();
+        int num_beats();
 
         void tick(audio_bins* bins);
         void set_beats_per_flip(int beats);
@@ -35,6 +36,7 @@ class Beat_Detection {
         bool flip_on;
 
         int red, green, blue;
+        int beat_count;
         int beats_per_flip;
         int flip_count;
         int sma_long_index;
