@@ -22,7 +22,8 @@ Beat_Detection::Beat_Detection() {
     red = 0;
     green = 0;
     blue = 0;
-    flip_count = 0;
+    beat_count = 0;
+    beats_per_flip = 3;
 
     sma_long_total = 0;
     sma_long_index = 0;
@@ -48,11 +49,11 @@ void Beat_Detection::tick(audio_bins* bins) {
 
     if (!beat_on && sma_short > 1.00*sma_long) {
         //beat detected
-        if (flip_count > 3) {
+        beat_count++;
+
+        if (beat_count % beats_per_flip == 0) {
             flip_on = !flip_on;
-            flip_count = 0;
         }
-        flip_count++;
 
         blue = (green+red) % 255;
         green = red;
@@ -77,6 +78,15 @@ void Beat_Detection::tick(audio_bins* bins) {
  * ================================================================== */
 bool Beat_Detection::flip() {
     return flip_on;
+}
+
+/* ================================================================== *
+ * Function: num_beats
+ * Description: Returns the current number of beats detected
+ * Parameters: none
+ * ================================================================== */
+int Beat_Detection::num_beats() {
+    return beat_count;
 }
 
 /* ================================================================== *
