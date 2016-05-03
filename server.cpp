@@ -10,6 +10,8 @@
 
 #include "server.h"
 
+#include "WebServer.h"
+
 #define PREFIX ""
 WebServer webserver(PREFIX, 80);
 
@@ -26,7 +28,6 @@ Server::Server() {}
  * Parameters: none
  * ================================================================== */
 void Server::init() {
-
     /* setup our default command that will be run when the user accesses
      * the root page on the server */
     webserver.setDefaultCommand(&helloCmd);

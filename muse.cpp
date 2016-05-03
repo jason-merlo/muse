@@ -11,12 +11,11 @@
 
 /* ======================= includes ================================= */
 #include "muse.h"
-#include "bar_matrix.h"
-#include "application.h"
-#include "neopixel.h"
 
+#include "application.h"
+#include "bar_matrix.h"
+#include "neopixel.h"
 #include "server.h"
-//#include "webpage.h"
 
 SYSTEM_MODE(AUTOMATIC);
 

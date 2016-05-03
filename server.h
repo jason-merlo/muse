@@ -12,14 +12,12 @@
 #define SERVER_H
 
 #include "application.h"
-#include "WebServer.h"
-//#include "webpage.h"
 
 class Server {
     public:
         Server();
-        void init();
 
+        void init();
         void tick();
 
     private:
