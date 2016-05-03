@@ -10,10 +10,6 @@
 
 #include "server.h"
 
-#include "muse.h"
-
-//static uint8_t mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-
 #define PREFIX ""
 WebServer webserver(PREFIX, 80);
 
