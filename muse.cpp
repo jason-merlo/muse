@@ -143,7 +143,7 @@ void loop() {
     }
 
     if (psu_is_on) {
-        matrix->tick(&bins, VISUALIZER_BARS_MIDDLE);
+        matrix->tick(&bins, server.visualizer());
     }
 
     if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {

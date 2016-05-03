@@ -20,8 +20,11 @@ class Server {
         void init();
         void tick();
 
+        int visualizer();
+
     private:
         char myIpAddress[24];
+        int server_red;
 };
 
 #endif
