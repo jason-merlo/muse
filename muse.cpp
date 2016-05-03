@@ -161,7 +161,9 @@ void loop() {
     }*/
     #endif
 
+    #if ENABLE_WEB_SERVER
     server.tick();
+    #endif
 
     // Delay to make updates from the cloud more responsive
     delay(1);

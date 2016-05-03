@@ -1,3 +1,8 @@
+/**
+ *  This is a modified version of the Webduino server.
+ *  Webduino information included below.
+ *  Modifications by Steven Ploog
+ */
 /* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil;  c-file-style: "k&r"; c-basic-offset: 2; -*-
 
    Webduino, a simple Arduino web server
@@ -30,9 +35,6 @@
 #include <stdlib.h>
 
 #include "application.h"
-//#include <Ethernet.h>
-//#include <EthernetClient.h>
-//#include <EthernetServer.h>
 
 /********************************************************************
  * CONFIGURATION

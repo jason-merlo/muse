@@ -21,23 +21,18 @@ static void helloCmd(WebServer &server, WebServer::ConnectionType type, char *, 
 
 /* ================================================================== *
  * Server
- *
- * num_bars - number of LED bars
- * bar_len - number of leds in each bar (strip length)
- * orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
  * ================================================================== */
-Server::Server() {
-}
+Server::Server() {}
 
+/* ================================================================== *
+ * Function: init
+ * Description: Initialize the server
+ * Parameters: none
+ * ================================================================== */
 void Server::init() {
 
     /* setup our default command that will be run when the user accesses
      * the root page on the server */
-     //void (*hw)(WebServer &server, WebServer::ConnectionType type, char *, bool)  = &helloCmd;
-    //  void (Server::*hw)(WebServer &server, WebServer::ConnectionType type, char *, bool)
-    //     = (std::function<void(WebServer &server, WebServer::ConnectionType type, char *, bool)>)
-    //     std::bind(&Server::helloCmd, this, _1);
-        //hw = &Server::helloCmd;
     webserver.setDefaultCommand(&helloCmd);
 
     /* run the same command if you try to load /index.html, a common
@@ -53,30 +48,24 @@ void Server::init() {
     sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 }
 
-char buff[256];
-int len = 256;
-
+/* ================================================================== *
+ * Function: tick
+ * Description: Periodically call to serve HTTP connections
+ * Parameters: none
+ * ================================================================== */
 void Server::tick() {
+    char buff[256];
+    int len = 256;
+
     /* process incoming connections one at a time forever */
     webserver.processConnection(buff, &len);
-    /*
-    // Serve webpage
-    #if ENABLE_WEB_SERVER
-    if (tcp_client.connected()){// && tcp_client.available()) {
-        #if ENABLE_SERIAL
-        Serial.printf("Serving webpage\n");
-        #endif
-        serve_webpage();
-    } else {
-        tcp_client = tcp_server.available();
-    }
-    #endif
-    */
 }
 
-/* commands are functions that get called by the webserver framework
- * they can read any posted data from client, and they output to the
- * server to send data back to the web browser. */
+/* ================================================================== *
+ * Function: helloCmd
+ * Description: Defualt callback function for the WebServer to run
+ * Parameters: none
+ * ================================================================== */
 static void helloCmd(WebServer &server, WebServer::ConnectionType type, char * c, bool b)
 {
   /* this line sends the standard "we're all OK" headers back to the
