@@ -12,6 +12,31 @@
 #include "application.h"
 
 static const unsigned char hello_world[] = "<h1>Hello, World!</h1>";
+
+static const unsigned char control_panel[] = "<!DOCTYPE html>"
+"<html>"
+    "<head>"
+        "<title>MUSE Control Panel</title>"
+        "<script>"
+            "var currentValue = 0;"
+            "function handleClick(myRadio) {"
+                "currentValue = myRadio.value;"
+                "document.getElementById('visualizer_form').submit();"
+            "}"
+        "</script>"
+    "</head>"
+    "<body>"
+        "<form id='visualizer_form' action='/web_input' method='post'>"
+            "<label for='v1'><input type='radio' id='v1' name='visualizer' onclick='handleClick(this)' value='0'></input>Bars</label><br>"
+            "<label for='v2'><input type='radio' id='v2' name='visualizer' onclick='handleClick(this)' value='1'></input>Bars Middle</label><br>"
+            "<label for='v3'><input type='radio' id='v3' name='visualizer' onclick='handleClick(this)' value='2'></input>Plasma</label><br>"
+            "<label for='v4'><input type='radio' id='v4' name='visualizer' onclick='handleClick(this)' value='3'></input>Pulse</label><br>"
+            "<label for='v5'><input type='radio' id='v5' name='visualizer' onclick='handleClick(this)' value='4'></input>Rainbow</label><br>"
+            "<label for='v6'><input type='radio' id='v6' name='visualizer' onclick='handleClick(this)' value='5'></input>Wheel</label><br>"
+        "</form>"
+    "</body>"
+"</html>";
+
 static const unsigned char rgb_main_html[] =
     "<!DOCTYPE html>"
         "<html>"
