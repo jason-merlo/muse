@@ -26,6 +26,7 @@ class Server {
         char myIpAddress[24];
         int visualizer_type;
         int server_red;
+        unsigned long last_dns_advert;
 };
 
 #endif

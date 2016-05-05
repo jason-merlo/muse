@@ -50,12 +50,12 @@ void Server::init() {
     webserver.begin();
 
     // Print the IP so we know where to connect
-    server_red = 0;
-
     Particle.variable("ipAddress", myIpAddress, STRING);
     Particle.variable("RedValue", &server_red, INT);
     IPAddress myIp = WiFi.localIP();
     sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
+
+    last_dns_advert = 0;
 }
 
 /* ================================================================== *
@@ -66,6 +66,18 @@ void Server::init() {
 void Server::tick() {
     char buff[256];
     int len = 256;
+
+    static char muse_name[] = "muse";
+    unsigned char idx = 0;
+    if (millis() - last_dns_advert > 5000) {
+    	while (idx < 3)
+    	{
+    		//mdnsAdvertiser(1,muse_name,strlen(muse_name));
+    		idx++;
+    	}
+
+        last_dns_advert = millis();
+    }
 
     server_red = static_red;
     visualizer_type = static_visualizer_type;
@@ -116,6 +128,21 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                         static_visualizer_type = VISUALIZER_WHEEL;
                         break;
                     default: static_visualizer_type = VISUALIZER_BARS; break;
+                }
+            } else if (strcmp(name, "other") == 0) {
+                switch (type) {
+                    case BOUNCING_LINES:
+                        static_visualizer_type = BOUNCING_LINES;
+                        break;
+                    case BAR_TEST:
+                        static_visualizer_type = BAR_TEST;
+                        break;
+                    case PIXEL_TEST:
+                        static_visualizer_type = PIXEL_TEST;
+                        break;
+                    default:
+                        static_visualizer_type = BOUNCING_LINES;
+                        break;
                 }
             }
         } while (repeat);
