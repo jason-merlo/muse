@@ -130,6 +130,7 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                     default: static_visualizer_type = VISUALIZER_BARS; break;
                 }
             } else if (strcmp(name, "other") == 0) {
+                int type = strtol(value, NULL, 10);
                 switch (type) {
                     case BOUNCING_LINES:
                         static_visualizer_type = BOUNCING_LINES;
