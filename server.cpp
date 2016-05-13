@@ -67,18 +67,6 @@ void Server::tick() {
     char buff[256];
     int len = 256;
 
-    static char muse_name[] = "muse";
-    unsigned char idx = 0;
-    if (millis() - last_dns_advert > 5000) {
-    	while (idx < 3)
-    	{
-    		//mdnsAdvertiser(1,muse_name,strlen(muse_name));
-    		idx++;
-    	}
-
-        last_dns_advert = millis();
-    }
-
     server_red = static_red;
     visualizer_type = static_visualizer_type;
 
