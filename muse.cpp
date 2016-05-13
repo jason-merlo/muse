@@ -11,11 +11,11 @@
 
 /* ======================= includes ================================= */
 #include "muse.h"
-#include "bar_matrix.h"
-#include "application.h"
-#include "neopixel.h"
 
-#include "webpage.h"
+#include "application.h"
+#include "bar_matrix.h"
+#include "neopixel.h"
+#include "server.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
@@ -50,11 +50,12 @@ static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 static Bar_Matrix* matrix;
 #endif
 
-/* =============== Visualizer variables ================= */
-
 #if ENABLE_WEB_SERVER
-char myIpAddress[24];
+// Declare matrix variables
+Server server;
 #endif
+
+/* =============== Visualizer variables ================= */
 
 #if ENABLE_PSU_CONTROL
 static bool psu_is_on = false;
@@ -63,10 +64,6 @@ static bool psu_is_on = false;
 #if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
 static unsigned long last_sound_seconds;
 #endif
-
-/* =============== TCP Server variables ================== */
-TCPClient tcp_client;
-TCPServer tcp_server = TCPServer(80);
 
 /* ================================================================== *
  *  Function: Setup
@@ -114,11 +111,7 @@ void setup() {
     #endif
 
     #if ENABLE_WEB_SERVER
-    Particle.variable("ipAddress", myIpAddress, STRING);
-    IPAddress myIp = WiFi.localIP();
-    sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
-
-    tcp_server.begin();
+    server.init();
     #endif
 }
 
@@ -136,18 +129,6 @@ void loop() {
     //Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
 
-    // Serve webpage
-    #if ENABLE_WEB_SERVER
-    if (tcp_client.connected()){// && tcp_client.available()) {
-        #if ENABLE_SERIAL
-        Serial.printf("Serving webpage\n");
-        #endif
-        serve_webpage();
-    } else {
-        tcp_client = tcp_server.available();
-    }
-    #endif
-
     // Check each bin to see if they are below the threshold to be "off"
     // If any bin is active break and just run the visualizer
     #if ENABLE_PSU_CONTROL
@@ -162,7 +143,7 @@ void loop() {
     }
 
     if (psu_is_on) {
-        matrix->tick(&bins, VISUALIZER_BARS_MIDDLE);
+        matrix->tick(&bins, server.visualizer());
     }
 
     if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
@@ -177,6 +158,10 @@ void loop() {
         matrix->show_all();
         bouncing_lines_last_update = millis();
     }*/
+    #endif
+
+    #if ENABLE_WEB_SERVER
+    server.tick();
     #endif
 
     // Delay to make updates from the cloud more responsive
@@ -254,34 +239,4 @@ void psu_shutdown() {
     }
     psu_is_on = false;
     #endif
-}
-
-/* ================================================================== *
- *  Function: serve_webpage
- *  Description: Sends webpage data to client over TCP
- *  Parameters:  none
- * ================================================================== */
-void serve_webpage() {
-    //TODO: read in the request to see what page they want:
-    //TODO: retrieve larger content from flash?
-
-    tcp_client.println(http_ok);
-    tcp_client.println(http_content_type);
-    tcp_client.print(http_content_length);
-    tcp_client.println(webpage_string.length() + 1);
-    tcp_client.println(http_connection_close);
-    tcp_client.println();
-
-    tcp_client.println(webpage_string);
-    delayMicroseconds(50);
-    tcp_client.flush();
-    tcp_client.stop();
-
-    /*
-    tcp_client.print(webpage);
-    tcp_client.println("\n\n");
-    tcp_client.flush();
-    tcp_client.stop();
-    delayMicroseconds(50);
-    */
 }
