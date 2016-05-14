@@ -57,7 +57,7 @@ void Beat_Detection::tick(audio_bins* bins) {
 
         blue = (green+red) % 255;
         green = red;
-        red += random(255);
+        red = (red+random(255)) % 255;
 
         beat_on = true;
     } else if (beat_on && sma_short < 1.00*sma_long) {

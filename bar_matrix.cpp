@@ -143,7 +143,7 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
         visualizer_bars(bins, 0.15, 0.9, false);
         break;
         case VISUALIZER_BARS_MIDDLE:
-        visualizer_bars_middle(bins, 0.15, 0.8);
+        visualizer_bars_middle(bins, 0.15, 0.9);
         break;
         case VISUALIZER_PLASMA:
         visualizer_plasma(bins, 0.5, 0.965);
@@ -581,7 +581,7 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             // set bar
             if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
                 float val = level*2*PI/4096.0;
-                mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, 255-bd.r(), 255-bd.g(), 255-bd.b());
+                mix_pixel(i, STRIP_LENGTH/2 - j, .95, 255-bd.r(), 255-bd.g(), 255-bd.b());
             }
         }
 
@@ -622,7 +622,7 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
                 //j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
                 float val = level*2*PI/4096.0;
                 //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                mix_pixel(i, j, in_factor, 255-bd.r(), 255-bd.g(), 255-bd.b());//reds[i], greens[i], blues[i]);
+                mix_pixel(i, j, .95, 255-bd.r(), 255-bd.g(), 255-bd.b());//reds[i], greens[i], blues[i]);
             }
         }
     }
