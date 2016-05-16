@@ -33,8 +33,6 @@ class Server {
         char myIpAddress[24];
         int power_status;
         int visualizer_type;
-        int server_red;
-        unsigned long last_dns_advert;
 };
 
 #endif
