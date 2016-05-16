@@ -154,8 +154,8 @@ void loop() {
         #endif
 
         #if ENABLE_WEB_POWER
-        if (server.powered_on()) {
-            if (!psu_is_on) { psu_startup; }
+        if (server.powered_on() == SERVER_POWER_ON) {
+            if (!psu_is_on) { psu_startup(); }
             matrix->tick(&bins, server.visualizer());
         } else {
             psu_shutdown();

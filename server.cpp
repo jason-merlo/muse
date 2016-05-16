@@ -24,8 +24,8 @@ int static_visualizer_type = VISUALIZER_BARS;
 
 void helloCmd(WebServer &server, WebServer::ConnectionType type, char *, bool);
 void rgbCmd(WebServer &server, WebServer::ConnectionType type, char *, bool);
-void web_index(WebServer &server, WebServer::ConnectionType type, char * c, bool b);
-void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool b);
+void web_index(WebServer &server, WebServer::ConnectionType type, char * c, bool b, void * obj);
+void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool b, void * obj);
 
 /* ================================================================== *
  * Server
@@ -44,7 +44,7 @@ void Server::init() {
 
     /* run the same command if you try to load /index.html, a common
      * default page name */
-    webserver.addCommand("web_input", &web_input);
+    webserver.addCommand("web_input", &web_input, this);
 
     /* start the webserver */
     webserver.begin();
@@ -56,6 +56,7 @@ void Server::init() {
     sprintf(myIpAddress, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
 
     last_dns_advert = 0;
+    power_status = SERVER_POWER_ON;
 }
 
 /* ================================================================== *
@@ -68,17 +69,33 @@ void Server::tick() {
     int len = 256;
 
     server_red = static_red;
-    visualizer_type = static_visualizer_type;
+    //visualizer_type = static_visualizer_type;
 
     /* process incoming connections one at a time forever */
     webserver.processConnection(buff, &len);
+}
+
+void Server::set_power(int onOff) {
+    if (onOff == SERVER_POWER_ON || onOff == SERVER_POWER_OFF) {
+        power_status = onOff;
+    } else {
+        power_status = SERVER_POWER_OFF;
+    }
+}
+
+void Server::set_visualizer(int type) {
+    visualizer_type = type;
+}
+
+int Server::powered_on() {
+    return power_status;
 }
 
 int Server::visualizer() {
     return visualizer_type;
 }
 
-void web_index(WebServer &server, WebServer::ConnectionType type, char * c, bool b) {
+void web_index(WebServer &server, WebServer::ConnectionType type, char * c, bool b, void * obj) {
     server.httpSuccess();
 
     if (type != WebServer::HEAD) {
@@ -86,8 +103,9 @@ void web_index(WebServer &server, WebServer::ConnectionType type, char * c, bool
     }
 }
 
-void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool b) {
+void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool b, void * obj) {
     if (type == WebServer::POST) {
+        Server * s = (Server *) obj;
         bool repeat;
         char name[16], value[16];
         do {
@@ -98,51 +116,45 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                 int type = strtol(value, NULL, 10);
                 switch (type) {
                     case VISUALIZER_BARS:
-                        static_visualizer_type = VISUALIZER_BARS;
+                        s->set_visualizer(VISUALIZER_BARS);
                         break;
                     case VISUALIZER_BARS_MIDDLE:
-                        static_visualizer_type = VISUALIZER_BARS_MIDDLE;
+                        s->set_visualizer(VISUALIZER_BARS_MIDDLE);
                         break;
                     case VISUALIZER_PULSE:
-                        static_visualizer_type = VISUALIZER_PULSE;
+                        s->set_visualizer(VISUALIZER_PULSE);
                         break;
                     case VISUALIZER_PLASMA:
-                        static_visualizer_type = VISUALIZER_PLASMA;
+                        s->set_visualizer(VISUALIZER_PLASMA);
                         break;
                     case VISUALIZER_RAINBOW:
-                        static_visualizer_type = VISUALIZER_RAINBOW;
+                        s->set_visualizer(VISUALIZER_RAINBOW);
                         break;
                     case VISUALIZER_WHEEL:
-                        static_visualizer_type = VISUALIZER_WHEEL;
+                        s->set_visualizer(VISUALIZER_WHEEL);
                         break;
-                    default: static_visualizer_type = VISUALIZER_BARS; break;
+                    default:
+                        s->set_visualizer(VISUALIZER_BARS);
+                        break;
                 }
             } else if (strcmp(name, "other") == 0) {
                 int type = strtol(value, NULL, 10);
                 switch (type) {
                     case BOUNCING_LINES:
-                        static_visualizer_type = BOUNCING_LINES;
+                        s->set_visualizer(BOUNCING_LINES);
                         break;
                     case BAR_TEST:
-                        static_visualizer_type = BAR_TEST;
+                        s->set_visualizer(BAR_TEST);
                         break;
                     case PIXEL_TEST:
-                        static_visualizer_type = PIXEL_TEST;
+                        s->set_visualizer(PIXEL_TEST);
                         break;
                     default:
-                        static_visualizer_type = BOUNCING_LINES;
+                        s->set_visualizer(BOUNCING_LINES);
                         break;
                 }
             } else if (strcmp(name, "power") == 0) {
-                int type = strtol(value, NULL, 10);
-                switch (type) {
-                    case 0:
-                    break;
-                    case 1:
-                    break;
-                    default:
-                    break;
-                }
+                s->set_power(strtol(value, NULL, 10));
             }
         } while (repeat);
             // after procesing the POST data, tell the web browser to reload

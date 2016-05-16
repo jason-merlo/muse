@@ -61,12 +61,13 @@ void WebServer::setFailureCommand(Command *cmd)
   m_failureCmd = cmd;
 }
 
-void WebServer::addCommand(const char *verb, Command *cmd)
+void WebServer::addCommand(const char *verb, Command *cmd, void* callback_obj)
 {
   if (m_cmdCount < SIZE(m_commands))
   {
     m_commands[m_cmdCount].verb = verb;
-    m_commands[m_cmdCount++].cmd = cmd;
+    m_commands[m_cmdCount].cmd = cmd;
+    m_commands[m_cmdCount++].obj = callback_obj;
   }
 }
 
@@ -161,7 +162,7 @@ bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
   // trailing slash or if the URL is just the slash
   if ((verb[0] == 0) || ((verb[0] == '/') && (verb[1] == 0)))
   {
-    m_defaultCmd(*this, requestType, (char*)"", tail_complete);
+    m_defaultCmd(*this, requestType, (char*)"", tail_complete, NULL);
     return true;
   }
   // if the URL is just a slash followed by a question mark
@@ -169,7 +170,7 @@ bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
   if ((verb[0] == '/') && (verb[1] == '?'))
   {
     verb+=2; // skip over the "/?" part of the url
-    m_defaultCmd(*this, requestType, verb, tail_complete);
+    m_defaultCmd(*this, requestType, verb, tail_complete, NULL);
     return true;
   }
   // We now know that the URL contains at least one character.  And,
@@ -197,7 +198,7 @@ bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
         // mark, if present) when passing it to the "action" routine
         m_commands[i].cmd(*this, requestType,
         verb + verb_len + qm_offset,
-        tail_complete);
+        tail_complete, m_commands[i].obj);
         return true;
       }
     }
@@ -291,12 +292,12 @@ void WebServer::processConnection(char *buff, int *bufflen)
     if (requestType == INVALID ||
         strncmp(buff, m_urlPrefix, urlPrefixLen) != 0)
     {
-      m_failureCmd(*this, requestType, buff, (*bufflen) >= 0);
+      m_failureCmd(*this, requestType, buff, (*bufflen) >= 0, NULL);
     }
     else if (!dispatchCommand(requestType, buff + urlPrefixLen,
              (*bufflen) >= 0))
     {
-      m_failureCmd(*this, requestType, buff, (*bufflen) >= 0);
+      m_failureCmd(*this, requestType, buff, (*bufflen) >= 0, NULL);
     }
 
     flushBuf();
@@ -336,7 +337,8 @@ void WebServer::httpFail()
 void WebServer::defaultFailCmd(WebServer &server,
                                WebServer::ConnectionType type,
                                char *url_tail,
-                               bool tail_complete)
+                               bool tail_complete,
+                               void * obj)
 {
   server.httpFail();
 }
