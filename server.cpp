@@ -133,13 +133,21 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                         static_visualizer_type = BOUNCING_LINES;
                         break;
                 }
+            } else if (strcmp(name, "power") == 0) {
+                int type = strtol(value, NULL, 10);
+                switch (type) {
+                    case 0:
+                    break;
+                    case 1:
+                    break;
+                    default:
+                    break;
+                }
             }
         } while (repeat);
-
             // after procesing the POST data, tell the web browser to reload
             // the page using a GET method.
             server.httpSeeOther("/web_input");
-
             return;
         }
 

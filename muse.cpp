@@ -132,32 +132,35 @@ void loop() {
     // Check each bin to see if they are below the threshold to be "off"
     // If any bin is active break and just run the visualizer
     #if ENABLE_PSU_CONTROL
-    bool any_bin_active = false;
-    for (int i = 0; i < NUM_BINS; i++) {
-        if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
-            any_bin_active = true;
-            if (!psu_is_on) { psu_startup(); }
-            last_sound_seconds = Time.now();
-            break;
-        }
-    }
-
-    if (psu_is_on) {
-        matrix->tick(&bins, server.visualizer());
-    }
-
-    if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
         #if ENABLE_AUTO_SHUTDOWN
-        // If we have passed the seconds until psu shutoff, turn it off
-        if (psu_is_on) { psu_shutdown(); }
+        bool any_bin_active = false;
+        for (int i = 0; i < NUM_BINS; i++) {
+            if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
+                any_bin_active = true;
+                if (!psu_is_on) { psu_startup(); }
+                last_sound_seconds = Time.now();
+                break;
+            }
+        }
+
+        if (psu_is_on) {
+            matrix->tick(&bins, server.visualizer());
+        }
+
+        if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+            // If we have passed the seconds until psu shutoff, turn it off
+            if (psu_is_on) { psu_shutdown(); }
+        }
         #endif
-    } /*else {
-        // Otherwise we must be in the screensaver time. Run the screensaver
-        if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
-        matrix->bouncing_lines();
-        matrix->show_all();
-        bouncing_lines_last_update = millis();
-    }*/
+
+        #if ENABLE_WEB_POWER
+        if (server.powered_on()) {
+            if (!psu_is_on) { psu_startup; }
+            matrix->tick(&bins, server.visualizer());
+        } else {
+            psu_shutdown();
+        }
+        #endif
     #endif
 
     #if ENABLE_WEB_SERVER

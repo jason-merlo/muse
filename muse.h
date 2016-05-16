@@ -23,8 +23,9 @@
 #define ENABLE_PSU_CONTROL    1
 #define ENABLE_RGB_SR         0
 #define ENABLE_SCREENSAVER    0
-#define ENABLE_AUTO_SHUTDOWN  1
+#define ENABLE_AUTO_SHUTDOWN  0
 #define ENABLE_WEB_SERVER     1
+#define ENABLE_WEB_POWER      1
 #define ENABLE_SERIAL         0
 
 /* ======================= Define - General ========================= */
