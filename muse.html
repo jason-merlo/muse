@@ -14,12 +14,22 @@
             }
             div {
                 display: inline-block;
-                width: 75%;
+                width: 60%;
             }
             form {
                 color: #E87722;
                 font-size: 24px;
                 text-align: left;
+            }
+            input[type=radio] {
+                -webkit-appearance: button;
+                -moz-appearance: button;
+                -o-appearance: button;
+                -ms-appearance: button;
+                appearance: button;
+            }
+            label:hover {
+                background:#606EB2;
             }
         </style>
         <script>
@@ -38,6 +48,7 @@
                 }
             }
         </script>
+        <meta id='meta' name='viewport' content='height=device-height; initial-scale=1.0' />
     </head>
     <body>
         <div id='visualizer_div'>
