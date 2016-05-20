@@ -49,6 +49,9 @@
 #define SCREENSAVER_SECS_TO_PSU_OFF 30
 #define SCREENSAVER_SECS_TO_START   10
 
+// Web server constants
+#define SERVER_UPDATE_INTERVAL      100
+
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS           0
 #define VISUALIZER_BARS_MIDDLE    1

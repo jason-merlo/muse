@@ -51,8 +51,9 @@ static Bar_Matrix* matrix;
 #endif
 
 #if ENABLE_WEB_SERVER
-// Declare matrix variables
+// Declare webserver variables
 Server server;
+unsigned int last_server_update = 0;
 #endif
 
 /* =============== Visualizer variables ================= */
@@ -111,7 +112,11 @@ void setup() {
     #endif
 
     #if ENABLE_WEB_SERVER
-    server.init();
+    if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
+          millis - last_server_update < 0) {
+      server.init();
+      last_server_update = millis();
+    }
     #endif
 }
 
@@ -164,6 +169,7 @@ void loop() {
     #endif
 
     #if ENABLE_WEB_SERVER
+
     server.tick();
     #endif
 

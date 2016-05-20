@@ -36,6 +36,7 @@ class Bar_Matrix {
             bar_test(),
             bouncing_lines(float speed),
             pixel_test();
+            ambient_lighting(Color_Value color);
 
         // Visualizer drawing functions
         void
