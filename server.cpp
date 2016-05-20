@@ -169,6 +169,9 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                     case PIXEL_TEST:
                         s->set_visualizer(PIXEL_TEST);
                         break;
+                    case AMBIENT_LIGHTING:
+                        s->set_visualizer(AMBIENT_LIGHTING);
+                        break;
                     default:
                         s->set_visualizer(BOUNCING_LINES);
                         break;

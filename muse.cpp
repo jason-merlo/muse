@@ -112,11 +112,7 @@ void setup() {
     #endif
 
     #if ENABLE_WEB_SERVER
-    if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
-          millis - last_server_update < 0) {
-      server.init();
-      last_server_update = millis();
-    }
+    server.init();
     #endif
 }
 
@@ -169,8 +165,11 @@ void loop() {
     #endif
 
     #if ENABLE_WEB_SERVER
-
-    server.tick();
+    if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
+          millis - last_server_update < 0) {
+      server.tick();
+      last_server_update = millis();
+    }
     #endif
 
     // Delay to make updates from the cloud more responsive

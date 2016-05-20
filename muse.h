@@ -60,6 +60,8 @@
 #define VISUALIZER_RAINBOW        4
 #define VISUALIZER_WHEEL          5
 
+#define AMBIENT_LIGHTING          66
+
 #define BOUNCING_LINES            77
 
 #define BAR_TEST                  88

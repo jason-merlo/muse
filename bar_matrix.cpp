@@ -85,6 +85,16 @@ void Bar_Matrix::fill_matrix(Color_Value c) {
 }
 
 /* ================================================================== *
+ * Function: ambient_lighting
+ * Description: Sets all pixel values in matrix to given color value
+ * Parameters: [Color]* color - color to set matrix to
+ * ================================================================== */
+void Bar_Matrix::ambient_lighting(Color_Value c) {
+    fill_matrix(c);
+}
+
+
+/* ================================================================== *
  * Function: init_matrix
  * Description: Initializes the matrix to off
  * ================================================================== */
@@ -140,33 +150,37 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
     switch (visualizer_type) {
         // Visualizers
         case VISUALIZER_BARS:
-        visualizer_bars(bins, 0.15, 0.9, false);
-        break;
+          visualizer_bars(bins, 0.15, 0.9, false);
+          break;
         case VISUALIZER_BARS_MIDDLE:
-        visualizer_bars_middle(bins, 0.15, 0.9);
-        break;
+          visualizer_bars_middle(bins, 0.15, 0.9);
+          break;
         case VISUALIZER_PLASMA:
-        visualizer_plasma(bins, 0.5, 0.965);
-        break;
+          visualizer_plasma(bins, 0.5, 0.965);
+          break;
         case VISUALIZER_PULSE:
-        visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
-        break;
+          visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
+          break;
         case VISUALIZER_RAINBOW:
-        visualizer_rainbow(bins, 0.15, 0.8);
-        break;
+          visualizer_rainbow(bins, 0.15, 0.8);
+          break;
         case VISUALIZER_WHEEL:
-        visualizer_wheel(0.25, 10);
-        break;
+          visualizer_wheel(0.25, 10);
+          break;
 
         // Tests and misc
         case BOUNCING_LINES:
-        bouncing_lines(0.75);
-        break;
+          bouncing_lines(0.75);
+          break;
         case BAR_TEST:
-        bar_test();
-        break;
+          bar_test();
+          break;
         case PIXEL_TEST:
-        pixel_test();
+          pixel_test();
+          break;
+        case AMBIENT_LIGHTING:
+          ambient_lighting(Color_Value(200, 150, 100));
+          break;
     }
 
     show_all();
