@@ -134,47 +134,29 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
 
             if (strcmp(name, "visualizer") == 0) {
                 int type = strtol(value, NULL, 10);
+                // Ensure type is valid, default to VISUALIZER_BARS
                 switch (type) {
                     case VISUALIZER_BARS:
-                        s->set_visualizer(VISUALIZER_BARS);
-                        break;
                     case VISUALIZER_BARS_MIDDLE:
-                        s->set_visualizer(VISUALIZER_BARS_MIDDLE);
-                        break;
                     case VISUALIZER_PULSE:
-                        s->set_visualizer(VISUALIZER_PULSE);
-                        break;
                     case VISUALIZER_PLASMA:
-                        s->set_visualizer(VISUALIZER_PLASMA);
-                        break;
                     case VISUALIZER_RAINBOW:
-                        s->set_visualizer(VISUALIZER_RAINBOW);
-                        break;
                     case VISUALIZER_WHEEL:
-                        s->set_visualizer(VISUALIZER_WHEEL);
-                        break;
+                        s->set_visualizer(type); break;
                     default:
-                        s->set_visualizer(VISUALIZER_BARS);
-                        break;
+                        s->set_visualizer(VISUALIZER_BARS); break;
                 }
             } else if (strcmp(name, "other") == 0) {
                 int type = strtol(value, NULL, 10);
+                // Ensure type is valid, default to BOUNCING_LINES
                 switch (type) {
                     case BOUNCING_LINES:
-                        s->set_visualizer(BOUNCING_LINES);
-                        break;
                     case BAR_TEST:
-                        s->set_visualizer(BAR_TEST);
-                        break;
                     case PIXEL_TEST:
-                        s->set_visualizer(PIXEL_TEST);
-                        break;
                     case AMBIENT_LIGHTING:
-                        s->set_visualizer(AMBIENT_LIGHTING);
-                        break;
+                        s->set_visualizer(type); break;
                     default:
-                        s->set_visualizer(BOUNCING_LINES);
-                        break;
+                        s->set_visualizer(BOUNCING_LINES); break;
                 }
             } else if (strcmp(name, "power") == 0) {
                 s->set_power(strtol(value, NULL, 10));
