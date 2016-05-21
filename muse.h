@@ -27,6 +27,7 @@
 #define ENABLE_WEB_SERVER     1
 #define ENABLE_WEB_POWER      1
 #define ENABLE_SERIAL         0
+#define ENABLE_MDNS           1
 
 /* ======================= Define - General ========================= */
 
@@ -51,6 +52,7 @@
 
 // Web server constants
 #define SERVER_UPDATE_INTERVAL      100
+#define MDNS_UPDATE_INTERVAL        100
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS           0

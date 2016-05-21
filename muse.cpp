@@ -14,6 +14,7 @@
 
 #include "application.h"
 #include "bar_matrix.h"
+#include "MDNS.h"
 #include "neopixel.h"
 #include "server.h"
 
@@ -54,6 +55,11 @@ static Bar_Matrix* matrix;
 // Declare webserver variables
 Server server;
 unsigned int last_server_update = 0;
+#endif
+
+#if ENABLE_MDNS
+MDNS mdns;
+unsigned int last_mdns_update = 0;
 #endif
 
 /* =============== Visualizer variables ================= */
@@ -114,6 +120,11 @@ void setup() {
     #if ENABLE_WEB_SERVER
     server.init();
     #endif
+
+    #if ENABLE_MDNS
+    mdns.setHostname("muse");
+    mdns.begin();
+    #endif
 }
 
 /* ================================================================== *
@@ -164,9 +175,17 @@ void loop() {
         #endif
     #endif
 
+    #if ENABLE_MDNS
+    if (millis() - last_mdns_update > MDNS_UPDATE_INTERVAL ||
+        millis() - last_mdns_update < 0) {
+            mdns.processQueries();
+            last_mdns_update = millis();
+    }
+    #endif
+
     #if ENABLE_WEB_SERVER
     if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
-          millis - last_server_update < 0) {
+        millis() - last_server_update < 0) {
       server.tick();
       last_server_update = millis();
     }
