@@ -50,9 +50,10 @@
 #define SCREENSAVER_SECS_TO_PSU_OFF 30
 #define SCREENSAVER_SECS_TO_START   10
 
-// Web server constants
-#define SERVER_UPDATE_INTERVAL      100
-#define MDNS_UPDATE_INTERVAL        100
+// Update intervals, min time between updates of subsystems in millis
+#define DISPLAY_UPDATE_INTERVAL     20
+#define MDNS_UPDATE_INTERVAL        75
+#define SERVER_UPDATE_INTERVAL      75
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS           0

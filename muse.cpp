@@ -49,6 +49,7 @@ static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 #if ENABLE_BARS
 // Declare matrix variables
 static Bar_Matrix* matrix;
+unsigned long last_display_update;
 #endif
 
 #if ENABLE_WEB_SERVER
@@ -71,6 +72,13 @@ static bool psu_is_on = false;
 #if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
 static unsigned long last_sound_seconds;
 #endif
+
+// Stat trackers for number of loop ticks and number of frames
+int tick_count;
+int tick_count_publish;
+int frame_count;
+int frame_count_publish;
+unsigned long last_tick_update;
 
 /* ================================================================== *
  *  Function: Setup
@@ -110,6 +118,7 @@ void setup() {
     // Create new bar matrix inistance
     #if ENABLE_BARS
     matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
+    last_display_update = 0;
     #endif
 
     // Initialize screenaver variables
@@ -119,12 +128,21 @@ void setup() {
 
     #if ENABLE_WEB_SERVER
     server.init();
+    last_server_update = 0;
     #endif
 
     #if ENABLE_MDNS
     mdns.setHostname("muse");
     mdns.begin();
+    last_mdns_update = 0;
     #endif
+
+    tick_count = 0;
+    last_tick_update = 0;
+    frame_count = 0;
+    frame_count_publish = 0;
+    Particle.variable("tick_count", &tick_count_publish, INT);
+    Particle.variable("frames", &frame_count_publish, INT);
 }
 
 /* ================================================================== *
@@ -132,11 +150,6 @@ void setup() {
  *  Description: Contains main program
  * ================================================================== */
 void loop() {
-    // Sample frequency bins
-    #if ENABLE_MSGEQ7
-    sample_freq(&bins);
-    #endif
-
     #if ENABLE_SERIAL
     //Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
@@ -156,7 +169,14 @@ void loop() {
         }
 
         if (psu_is_on) {
-            matrix->tick(&bins, server.visualizer());
+            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+                last_display_update = millis();
+                #if ENABLE_MSGEQ7
+                sample_freq(&bins);
+                #endif
+                matrix->tick(&bins, server.visualizer());
+                frame_count++;
+            }
         }
 
         if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
@@ -168,7 +188,14 @@ void loop() {
         #if ENABLE_WEB_POWER
         if (server.powered_on() == SERVER_POWER_ON) {
             if (!psu_is_on) { psu_startup(); }
-            matrix->tick(&bins, server.visualizer());
+            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+                last_display_update = millis();
+                #if ENABLE_MSGEQ7
+                sample_freq(&bins);
+                #endif
+                matrix->tick(&bins, server.visualizer());
+                frame_count++;
+            }
         } else {
             psu_shutdown();
         }
@@ -178,18 +205,27 @@ void loop() {
     #if ENABLE_MDNS
     if (millis() - last_mdns_update > MDNS_UPDATE_INTERVAL ||
         millis() - last_mdns_update < 0) {
-            mdns.processQueries();
             last_mdns_update = millis();
+            mdns.processQueries();
     }
     #endif
 
     #if ENABLE_WEB_SERVER
     if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
         millis() - last_server_update < 0) {
-      server.tick();
-      last_server_update = millis();
+            last_server_update = millis();
+            server.tick();
     }
     #endif
+
+    tick_count++;
+    if (millis() - last_tick_update >= 10000) {
+        last_tick_update = millis();
+        tick_count_publish = tick_count;
+        frame_count_publish = frame_count;
+        tick_count = 0;
+        frame_count = 0;
+    }
 
     // Delay to make updates from the cloud more responsive
     delay(1);
