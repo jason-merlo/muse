@@ -52,8 +52,8 @@
 
 // Update intervals, min time between updates of subsystems in millis
 #define DISPLAY_UPDATE_INTERVAL     20
-#define MDNS_UPDATE_INTERVAL        75
-#define SERVER_UPDATE_INTERVAL      75
+#define MDNS_UPDATE_INTERVAL        48
+#define SERVER_UPDATE_INTERVAL      48
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS           0
