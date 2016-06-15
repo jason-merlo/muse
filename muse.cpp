@@ -28,13 +28,13 @@ static const char ps_on   = TX;
 static const char rst     = A3;
 static const char strobe  = A4;
 
-// RGB LED Strip Control Shift Register
-static const char sr_lat  = A5;
-static const char sr_clk  = A6;
-static const char sr_dat  = A7;
+// Pi communication pins, defined/used in pi_server
+// static const char pi_data_ready     = A5;
+// static const char pi_data           = A6;
+// static const char pi_data_rec       = A7;
 
 // Digital Inputs
-static const char pwr_sw = D4;
+static const char pwr_sw  = D4;
 
 // Analog Inputs (0-4096)
 static const char audio_r = A0;
@@ -112,13 +112,6 @@ void setup() {
     //pinMode(pwr_sw, INPUT);
     psu_is_on = false;
     psu_startup();
-    #endif
-
-    // Enables pins for shift register to control RGB LED strips
-    #if ENABLE_RGB_SR
-    pinMode(sr_lat, OUTPUT);
-    pinMode(sr_clk, OUTPUT);
-    pinMode(sr_dat, OUTPUT);
     #endif
 
     // Create new bar matrix inistance

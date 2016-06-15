@@ -12,18 +12,48 @@
 
 #include "muse.h"
 
+// Pi communication pins
+static const char pi_data_ready     = A5;
+static const char pi_data           = A6;
+static const char pi_data_rec       = A7;
+
 /* ================================================================== *
  * Server constructor
  * ================================================================== */
-PiServer::Server() {}
+PiServer::PiServer() {}
 
 /* ================================================================== *
  * Function: init
  * Description: Initialize the server
  * Parameters: none
  * ================================================================== */
+int last_byte_out;
+int bytes_read;
 void PiServer::init() {
+    // Initialize input pins
+    pinMode(pi_data_ready, INPUT);
+    pinMode(pi_data, INPUT);
+    pinMode(pi_data_rec, OUTPUT);
+
+    digitalWrite(pi_data_rec, LOW);
+
+    // Initializer variables
+    data_ready_value = LOW;
+    data_rec_value = LOW;
+
+    bits_read = 0;
+    incoming_byte = 0;
+    last_byte = 0;
+
     power_status = PI_SERVER_POWER_ON;
+    visualizer_type = VISUALIZER_BARS;
+
+    // Debug infos
+    Particle.variable("LastByte", &last_byte_out, INT);
+    Particle.variable("BytesRead", &bytes_read, INT);
+    Particle.variable("BitsRead", &bits_read, INT);
+    last_byte_out = 0;
+    bytes_read = 0;
 }
 
 /* ================================================================== *
@@ -32,7 +62,37 @@ void PiServer::init() {
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
+    if (digitalRead(pi_data_ready) != data_ready_value) {
+        // Flip the data ready value we are looking for
+        if (data_ready_value == LOW) data_ready_value = HIGH;
+        else data_ready_value = LOW;
 
+        // Grab the next bit
+        int next_bit = digitalRead(pi_data);
+
+        // Flip the data rec value so the pi will send next bit
+        if (data_rec_value == LOW) data_rec_value = HIGH;
+        else data_rec_value = LOW;
+        digitalWrite(pi_data_rec, data_rec_value);
+
+        // Update the incoming byte
+        incoming_byte = incoming_byte >> 1;
+        if (next_bit) incoming_byte += 0x80;
+
+        // Update location within byte
+        bits_read++;
+        if (bits_read >= 8) {
+            last_byte = incoming_byte;
+            bits_read = 0;
+            incoming_byte = 0;
+
+            data_rec_value = LOW;
+            data_ready_value = LOW;
+
+            last_byte_out = (int) last_byte;
+            bytes_read++;
+        }
+    }
 }
 
 /* ================================================================== *

@@ -30,8 +30,15 @@ class PiServer {
         int visualizer();
 
     private:
+        int bits_read;
+        int data_ready_value;
+        int data_rec_value;
+        int incoming_byte;
+        int last_byte;
         int power_status;
         int visualizer_type;
+
+        bool pi_clock_went_low;
 };
 
 #endif
