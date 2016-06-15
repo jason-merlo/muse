@@ -24,10 +24,11 @@
 #define ENABLE_RGB_SR         0
 #define ENABLE_SCREENSAVER    0
 #define ENABLE_AUTO_SHUTDOWN  0
-#define ENABLE_WEB_SERVER     1
-#define ENABLE_WEB_POWER      1
+#define ENABLE_WEB_SERVER     0
+#define ENABLE_WEB_POWER      0
 #define ENABLE_SERIAL         0
-#define ENABLE_MDNS           1
+#define ENABLE_MDNS           0
+#define ENABLE_PI_SERVER      1
 
 /* ======================= Define - General ========================= */
 
@@ -54,6 +55,7 @@
 #define DISPLAY_UPDATE_INTERVAL     20
 #define MDNS_UPDATE_INTERVAL        48
 #define SERVER_UPDATE_INTERVAL      48
+#define PI_SERVER_UPDATE_INTERVAL    0
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS           0

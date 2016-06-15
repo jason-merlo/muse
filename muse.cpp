@@ -17,6 +17,7 @@
 #include "MDNS.h"
 #include "neopixel.h"
 #include "server.h"
+#include "pi_server.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
@@ -61,6 +62,11 @@ unsigned int last_server_update = 0;
 #if ENABLE_MDNS
 MDNS mdns;
 unsigned int last_mdns_update = 0;
+#endif
+
+#if ENABLE_PI_SERVER
+PiServer pi_server;
+unsigned int last_pi_server_update = 0;
 #endif
 
 /* =============== Visualizer variables ================= */
@@ -129,6 +135,11 @@ void setup() {
     #if ENABLE_WEB_SERVER
     server.init();
     last_server_update = 0;
+    #endif
+
+    #if ENABLE_PI_SERVER
+    pi_server.init();
+    last_pi_server_update = 0;
     #endif
 
     #if ENABLE_MDNS
@@ -200,6 +211,22 @@ void loop() {
             psu_shutdown();
         }
         #endif
+
+        #if ENABLE_PI_SERVER
+        if (pi_server.powered_on() == SERVER_POWER_ON) {
+            if (!psu_is_on) { psu_startup(); }
+            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+                last_display_update = millis();
+                #if ENABLE_MSGEQ7
+                sample_freq(&bins);
+                #endif
+                matrix->tick(&bins, pi_server.visualizer());
+                frame_count++;
+            }
+        } else {
+            psu_shutdown();
+        }
+        #endif
     #endif
 
     #if ENABLE_MDNS
@@ -215,6 +242,14 @@ void loop() {
         millis() - last_server_update < 0) {
             last_server_update = millis();
             server.tick();
+    }
+    #endif
+
+    #if ENABLE_PI_SERVER
+    if (millis() - last_pi_server_update > PI_SERVER_UPDATE_INTERVAL ||
+        millis() - last_pi_server_update < 0) {
+            last_pi_server_update = millis();
+            pi_server.tick();
     }
     #endif
 
