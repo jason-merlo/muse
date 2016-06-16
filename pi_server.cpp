@@ -27,7 +27,7 @@ PiServer::PiServer() {}
 
 /* ================================================================== *
  * Function: init
- * Description: Initialize the server
+ * Description: Initialize the pi server
  * Parameters: none
  * ================================================================== */
 int last_byte_out;
@@ -61,7 +61,7 @@ void PiServer::init() {
 
 /* ================================================================== *
  * Function: tick
- * Description: Periodically call to serve HTTP connections
+ * Description: Periodically call to get data from the Pi and process it
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
@@ -85,13 +85,15 @@ void PiServer::tick() {
 }
 
 /* ================================================================== *
- * Function: tick
- * Description: Periodically call to serve HTTP connections
+ * Function: get_byte
+ * Description: Attempts to get a byte from the Pi for BYTE_SCAN_MICROS microseconds
  * Parameters: none
+ * Returns: true - If a full byte was received within BYTE_SCAN_MICROS microseconds
+ *          false - otherwise
  * ================================================================== */
 bool PiServer::get_byte() {
     unsigned long start_micros = micros();
-    while(micros() - start_micros < BYTE_SCAN_MICROS) {
+    while(micros() - start_micros < BYTE_SCAN_MICROS && micros() > start_micros) {
         if (digitalRead(pi_data_ready) != data_ready_value) {
             // Flip the data ready value we are looking for
             if (data_ready_value == LOW) data_ready_value = HIGH;
