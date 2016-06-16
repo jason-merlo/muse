@@ -145,8 +145,8 @@ void setup() {
     last_tick_update = 0;
     frame_count = 0;
     frame_count_publish = 0;
-    Particle.variable("tick_count", &tick_count_publish, INT);
-    Particle.variable("frames", &frame_count_publish, INT);
+    Particle.variable("Ticks10s", &tick_count_publish, INT);
+    Particle.variable("Frames10s", &frame_count_publish, INT);
 }
 
 /* ================================================================== *

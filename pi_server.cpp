@@ -48,7 +48,7 @@ void PiServer::init() {
     incoming_byte = 0;
     last_byte = 0;
 
-    power_status = PI_SERVER_POWER_ON;
+    power_status = PI_SERVER_POWER_OFF;
     visualizer_type = VISUALIZER_BARS;
 
     // Debug infos
