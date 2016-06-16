@@ -134,7 +134,7 @@ bool PiServer::get_byte() {
 
 /* ================================================================== *
  * Function: set_power
- * Description: Sets wether Server.powered_on() should return PI_SERVER_POWER_ON or PI_SERVER_POWER_OFF
+ * Description: Sets wether PiServer.powered_on() should return PI_SERVER_POWER_ON or PI_SERVER_POWER_OFF
  * Parameters: int onOff - Pass in PI_SERVER_POWER_ON for on, PI_SERVER_POWER_OFF for off
  * ================================================================== */
 void PiServer::set_power(int onOff) {
@@ -148,7 +148,7 @@ void PiServer::set_power(int onOff) {
 
 /* ================================================================== *
  * Function: set_visualizer
- * Description: Sets the visualizer to be returned by Server.visualizer()
+ * Description: Sets the visualizer to be returned by PiServer.visualizer()
  * Parameters: int type - One of the visualizer constants from muse.h
  * ================================================================== */
 void PiServer::set_visualizer(int type) {
