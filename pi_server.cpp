@@ -29,6 +29,9 @@ PiServer::PiServer() {}
  * ================================================================== */
 int last_byte_out;
 int bytes_read;
+int total_time_out;
+unsigned long total_time;
+unsigned long last_total_time;
 void PiServer::init() {
     // Initialize input pins
     pinMode(pi_data_ready, INPUT);
@@ -52,8 +55,12 @@ void PiServer::init() {
     Particle.variable("LastByte", &last_byte_out, INT);
     Particle.variable("BytesRead", &bytes_read, INT);
     Particle.variable("BitsRead", &bits_read, INT);
+    Particle.variable("time", &total_time_out, INT);
     last_byte_out = 0;
     bytes_read = 0;
+    total_time_out = 0;
+    total_time = 0;
+    last_total_time = 0;
 }
 
 /* ================================================================== *
@@ -62,36 +69,47 @@ void PiServer::init() {
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
-    if (digitalRead(pi_data_ready) != data_ready_value) {
-        // Flip the data ready value we are looking for
-        if (data_ready_value == LOW) data_ready_value = HIGH;
-        else data_ready_value = LOW;
+    unsigned long now = micros();
 
-        // Grab the next bit
-        int next_bit = digitalRead(pi_data);
+    while(micros() - now < 50) {
+        if (digitalRead(pi_data_ready) != data_ready_value) {
+            // Flip the data ready value we are looking for
+            if (data_ready_value == LOW) data_ready_value = HIGH;
+            else data_ready_value = LOW;
 
-        // Flip the data rec value so the pi will send next bit
-        if (data_rec_value == LOW) data_rec_value = HIGH;
-        else data_rec_value = LOW;
-        digitalWrite(pi_data_rec, data_rec_value);
+            // Grab the next bit
+            int next_bit = digitalRead(pi_data);
 
-        // Update the incoming byte
-        incoming_byte = incoming_byte >> 1;
-        if (next_bit) incoming_byte += 0x80;
+            // Flip the data rec value so the pi will send next bit
+            if (data_rec_value == LOW) data_rec_value = HIGH;
+            else data_rec_value = LOW;
+            digitalWrite(pi_data_rec, data_rec_value);
 
-        // Update location within byte
-        bits_read++;
-        if (bits_read >= 8) {
-            last_byte = incoming_byte;
-            bits_read = 0;
-            incoming_byte = 0;
+            // Update the incoming byte
+            incoming_byte = incoming_byte >> 1;
+            if (next_bit) incoming_byte += 0x80;
 
-            data_rec_value = LOW;
-            data_ready_value = LOW;
+            // Update location within byte
+            bits_read++;
+            if (bits_read >= 8) {
+                last_byte = incoming_byte;
+                bits_read = 0;
+                incoming_byte = 0;
 
-            last_byte_out = (int) last_byte;
-            bytes_read++;
+                data_rec_value = LOW;
+                data_ready_value = LOW;
+
+                last_byte_out = (int) last_byte;
+                bytes_read++;
+            }
         }
+    }
+    total_time += micros() - now;
+
+    if (millis() - last_total_time > 10000) {
+        last_total_time = millis();
+        total_time_out = (int)total_time;
+        total_time = 0;
     }
 }
 
