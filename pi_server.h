@@ -30,6 +30,8 @@ class PiServer {
         int visualizer();
 
     private:
+        bool get_byte();
+
         int bits_read;
         int data_ready_value;
         int data_rec_value;

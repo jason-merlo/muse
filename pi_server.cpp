@@ -12,6 +12,9 @@
 
 #include "muse.h"
 
+// The max number of micros to spend per tick attempting to get data
+#define BYTE_SCAN_MICROS 50
+
 // Pi communication pins
 static const char pi_data_ready     = A5;
 static const char pi_data           = A6;
@@ -29,9 +32,6 @@ PiServer::PiServer() {}
  * ================================================================== */
 int last_byte_out;
 int bytes_read;
-int total_time_out;
-unsigned long total_time;
-unsigned long last_total_time;
 void PiServer::init() {
     // Initialize input pins
     pinMode(pi_data_ready, INPUT);
@@ -55,12 +55,8 @@ void PiServer::init() {
     Particle.variable("LastByte", &last_byte_out, INT);
     Particle.variable("BytesRead", &bytes_read, INT);
     Particle.variable("BitsRead", &bits_read, INT);
-    Particle.variable("time", &total_time_out, INT);
     last_byte_out = 0;
     bytes_read = 0;
-    total_time_out = 0;
-    total_time = 0;
-    last_total_time = 0;
 }
 
 /* ================================================================== *
@@ -69,9 +65,33 @@ void PiServer::init() {
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
-    unsigned long now = micros();
+    // Get a byte, process if a full byte was recieved
+    if (get_byte()) {
+        switch (last_byte) {
+            case VISUALIZER_BARS:
+            case VISUALIZER_BARS_MIDDLE:
+                set_visualizer(last_byte);
+                break;
+            case 69:
+                set_power(PI_SERVER_POWER_ON);
+                break;
+            case 70:
+                set_power(PI_SERVER_POWER_OFF);
+                break;
+            default:
+                break;
+        }
+    }
+}
 
-    while(micros() - now < 50) {
+/* ================================================================== *
+ * Function: tick
+ * Description: Periodically call to serve HTTP connections
+ * Parameters: none
+ * ================================================================== */
+bool PiServer::get_byte() {
+    unsigned long start_micros = micros();
+    while(micros() - start_micros < BYTE_SCAN_MICROS) {
         if (digitalRead(pi_data_ready) != data_ready_value) {
             // Flip the data ready value we are looking for
             if (data_ready_value == LOW) data_ready_value = HIGH;
@@ -101,16 +121,13 @@ void PiServer::tick() {
 
                 last_byte_out = (int) last_byte;
                 bytes_read++;
+
+                return true; // Only get one byte at a time
             }
         }
     }
-    total_time += micros() - now;
 
-    if (millis() - last_total_time > 10000) {
-        last_total_time = millis();
-        total_time_out = (int)total_time;
-        total_time = 0;
-    }
+    return false;
 }
 
 /* ================================================================== *
