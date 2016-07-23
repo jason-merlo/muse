@@ -70,12 +70,20 @@ void PiServer::tick() {
         switch (last_byte) {
             case VISUALIZER_BARS:
             case VISUALIZER_BARS_MIDDLE:
+            case VISUALIZER_PLASMA:
+            case VISUALIZER_PULSE:
+            case VISUALIZER_RAINBOW:
+            case VISUALIZER_WHEEL:
+            case AMBIENT_LIGHTING:
+            case BAR_TEST:
+            case BOUNCING_LINES:
+            case PIXEL_TEST:
                 set_visualizer(last_byte);
                 break;
-            case 69:
+            case PI_POWER_ON_MSG:
                 set_power(PI_SERVER_POWER_ON);
                 break;
-            case 70:
+            case PI_POWER_OFF_MSG:
                 set_power(PI_SERVER_POWER_OFF);
                 break;
             default:

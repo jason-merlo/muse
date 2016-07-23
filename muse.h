@@ -58,19 +58,22 @@
 #define PI_SERVER_UPDATE_INTERVAL    0
 
 /* ======================= Define - Visualziers ===================== */
-#define VISUALIZER_BARS           0
-#define VISUALIZER_BARS_MIDDLE    1
-#define VISUALIZER_PLASMA         2
-#define VISUALIZER_PULSE          3
-#define VISUALIZER_RAINBOW        4
-#define VISUALIZER_WHEEL          5
+#define VISUALIZER_BARS         0
+#define VISUALIZER_BARS_MIDDLE  1
+#define VISUALIZER_PLASMA       2
+#define VISUALIZER_PULSE        3
+#define VISUALIZER_RAINBOW      4
+#define VISUALIZER_WHEEL        5
 
-#define AMBIENT_LIGHTING          66
+#define AMBIENT_LIGHTING        66
 
-#define BOUNCING_LINES            77
+#define BOUNCING_LINES          77
 
-#define BAR_TEST                  88
-#define PIXEL_TEST                99
+#define BAR_TEST                88
+#define PIXEL_TEST              99
+
+#define PI_POWER_ON_MSG         254
+#define PI_POWER_OFF_MSG        255
 
 /* ======================= Define - EQ Bins ===================== */
 #define LEFT_63                   0
