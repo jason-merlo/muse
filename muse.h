@@ -55,7 +55,8 @@
 #define DISPLAY_UPDATE_INTERVAL     20
 #define MDNS_UPDATE_INTERVAL        48
 #define SERVER_UPDATE_INTERVAL      48
-#define PI_SERVER_UPDATE_INTERVAL    0
+#define PI_SERVER_UPDATE_INTERVAL   25
+#define SAMPLE_UPDATE_INTERVAL      10
 
 /* ======================= Define - Visualziers ===================== */
 #define VISUALIZER_BARS         0

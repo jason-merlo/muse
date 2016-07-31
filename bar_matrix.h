@@ -13,6 +13,7 @@
 #define BAR_MATRIX_H
 
 #include "application.h"
+#include "beat_detection.h"
 #include "neopixel.h"
 #include "muse.h"
 
@@ -23,7 +24,7 @@
 
 class Bar_Matrix {
     public:
-        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins);
+        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins, Beat_Detection * beat_detection);
 
         // General functions
         void

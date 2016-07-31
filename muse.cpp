@@ -79,6 +79,10 @@ static bool psu_is_on = false;
 static unsigned long last_sound_seconds;
 #endif
 
+// Beat detection instance
+Beat_Detection beat_detect;
+unsigned long last_sample_millis;
+
 // Stat trackers for number of loop ticks and number of frames
 int tick_count;
 int tick_count_publish;
@@ -104,6 +108,7 @@ void setup() {
     pinMode(audio_l, INPUT);
     pinMode(audio_r, INPUT);
     init_eq();
+    last_sample_millis = 0;
     #endif
 
     // Enables power switch input for PSU and control for
@@ -116,7 +121,7 @@ void setup() {
 
     // Create new bar matrix inistance
     #if ENABLE_BARS
-    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
+    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins, &beat_detect);
     last_display_update = 0;
     #endif
 
@@ -208,11 +213,15 @@ void loop() {
         #if ENABLE_PI_SERVER
         if (pi_server.powered_on() == SERVER_POWER_ON) {
             if (!psu_is_on) { psu_startup(); }
-            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
-                last_display_update = millis();
+            if (millis() - last_sample_millis >= SAMPLE_UPDATE_INTERVAL) {
+                last_sample_millis = millis();
                 #if ENABLE_MSGEQ7
                 sample_freq(&bins);
+                beat_detect.tick(&bins);
                 #endif
+            }
+            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+                last_display_update = millis();
                 matrix->tick(&bins, pi_server.visualizer());
                 frame_count++;
             }
