@@ -14,8 +14,8 @@
 #include "muse.h"
 
 // Constants
-#define SMA_LONG_LENGTH 450
-#define SMA_SHORT_LENGTH 10
+#define SMA_LONG_LENGTH 100
+#define SMA_SHORT_LENGTH 5
 
 class Beat_Detection {
     public:
