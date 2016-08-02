@@ -14,9 +14,6 @@
 
 // The max number of micros to spend per tick attempting to get data
 #define BYTE_SCAN_MICROS 50
-// Periodically reset scanner to avoid errors, not a big deal since we send very small messages
-#define RESET_SCANNER_MILLIS 5000
-unsigned long last_comms_reset = 0;
 
 // Pi communication pins
 static const char pi_data_ready     = A5;
@@ -70,16 +67,6 @@ void PiServer::init() {
 void PiServer::tick() {
     // Get a byte, process if a full byte was recieved
     if (get_byte()) {
-        // Reset communication Periodically, hopefully fixes communication bugs
-        if (millis() - last_comms_reset > RESET_SCANNER_MILLIS) {
-            last_comms_reset = millis();
-
-            bits_read = 0;
-            incoming_byte = 0;
-            data_rec_value = LOW;
-            data_ready_value = LOW;
-        }
-
         switch (last_byte) {
             case VISUALIZER_BARS:
             case VISUALIZER_BARS_MIDDLE:

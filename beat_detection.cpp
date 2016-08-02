@@ -38,7 +38,9 @@ Beat_Detection::Beat_Detection() {
  * ================================================================== */
 void Beat_Detection::tick(audio_bins* bins) {
     sma_short_total -= sma_short_values[sma_short_index];
-    sma_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->left[1]*bins->left[1])/2;
+    sma_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->right[0]*bins->right[0])/4;
+    sma_short_values[sma_short_index] += (bins->left[1]*bins->left[1] + bins->right[1]*bins->right[1])/4;
+    //sma_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->left[1]*bins->left[1])/2;
     sma_short_total += sma_short_values[sma_short_index];
     float sma_short = sma_short_total / SMA_SHORT_LENGTH;
 
@@ -47,7 +49,7 @@ void Beat_Detection::tick(audio_bins* bins) {
     sma_long_total += sma_long_values[sma_long_index];
     float sma_long = sma_long_total / SMA_LONG_LENGTH;
 
-    if (!beat_on && sma_short > 1.00*sma_long) {
+    if (!beat_on && sma_short > 1.40*sma_long) {
         //beat detected
         beat_count++;
 
@@ -60,7 +62,7 @@ void Beat_Detection::tick(audio_bins* bins) {
         red = (red+random(255)) % 255;
 
         beat_on = true;
-    } else if (beat_on && sma_short < 1.00*sma_long) {
+    } else if (beat_on && sma_short < 1.20*sma_long) {
         //beat reset
         beat_on = false;
     }

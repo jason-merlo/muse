@@ -219,8 +219,11 @@ void loop() {
                 sample_freq(&bins);
                 beat_detect.tick(&bins);
                 #endif
+                Serial.printf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+                bins.left[0], bins.left[1], bins.left[2], bins.left[3], bins.left[4], bins.left[5], bins.left[6],
+                bins.right[0], bins.right[1], bins.right[2], bins.right[3], bins.right[4], bins.right[5], bins.right[6]);
             }
-            if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+            if (0 && millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
                 last_display_update = millis();
                 matrix->tick(&bins, pi_server.visualizer());
                 frame_count++;
