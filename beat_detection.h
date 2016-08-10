@@ -28,11 +28,13 @@ class Beat_Detection {
         int b();
         int num_beats();
 
+        void frame_ticked();
         void tick(audio_bins* bins);
         void set_beats_per_flip(int beats);
 
     private:
         bool beat_on;
+        bool beat_reporter;
         bool flip_on;
 
         int red, green, blue;
@@ -42,10 +44,17 @@ class Beat_Detection {
         int sma_long_index;
         int sma_short_index;
 
-        float sma_long_values[SMA_LONG_LENGTH];
-        float sma_short_values[SMA_SHORT_LENGTH];
-        float sma_long_total;
-        float sma_short_total;
+        float sma_long_bins[NUM_BINS][SMA_LONG_LENGTH];
+        float sma_short_bins[NUM_BINS][SMA_SHORT_LENGTH];
+        float sma_long_totals[NUM_BINS];
+        float sma_short_totals[NUM_BINS];
+        bool beat_on_bins[NUM_BINS];
+        bool beat_reporter_bins[NUM_BINS];
+
+        float bpm_long_values[SMA_LONG_LENGTH];
+        float bpm_short_values[SMA_SHORT_LENGTH];
+        float bpm_long_total;
+        float bpm_short_total;
 };
 
 #endif // BEAT_DETECTION_H
