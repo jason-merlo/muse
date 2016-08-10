@@ -37,7 +37,7 @@
 #define LEFT_NOISE_THRESHOLD  0 //118
 #define RIGHT_NOISE_THRESHOLD 0 //308
 #define HISTORESIS_FACTOR 1.0f/2.0f
-#define BINS_MAX          4096.0f
+#define BINS_MAX          4095.0f
 
 // LED bars
 #define LED_TYPE          WS2812B
