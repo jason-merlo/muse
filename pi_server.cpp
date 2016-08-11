@@ -14,6 +14,8 @@
 
 // The max number of micros to spend per tick attempting to get data
 #define BYTE_SCAN_MICROS 50
+// Max number of millis to wait before resetting data connection
+#define TIMEOUT_MILLIS 500
 
 // Pi communication pins
 static const char pi_data_ready     = A5;
@@ -32,6 +34,8 @@ PiServer::PiServer() {}
  * ================================================================== */
 int last_byte_out;
 int bytes_read;
+int time_outs;
+unsigned long byte_start_time;
 void PiServer::init() {
     // Initialize input pins
     pinMode(pi_data_ready, INPUT);
@@ -47,6 +51,7 @@ void PiServer::init() {
     bits_read = 0;
     incoming_byte = 0;
     last_byte = 0;
+    byte_start_time = 0;
 
     power_status = PI_SERVER_POWER_OFF;
     visualizer_type = VISUALIZER_BARS;
@@ -55,8 +60,10 @@ void PiServer::init() {
     Particle.variable("LastByte", &last_byte_out, INT);
     Particle.variable("BytesRead", &bytes_read, INT);
     Particle.variable("BitsRead", &bits_read, INT);
+    Particle.variable("TimeOuts", &time_outs, INT);
     last_byte_out = 0;
     bytes_read = 0;
+    time_outs = 0;
 }
 
 /* ================================================================== *
@@ -65,6 +72,16 @@ void PiServer::init() {
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
+    if (bits_read > 0 && millis() - byte_start_time > TIMEOUT_MILLIS) {
+        time_outs++;
+        byte_start_time = millis();
+        bits_read = 0;
+        incoming_byte = 0;
+        data_rec_value = LOW;
+        data_ready_value = LOW;
+        last_byte_out = (int) last_byte;
+    }
+
     // Get a byte, process if a full byte was recieved
     if (get_byte()) {
         switch (last_byte) {
@@ -112,6 +129,10 @@ bool PiServer::get_byte() {
     unsigned long start_micros = micros();
     while(micros() - start_micros < BYTE_SCAN_MICROS && micros() > start_micros) {
         if (digitalRead(pi_data_ready) != data_ready_value) {
+            if (bits_read == 0) {
+                byte_start_time = millis();
+            }
+
             // Flip the data ready value we are looking for
             if (data_ready_value == LOW) data_ready_value = HIGH;
             else data_ready_value = LOW;
@@ -141,6 +162,7 @@ bool PiServer::get_byte() {
                 last_byte_out = (int) last_byte;
                 bytes_read++;
 
+                byte_start_time = millis();
                 return true; // Only get one byte at a time
             }
         }
