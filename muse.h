@@ -65,6 +65,7 @@
 #define VISUALIZER_PULSE        3
 #define VISUALIZER_RAINBOW      4
 #define VISUALIZER_WHEEL        5
+#define VISUALIZER_CLASSIC      6
 
 #define AMBIENT_LIGHTING        66
 

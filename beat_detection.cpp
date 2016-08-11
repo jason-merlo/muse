@@ -57,24 +57,24 @@ void Beat_Detection::tick(audio_bins* bins) {
 }
 
 void Beat_Detection::tick_beat_detection(audio_bins * bins, int cur_bin) {
-    sma_short_totals[cur_bin] -= sma_short_totals[cur_bin][sma_short_index];
-    sma_short_values[cur_bin][sma_short_index]  = (bins->left[cur_bin]*bins->left[cur_bin])/2;
-    sma_short_values[cur_bin][sma_short_index] += (bins->right[cur_bin]*bins->right[cur_bin])/2;
-    sma_short_totals[cur_bin] += sma_short_values[cur_bin][sma_short_index];
+    sma_short_totals[cur_bin] -= sma_short_bins[cur_bin][sma_short_index];
+    sma_short_bins[cur_bin][sma_short_index]  = (bins->left[cur_bin]*bins->left[cur_bin])/2;
+    sma_short_bins[cur_bin][sma_short_index] += (bins->right[cur_bin]*bins->right[cur_bin])/2;
+    sma_short_totals[cur_bin] += sma_short_bins[cur_bin][sma_short_index];
     float sma_short = sma_short_totals[cur_bin] / SMA_SHORT_LENGTH;
 
-    sma_long_totals[cur_bin] -= sma_long_totals[cur_bin][sma_long_index];
-    sma_long_values[cur_bin][sma_long_index] = sma_short_values[sma_short_index];
-    sma_long_totals[cur_bin] += sma_long_values[cur_bin][sma_long_index];
+    sma_long_totals[cur_bin] -= sma_long_bins[cur_bin][sma_long_index];
+    sma_long_bins[cur_bin][sma_long_index] = sma_short_bins[cur_bin][sma_short_index];
+    sma_long_totals[cur_bin] += sma_long_bins[cur_bin][sma_long_index];
     float sma_long = sma_long_totals[cur_bin] / SMA_LONG_LENGTH;
 
-    if (!beat_on_bins[cur_bin] && sma_short > 1.40*sma_long) {
+    if (!beat_on_bins[cur_bin] && sma_short > 1.6*sma_long) {
         //beat detected
         // beat_reporter is used by visualizers, it is cleared after every frame
         // beat_on is used by beat detection, it is cleared whenever a beat ends
         beat_on_bins[cur_bin] = true;
         beat_reporter_bins[cur_bin] = true;
-    } else if (beat_on_bins[cur_bin] && sma_short < 1.20*sma_long) {
+    } else if (beat_on_bins[cur_bin] && sma_short < 1.0*sma_long) {
         //beat reset
         beat_on_bins[cur_bin] = false;
     }
@@ -128,12 +128,12 @@ void Beat_Detection::frame_ticked() {
 }
 
 /* ================================================================== *
- * Function: beat_on
+ * Function: beat_on_bin
  * Description: Returns the beat reporter for the given bin
  * Parameters: [int] bin - The bin to check
  * Returns: True if a beat was detected within the last frame, false otherwise.
  * ================================================================== */
-bool Beat_Detection::beat_on(int bin) {
+bool Beat_Detection::beat_on_bin(int bin) {
     return beat_reporter_bins[bin];
 }
 

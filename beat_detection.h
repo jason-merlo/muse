@@ -21,6 +21,7 @@ class Beat_Detection {
     public:
         Beat_Detection();
 
+        bool beat_on_bin(int bin);
         bool flip();
 
         int r();
@@ -33,6 +34,9 @@ class Beat_Detection {
         void set_beats_per_flip(int beats);
 
     private:
+        void tick_beat_detection(audio_bins * bins, int cur_bin);
+        void tick_bpm_detection(audio_bins * bins);
+
         bool beat_on;
         bool beat_reporter;
         bool flip_on;

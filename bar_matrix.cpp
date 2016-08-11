@@ -20,6 +20,8 @@ Adafruit_NeoPixel** bars;
 
 Beat_Detection * bd;
 
+int color_table_idx = 0;
+
 /* ================================================================== *
  * Bar_matrix
  *
@@ -68,6 +70,38 @@ void Bar_Matrix::decay(double factor) {
             (char)(color >> 8) * factor,
             (char)(color) * factor);
         }
+    }
+}
+
+/* ================================================================== *
+ * Function: decay_to_rgb
+ * Description: slowly fades out matrix values to the specified rgb value
+ * Parameters: [float] factor - decay factor to be multiplied by
+ *             [int] r - the red value to fade to
+ *             [int] g - the green value to fade to
+ *             [int] b - the blue value to fade to
+ * ================================================================== */
+void Bar_Matrix::decay_to_rgb(double factor, int r, int g, int b) {
+    for (char i = 0; i < disp_width; i++) {
+        for (char j = 0; j < disp_height; j++) {
+            unsigned int color = bars[i]->getPixelColor(j);
+
+            // Decay and do bounds checking on rgb values
+            int rx = (int) ((char)(color >> 16) * factor);
+            int gx = (int) ((char)(color >>  8) * factor);
+            int bx = (int) ((char)(color      ) * factor);
+            if (rx < r) { rx = r; }
+            if (gx < g) { gx = g; }
+            if (bx < b) { bx = b; }
+
+            bars[i]->setPixelColor(j, rx, gx, bx);
+        }
+    }
+}
+
+void Bar_Matrix::fill_bar(int bar, int r, int g, int b) {
+    for (int j =0; j < disp_height; j++) {
+        bars[bar]->setPixelColor(j, (uint8_t)r, (uint8_t)g, (uint8_t)b);
     }
 }
 
@@ -152,6 +186,9 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
         case VISUALIZER_BARS_MIDDLE:
           visualizer_bars_middle(bins, 0.15, 0.9);
           break;
+        case VISUALIZER_CLASSIC:
+            visualizer_classic(bins, 0.15, 0.9);
+            break;
         case VISUALIZER_PLASMA:
           visualizer_plasma(bins, 0.5, 0.965);
           break;
@@ -180,6 +217,7 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
           break;
     }
 
+    bd->frame_ticked();
     show_all();
 }
 
@@ -419,6 +457,27 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
                 float val = level*2*PI/4096.0;
                 //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
                 mix_pixel((bd->flip() ? i : disp_width-i), j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);
+            }
+        }
+    }
+}
+
+/* ================================================================== *
+ * Function: visualizer_classic
+ * Description: Emulate Steven's original, pre-muse, visualizer.
+ * Parameters: none.
+ * ================================================================== */
+void Bar_Matrix::visualizer_classic(audio_bins* bins, float in_factor, float out_factor) {
+    decay_to_rgb(out_factor, 0, 0, 10);
+
+    for (int i = 0; i < NUM_BINS; i++) {
+        if (bd->beat_on_bin(i)) {
+            fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+            color_table_idx = (color_table_idx+1) % 51;
+
+            if (i == 6) {
+                fill_bar(7, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+                color_table_idx = (color_table_idx+1) % 51;
             }
         }
     }

@@ -70,6 +70,7 @@ void PiServer::tick() {
         switch (last_byte) {
             case VISUALIZER_BARS:
             case VISUALIZER_BARS_MIDDLE:
+            case VISUALIZER_CLASSIC:
             case VISUALIZER_PLASMA:
             case VISUALIZER_PULSE:
             case VISUALIZER_RAINBOW:
@@ -87,6 +88,14 @@ void PiServer::tick() {
                 set_power(PI_SERVER_POWER_OFF);
                 break;
             default:
+                // Reset communication by default
+                bits_read = 0;
+                incoming_byte = 0;
+
+                data_rec_value = LOW;
+                data_ready_value = LOW;
+
+                last_byte_out = (int) last_byte;
                 break;
         }
     }
