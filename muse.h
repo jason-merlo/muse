@@ -78,21 +78,21 @@
 #define PI_POWER_OFF_MSG        255
 
 /* ======================= Define - EQ Bins ===================== */
-#define LEFT_63                   0
-#define LEFT_160                  1
-#define LEFT_400                  2
-#define LEFT_1000                 3
-#define LEFT_2500                 4
-#define LEFT_6250                 5
-#define LEFT_16000                6
+#define LEFT_63     0
+#define LEFT_160    1
+#define LEFT_400    2
+#define LEFT_1000   3
+#define LEFT_2500   4
+#define LEFT_6250   5
+#define LEFT_16000  6
 
-#define RIGHT_63                  0
-#define RIGHT_160                 1
-#define RIGHT_400                 2
-#define RIGHT_1000                3
-#define RIGHT_2500                4
-#define RIGHT_6250                5
-#define RIGHT_16000               6
+#define RIGHT_63    0
+#define RIGHT_160   1
+#define RIGHT_400   2
+#define RIGHT_1000  3
+#define RIGHT_2500  4
+#define RIGHT_6250  5
+#define RIGHT_16000 6
 
 /* ======================= Structs - General ======================== */
 
@@ -118,6 +118,7 @@ struct Color_Value {
 /* ======================= prototypes =============================== */
 
 void init_eq();
+void powered_on_tick();
 void psu_shutdown();
 void psu_startup();
 void sample_freq(audio_bins* bins);
