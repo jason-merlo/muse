@@ -16,19 +16,8 @@
 #include "application.h"
 #include "neopixel.h"
 
-/* ======================= Define - Flags =========================== */
-
-#define ENABLE_BARS           1
-#define ENABLE_MSGEQ7         1
-#define ENABLE_PSU_CONTROL    1
-#define ENABLE_RGB_SR         0
-#define ENABLE_SCREENSAVER    0
-#define ENABLE_AUTO_SHUTDOWN  0
-#define ENABLE_WEB_SERVER     0
-#define ENABLE_WEB_POWER      0
-#define ENABLE_SERIAL         0
-#define ENABLE_MDNS           0
-#define ENABLE_PI_SERVER      1
+// Include defines specific to each hardware instance/user
+#include "settings.h"
 
 /* ======================= Define - General ========================= */
 
@@ -45,11 +34,6 @@
 #define NUM_BARS          8
 #define BINS_TO_LEDS      (70.0f/(BINS_MAX - 240))
 #define FREQ_GAIN         1.0f
-
-// Screensaver constants
-#define SCREENSAVER_MINIMUM         1300
-#define SCREENSAVER_SECS_TO_PSU_OFF 30
-#define SCREENSAVER_SECS_TO_START   10
 
 // Update intervals, min time between updates of subsystems in millis
 #define DISPLAY_UPDATE_INTERVAL     20
@@ -76,23 +60,6 @@
 
 #define PI_POWER_ON_MSG         254
 #define PI_POWER_OFF_MSG        255
-
-/* ======================= Define - EQ Bins ===================== */
-#define LEFT_63     0
-#define LEFT_160    1
-#define LEFT_400    2
-#define LEFT_1000   3
-#define LEFT_2500   4
-#define LEFT_6250   5
-#define LEFT_16000  6
-
-#define RIGHT_63    0
-#define RIGHT_160   1
-#define RIGHT_400   2
-#define RIGHT_1000  3
-#define RIGHT_2500  4
-#define RIGHT_6250  5
-#define RIGHT_16000 6
 
 /* ======================= Structs - General ======================== */
 
