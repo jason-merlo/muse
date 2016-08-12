@@ -289,7 +289,10 @@ void sample_freq(audio_bins* bins) {
  *  Parameters:  none
  * ================================================================== */
 void powered_on_tick() {
+    #if ENABLE_PSU_CONTROL
     if (!psu_is_on) { psu_startup(); }
+    #endif
+    
     #if ENABLE_MSGEQ7
     if (millis() - last_sample_millis >= SAMPLE_UPDATE_INTERVAL) {
         last_sample_millis = millis();
