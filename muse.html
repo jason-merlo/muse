@@ -2,6 +2,9 @@
 <html>
     <head>
         <title>MUSE Control Panel</title>
+        <link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css' rel=stylesheet />
+        <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+        <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js'></script>
         <style>
             body {
                 background-color: #002058;
@@ -14,48 +17,58 @@
             }
             div {
                 display: inline-block;
-                width: 75%;
+                width: 60%;
             }
-            form {
+            button {
+                background-color: #002058;
+                border-color: #002058;
                 color: #E87722;
                 font-size: 24px;
                 text-align: left;
             }
-        </style>
-        <script>
-            function handleClick(myRadio) {
-                switch (myRadio) {
-                    case 0:
-                        document.getElementById('visualizer_form').submit();
-                        break;
-                    case 1:
-                        document.getElementById('other_form').submit();
-                        break;
-                    default: break;
-                }
+            button:hover {
+                background-color: #606EB2;
+                border-color: #606EB2;
             }
+        </style>
+        <meta id='meta' name='viewport' content='height=device-height, initial-scale=1.0' />
+        <script>
+            $(document).ready(function() {
+                $('#visualizer_div>button').click(function(event){
+                    $.post('/web_input', {visualizer: event.target.value});
+                }),
+                $('#other_div>button').click(function(event){
+                    $.post('/web_input', {other: event.target.value});
+                }),
+                $('#power_div>button').click(function(event){
+                    $.post('/web_input', {power: event.target.value});
+                })
+            });
         </script>
     </head>
     <body>
         <div id='visualizer_div'>
             <h1>Visualizers</h1>
-            <form id='visualizer_form' action='/web_input' method='post'>
-                <label for='v1'><input type='radio' id='v1' name='visualizer' onclick='handleClick(0)' value='0'></input>Bars</label><br>
-                <label for='v2'><input type='radio' id='v2' name='visualizer' onclick='handleClick(0)' value='1'></input>Bars Middle</label><br>
-                <label for='v3'><input type='radio' id='v3' name='visualizer' onclick='handleClick(0)' value='2'></input>Plasma</label><br>
-                <label for='v4'><input type='radio' id='v4' name='visualizer' onclick='handleClick(0)' value='3'></input>Pulse</label><br>
-                <label for='v5'><input type='radio' id='v5' name='visualizer' onclick='handleClick(0)' value='4'></input>Rainbow</label><br>
-                <label for='v6'><input type='radio' id='v6' name='visualizer' onclick='handleClick(0)' value='5'></input>Wheel</label><br>
-            </form>
+            <button value='0'>Bars</button>
+            <button value='1'>Bars Middle</button>
+            <button value='2'>Plasma</button>
+            <button value='3'>Pulse</button>
+            <button value='4'>Rainbow</button>
+            <button value='5'>Wheel</button>
         </div>
         <br><br>
         <div id='other_div'>
             <h1>Others</h1>
-            <form id='other_form' action='/web_input' method='post'>
-                <label for='o1'><input type='radio' id='o1' name='other' onclick='handleClick(1)' value='77'></input>Bouncing Lines</label><br>
-                <label for='o2'><input type='radio' id='o2' name='other' onclick='handleClick(1)' value='88'></input>Bar Test</label><br>
-                <label for='o3'><input type='radio' id='o3' name='other' onclick='handleClick(1)' value='99'></input>Pixel Test</label><br>
-            </form>
+            <button value='66'>Ambient Light</button>
+            <button value='77'>Bouncing Lines</button>
+            <button value='88'>Bar Test</button>
+            <button value='99'>Pixel Test</button>
+        </div>
+        <br><br>
+        <div id='power_div'>
+            <h1>Power</h1>
+            <button value='1'>Power On</button>
+            <button value='0'>Power Off</button>
         </div>
     </body>
 </html>

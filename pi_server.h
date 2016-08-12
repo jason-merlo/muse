@@ -3,22 +3,22 @@
  *
  *  updates:
  *
- *  File: server.h
+ *  File: pi_server.h
  *
- *  Description: Header for http server
+ *  Description: Header for pi server
  * ================================================================== */
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef PI_SERVER_H
+#define PI_SERVER_H
 
 #include "application.h"
 
-#define SERVER_POWER_ON  1
-#define SERVER_POWER_OFF 0
+#define PI_SERVER_POWER_ON  1
+#define PI_SERVER_POWER_OFF 0
 
-class Server {
+class PiServer {
     public:
-        Server();
+        PiServer();
 
         void init();
         void tick();
@@ -30,9 +30,17 @@ class Server {
         int visualizer();
 
     private:
-        char myIpAddress[24];
+        bool get_byte();
+
+        int bits_read;
+        int data_ready_value;
+        int data_rec_value;
+        int incoming_byte;
+        int last_byte;
         int power_status;
         int visualizer_type;
+
+        bool pi_clock_went_low;
 };
 
 #endif

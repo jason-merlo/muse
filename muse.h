@@ -23,9 +23,12 @@
 #define ENABLE_PSU_CONTROL    1
 #define ENABLE_RGB_SR         0
 #define ENABLE_SCREENSAVER    0
-#define ENABLE_AUTO_SHUTDOWN  1
-#define ENABLE_WEB_SERVER     1
+#define ENABLE_AUTO_SHUTDOWN  0
+#define ENABLE_WEB_SERVER     0
+#define ENABLE_WEB_POWER      0
 #define ENABLE_SERIAL         0
+#define ENABLE_MDNS           0
+#define ENABLE_PI_SERVER      1
 
 /* ======================= Define - General ========================= */
 
@@ -34,7 +37,7 @@
 #define LEFT_NOISE_THRESHOLD  0 //118
 #define RIGHT_NOISE_THRESHOLD 0 //308
 #define HISTORESIS_FACTOR 1.0f/2.0f
-#define BINS_MAX          4096.0f
+#define BINS_MAX          4095.0f
 
 // LED bars
 #define LED_TYPE          WS2812B
@@ -48,35 +51,48 @@
 #define SCREENSAVER_SECS_TO_PSU_OFF 30
 #define SCREENSAVER_SECS_TO_START   10
 
+// Update intervals, min time between updates of subsystems in millis
+#define DISPLAY_UPDATE_INTERVAL     20
+#define MDNS_UPDATE_INTERVAL        48
+#define SERVER_UPDATE_INTERVAL      48
+#define PI_SERVER_UPDATE_INTERVAL   25
+#define SAMPLE_UPDATE_INTERVAL      10
+
 /* ======================= Define - Visualziers ===================== */
-#define VISUALIZER_BARS           0
-#define VISUALIZER_BARS_MIDDLE    1
-#define VISUALIZER_PLASMA         2
-#define VISUALIZER_PULSE          3
-#define VISUALIZER_RAINBOW        4
-#define VISUALIZER_WHEEL          5
+#define VISUALIZER_BARS         0
+#define VISUALIZER_BARS_MIDDLE  1
+#define VISUALIZER_PLASMA       2
+#define VISUALIZER_PULSE        3
+#define VISUALIZER_RAINBOW      4
+#define VISUALIZER_WHEEL        5
+#define VISUALIZER_CLASSIC      6
 
-#define BOUNCING_LINES            77
+#define AMBIENT_LIGHTING        66
 
-#define BAR_TEST                  88
-#define PIXEL_TEST                99
+#define BOUNCING_LINES          77
+
+#define BAR_TEST                88
+#define PIXEL_TEST              99
+
+#define PI_POWER_ON_MSG         254
+#define PI_POWER_OFF_MSG        255
 
 /* ======================= Define - EQ Bins ===================== */
-#define LEFT_63                   0
-#define LEFT_160                  1
-#define LEFT_400                  2
-#define LEFT_1000                 3
-#define LEFT_2500                 4
-#define LEFT_6250                 5
-#define LEFT_16000                6
+#define LEFT_63     0
+#define LEFT_160    1
+#define LEFT_400    2
+#define LEFT_1000   3
+#define LEFT_2500   4
+#define LEFT_6250   5
+#define LEFT_16000  6
 
-#define RIGHT_63                  0
-#define RIGHT_160                 1
-#define RIGHT_400                 2
-#define RIGHT_1000                3
-#define RIGHT_2500                4
-#define RIGHT_6250                5
-#define RIGHT_16000               6
+#define RIGHT_63    0
+#define RIGHT_160   1
+#define RIGHT_400   2
+#define RIGHT_1000  3
+#define RIGHT_2500  4
+#define RIGHT_6250  5
+#define RIGHT_16000 6
 
 /* ======================= Structs - General ======================== */
 
@@ -102,6 +118,7 @@ struct Color_Value {
 /* ======================= prototypes =============================== */
 
 void init_eq();
+void powered_on_tick();
 void psu_shutdown();
 void psu_startup();
 void sample_freq(audio_bins* bins);

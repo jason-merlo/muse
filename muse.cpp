@@ -14,8 +14,10 @@
 
 #include "application.h"
 #include "bar_matrix.h"
+#include "MDNS.h"
 #include "neopixel.h"
 #include "server.h"
+#include "pi_server.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
@@ -26,13 +28,13 @@ static const char ps_on   = TX;
 static const char rst     = A3;
 static const char strobe  = A4;
 
-// RGB LED Strip Control Shift Register
-static const char sr_lat  = A5;
-static const char sr_clk  = A6;
-static const char sr_dat  = A7;
+// Pi communication pins, defined/used in pi_server
+// static const char pi_data_ready     = A5;
+// static const char pi_data           = A6;
+// static const char pi_data_rec       = A7;
 
 // Digital Inputs
-static const char pwr_sw = D4;
+static const char pwr_sw  = D4;
 
 // Analog Inputs (0-4096)
 static const char audio_r = A0;
@@ -48,22 +50,45 @@ static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 #if ENABLE_BARS
 // Declare matrix variables
 static Bar_Matrix* matrix;
+unsigned long last_display_update;
+// Beat detection instance
+Beat_Detection beat_detect;
 #endif
 
-#if ENABLE_WEB_SERVER
-// Declare matrix variables
-Server server;
+#if ENABLE_MDNS
+MDNS mdns;
+unsigned int last_mdns_update = 0;
 #endif
 
-/* =============== Visualizer variables ================= */
+#if ENABLE_MSGEQ7
+unsigned long last_sample_millis;
+#endif
+
+#if ENABLE_PI_SERVER
+PiServer pi_server;
+unsigned int last_pi_server_update = 0;
+#endif
 
 #if ENABLE_PSU_CONTROL
 static bool psu_is_on = false;
 #endif
 
-#if ENABLE_SCREENSAVER || ENABLE_PSU_CONTROL
+#if ENABLE_SCREENSAVER || ENABLE_AUTO_SHUTDOWN
 static unsigned long last_sound_seconds;
 #endif
+
+#if ENABLE_WEB_SERVER
+// Declare webserver variables
+Server server;
+unsigned int last_server_update = 0;
+#endif
+
+// Stat trackers for number of loop ticks and number of frames
+int tick_count;
+int tick_count_publish;
+int frame_count;
+int frame_count_publish;
+unsigned long last_tick_update;
 
 /* ================================================================== *
  *  Function: Setup
@@ -83,6 +108,7 @@ void setup() {
     pinMode(audio_l, INPUT);
     pinMode(audio_r, INPUT);
     init_eq();
+    last_sample_millis = 0;
     #endif
 
     // Enables power switch input for PSU and control for
@@ -93,16 +119,10 @@ void setup() {
     psu_startup();
     #endif
 
-    // Enables pins for shift register to control RGB LED strips
-    #if ENABLE_RGB_SR
-    pinMode(sr_lat, OUTPUT);
-    pinMode(sr_clk, OUTPUT);
-    pinMode(sr_dat, OUTPUT);
-    #endif
-
     // Create new bar matrix inistance
     #if ENABLE_BARS
-    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins);
+    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins, &beat_detect);
+    last_display_update = 0;
     #endif
 
     // Initialize screenaver variables
@@ -112,7 +132,26 @@ void setup() {
 
     #if ENABLE_WEB_SERVER
     server.init();
+    last_server_update = 0;
     #endif
+
+    #if ENABLE_PI_SERVER
+    pi_server.init();
+    last_pi_server_update = 0;
+    #endif
+
+    #if ENABLE_MDNS
+    mdns.setHostname("muse");
+    mdns.begin();
+    last_mdns_update = 0;
+    #endif
+
+    tick_count = 0;
+    last_tick_update = 0;
+    frame_count = 0;
+    frame_count_publish = 0;
+    Particle.variable("Ticks10s", &tick_count_publish, INT);
+    Particle.variable("Frames10s", &frame_count_publish, INT);
 }
 
 /* ================================================================== *
@@ -120,11 +159,6 @@ void setup() {
  *  Description: Contains main program
  * ================================================================== */
 void loop() {
-    // Sample frequency bins
-    #if ENABLE_MSGEQ7
-    sample_freq(&bins);
-    #endif
-
     #if ENABLE_SERIAL
     //Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
@@ -132,37 +166,77 @@ void loop() {
     // Check each bin to see if they are below the threshold to be "off"
     // If any bin is active break and just run the visualizer
     #if ENABLE_PSU_CONTROL
-    bool any_bin_active = false;
-    for (int i = 0; i < NUM_BINS; i++) {
-        if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
-            any_bin_active = true;
-            if (!psu_is_on) { psu_startup(); }
-            last_sound_seconds = Time.now();
-            break;
-        }
-    }
-
-    if (psu_is_on) {
-        matrix->tick(&bins, server.visualizer());
-    }
-
-    if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+        // Handle auto shutdown
         #if ENABLE_AUTO_SHUTDOWN
-        // If we have passed the seconds until psu shutoff, turn it off
-        if (psu_is_on) { psu_shutdown(); }
+        bool any_bin_active = false;
+        for (int i = 0; i < NUM_BINS; i++) {
+            if (bins.right[i] > SCREENSAVER_MINIMUM || bins.left[i] > SCREENSAVER_MINIMUM) {
+                any_bin_active = true;
+                if (!psu_is_on) { psu_startup(); }
+                last_sound_seconds = Time.now();
+                break;
+            }
+        }
+        if (psu_is_on) {
+            powered_on_tick();
+        }
+        if (Time.now()-last_sound_seconds > SCREENSAVER_SECS_TO_PSU_OFF) {
+            // If we have passed the seconds until psu shutoff, turn it off
+            if (psu_is_on) { psu_shutdown(); }
+        }
         #endif
-    } /*else {
-        // Otherwise we must be in the screensaver time. Run the screensaver
-        if (psu_is_on && millis() - bouncing_lines_last_update > 10) {
-        matrix->bouncing_lines();
-        matrix->show_all();
-        bouncing_lines_last_update = millis();
-    }*/
+
+        // Handle web power
+        #if ENABLE_WEB_POWER
+        if (server.powered_on() == SERVER_POWER_ON) {
+            powered_on_tick();
+        } else {
+            psu_shutdown();
+        }
+        #endif
+
+        // Handle Pi server power
+        #if ENABLE_PI_SERVER
+        if (pi_server.powered_on() == SERVER_POWER_ON) {
+            powered_on_tick();
+        } else {
+            psu_shutdown();
+        }
+        #endif
+    #endif
+
+    #if ENABLE_MDNS
+    if (millis() - last_mdns_update > MDNS_UPDATE_INTERVAL ||
+        millis() - last_mdns_update < 0) {
+            last_mdns_update = millis();
+            mdns.processQueries();
+    }
     #endif
 
     #if ENABLE_WEB_SERVER
-    server.tick();
+    if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
+        millis() - last_server_update < 0) {
+            last_server_update = millis();
+            server.tick();
+    }
     #endif
+
+    #if ENABLE_PI_SERVER
+    if (millis() - last_pi_server_update > PI_SERVER_UPDATE_INTERVAL ||
+        millis() - last_pi_server_update < 0) {
+            last_pi_server_update = millis();
+            pi_server.tick();
+    }
+    #endif
+
+    tick_count++;
+    if (millis() - last_tick_update >= 10000) {
+        last_tick_update = millis();
+        tick_count_publish = tick_count;
+        frame_count_publish = frame_count;
+        tick_count = 0;
+        frame_count = 0;
+    }
 
     // Delay to make updates from the cloud more responsive
     delay(1);
@@ -207,6 +281,30 @@ void sample_freq(audio_bins* bins) {
         digitalWrite(strobe, HIGH);
         delayMicroseconds(40); // allow for EQ mux to fully switch
     }
+}
+
+/* ================================================================== *
+ *  Function: powered_on_tick
+ *  Description: Samples/beat detects/updates frame as needed
+ *  Parameters:  none
+ * ================================================================== */
+void powered_on_tick() {
+    if (!psu_is_on) { psu_startup(); }
+    #if ENABLE_MSGEQ7
+    if (millis() - last_sample_millis >= SAMPLE_UPDATE_INTERVAL) {
+        last_sample_millis = millis();
+        sample_freq(&bins);
+        beat_detect.tick(&bins);
+    }
+    #endif
+
+    #if ENABLE_BARS
+    if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
+        last_display_update = millis();
+        matrix->tick(&bins, pi_server.visualizer());
+        frame_count++;
+    }
+    #endif
 }
 
 /* ================================================================== *

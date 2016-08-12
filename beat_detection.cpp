@@ -17,6 +17,7 @@
  * ================================================================== */
 Beat_Detection::Beat_Detection() {
     beat_on = false;
+    beat_reporter = false;
     flip_on = false;
 
     red = 0;
@@ -24,11 +25,18 @@ Beat_Detection::Beat_Detection() {
     blue = 0;
     beat_count = 0;
     beats_per_flip = 3;
-
-    sma_long_total = 0;
     sma_long_index = 0;
-    sma_short_total = 0;
     sma_short_index = 0;
+
+    bpm_long_total = 0.0;
+    bpm_short_total = 0.0;
+
+    for (int i = 0; i < NUM_BINS; i++) {
+        sma_long_totals[i] = 0.0;
+        sma_short_totals[i] = 0.0;
+        beat_on_bins[i] = false;
+        beat_reporter_bins[i] = false;
+    }
 }
 
 /* ================================================================== *
@@ -37,17 +45,55 @@ Beat_Detection::Beat_Detection() {
  * Parameters: [audio_bins *] bins - The visualizer's audio_bins object
  * ================================================================== */
 void Beat_Detection::tick(audio_bins* bins) {
-    sma_short_total -= sma_short_values[sma_short_index];
-    sma_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->left[1]*bins->left[1])/2;
-    sma_short_total += sma_short_values[sma_short_index];
-    float sma_short = sma_short_total / SMA_SHORT_LENGTH;
+    tick_bpm_detection(bins);
+    for (int i = 0; i < NUM_BINS; i++) {
+        tick_beat_detection(bins, i);
+    }
 
-    sma_long_total -= sma_long_values[sma_long_index];
-    sma_long_values[sma_long_index] = sma_short_values[sma_short_index];
-    sma_long_total += sma_long_values[sma_long_index];
-    float sma_long = sma_long_total / SMA_LONG_LENGTH;
+    sma_long_index++;
+    sma_long_index = sma_long_index % SMA_LONG_LENGTH;
+    sma_short_index++;
+    sma_short_index = sma_short_index % SMA_SHORT_LENGTH;
+}
 
-    if (!beat_on && sma_short > 1.00*sma_long) {
+void Beat_Detection::tick_beat_detection(audio_bins * bins, int cur_bin) {
+    sma_short_totals[cur_bin] -= sma_short_bins[cur_bin][sma_short_index];
+    sma_short_bins[cur_bin][sma_short_index]  = (bins->left[cur_bin]*bins->left[cur_bin])/2;
+    sma_short_bins[cur_bin][sma_short_index] += (bins->right[cur_bin]*bins->right[cur_bin])/2;
+    sma_short_totals[cur_bin] += sma_short_bins[cur_bin][sma_short_index];
+    float sma_short = sma_short_totals[cur_bin] / SMA_SHORT_LENGTH;
+
+    sma_long_totals[cur_bin] -= sma_long_bins[cur_bin][sma_long_index];
+    sma_long_bins[cur_bin][sma_long_index] = sma_short_bins[cur_bin][sma_short_index];
+    sma_long_totals[cur_bin] += sma_long_bins[cur_bin][sma_long_index];
+    float sma_long = sma_long_totals[cur_bin] / SMA_LONG_LENGTH;
+
+    if (!beat_on_bins[cur_bin] && sma_short > 1.6*sma_long) {
+        //beat detected
+        // beat_reporter is used by visualizers, it is cleared after every frame
+        // beat_on is used by beat detection, it is cleared whenever a beat ends
+        beat_on_bins[cur_bin] = true;
+        beat_reporter_bins[cur_bin] = true;
+    } else if (beat_on_bins[cur_bin] && sma_short < 1.0*sma_long) {
+        //beat reset
+        beat_on_bins[cur_bin] = false;
+    }
+}
+
+void Beat_Detection::tick_bpm_detection(audio_bins * bins) {
+    bpm_short_total -= bpm_short_values[sma_short_index];
+    bpm_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->right[0]*bins->right[0])/4;
+    bpm_short_values[sma_short_index] += (bins->left[1]*bins->left[1] + bins->right[1]*bins->right[1])/4;
+    //bpm_short_values[sma_short_index] = (bins->left[0]*bins->left[0] + bins->left[1]*bins->left[1])/2;
+    bpm_short_total += bpm_short_values[sma_short_index];
+    float sma_short = bpm_short_total / SMA_SHORT_LENGTH;
+
+    bpm_long_total -= bpm_long_values[sma_long_index];
+    bpm_long_values[sma_long_index] = bpm_short_values[sma_short_index];
+    bpm_long_total += bpm_long_values[sma_long_index];
+    float sma_long = bpm_long_total / SMA_LONG_LENGTH;
+
+    if (!beat_on && sma_short > 1.40*sma_long) {
         //beat detected
         beat_count++;
 
@@ -57,18 +103,38 @@ void Beat_Detection::tick(audio_bins* bins) {
 
         blue = (green+red) % 255;
         green = red;
-        red += random(255);
+        red = (red+random(255)) % 255;
 
+        // beat_reporter is used by visualizers, it is cleared after every frame
+        // beat_on is used by beat detection, it is cleared whenever a beat ends
         beat_on = true;
-    } else if (beat_on && sma_short < 1.00*sma_long) {
+        beat_reporter = true;
+    } else if (beat_on && sma_short < 1.20*sma_long) {
         //beat reset
         beat_on = false;
     }
+}
 
-    sma_long_index++;
-    sma_long_index = sma_long_index % SMA_LONG_LENGTH;
-    sma_short_index++;
-    sma_short_index = sma_short_index % SMA_SHORT_LENGTH;
+/* ================================================================== *
+ * Function: frame_ticked
+ * Description: Clear all beat detection reporters
+ * Parameters: none
+ * ================================================================== */
+void Beat_Detection::frame_ticked() {
+    beat_reporter = false;
+    for (int i = 0; i < NUM_BINS; i++) {
+        beat_reporter_bins[i] = false;
+    }
+}
+
+/* ================================================================== *
+ * Function: beat_on_bin
+ * Description: Returns the beat reporter for the given bin
+ * Parameters: [int] bin - The bin to check
+ * Returns: True if a beat was detected within the last frame, false otherwise.
+ * ================================================================== */
+bool Beat_Detection::beat_on_bin(int bin) {
+    return beat_reporter_bins[bin];
 }
 
 /* ================================================================== *

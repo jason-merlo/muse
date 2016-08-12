@@ -174,7 +174,7 @@ public:
   // tail_complete is true if the complete URL fit in url_tail,  false if
   //          part of it was lost because the buffer was too small.
   typedef void Command(WebServer &server, ConnectionType type,
-                       char *url_tail, bool tail_complete);
+                       char *url_tail, bool tail_complete, void * obj);
 
   // Prototype for the optional function which consumes the URL path itself.
   // url_path contains pointers to the seperate parts of the URL path where '/'
@@ -207,7 +207,7 @@ public:
   void setFailureCommand(Command *cmd);
 
   // add a new command to be run at the URL specified by verb
-  void addCommand(const char *verb, Command *cmd);
+  void addCommand(const char *verb, Command *cmd, void * callback_obj);
 
   // Set command that's run if default command or URL specified commands do
   // not run, uses extra url_path parameter to allow resolving the URL in the
@@ -336,6 +336,7 @@ private:
   {
     const char *verb;
     Command *cmd;
+    void *obj;
   } m_commands[WEBDUINO_COMMANDS_COUNT];
   unsigned char m_cmdCount;
   UrlPathCommand *m_urlPathCmd;
@@ -352,7 +353,7 @@ private:
                              bool selected);
 
   static void defaultFailCmd(WebServer &server, ConnectionType type,
-                             char *url_tail, bool tail_complete);
+                             char *url_tail, bool tail_complete, void * obj);
   void noRobots(ConnectionType type);
   void favicon(ConnectionType type);
 };
