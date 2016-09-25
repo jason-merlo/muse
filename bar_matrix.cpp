@@ -55,6 +55,13 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
         bouncing_line_colors[i][2] = bd->b();
     }
 
+    color_table_idx = 0;
+    snake_color[0] = COLOR_TABLE[color_table_idx][0];
+    snake_color[1] = COLOR_TABLE[color_table_idx][1];
+    snake_color[2] = COLOR_TABLE[color_table_idx][2];
+    snake_pos = 0;
+    snake_length = 30;
+
     init_matrix();
     clear_matrix();
 
@@ -697,6 +704,29 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
  * ================================================================== */
 void Bar_Matrix::snake_lines(float speed) {
 
+    fill_matrix(Color_Value(0, 0, 0));
+
+    for (int i = 0; i < snake_length; i++) {
+        int b = (snake_pos+i) / 70; // bar
+        int p = (snake_pos+i) % 70; // pixel
+
+        if (b % 2 == 1) {
+            p = 69-p;
+        }
+
+        mix_pixel(b, p, .95, snake_color[0], snake_color[1], snake_color[2]);
+    }
+
+    snake_pos++;
+    if (snake_pos > 8*70+snake_length) {
+        color_table_idx++;
+        color_table_idx = color_table_idx % 50;
+
+        snake_pos = 0;
+        snake_color[0] = COLOR_TABLE[color_table_idx][0];
+        snake_color[1] = COLOR_TABLE[color_table_idx][1];
+        snake_color[2] = COLOR_TABLE[color_table_idx][2];
+    }
 }
 
 /* ================================================================== *

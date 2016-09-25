@@ -57,6 +57,10 @@ class Bar_Matrix {
         int bouncing_line_directions[NUM_BARS]; // Hold the direction each line is moving
         int bouncing_line_colors[NUM_BARS][3];
 
+        int snake_color[3];
+        int snake_pos;
+        int snake_length;
+
         void
             decay(double factor),
             decay_to_rgb(double factor, int r, int g, int b),

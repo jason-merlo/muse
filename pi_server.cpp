@@ -96,6 +96,7 @@ void PiServer::tick() {
             case BAR_TEST:
             case BOUNCING_LINES:
             case PIXEL_TEST:
+            case SNAKE_LINES:
                 set_visualizer(last_byte);
                 break;
             case PI_POWER_ON_MSG:
