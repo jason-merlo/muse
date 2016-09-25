@@ -52,7 +52,9 @@ class Bar_Matrix {
     private:
         int bouncing_line_lengths[NUM_BARS];  // Hold the lengths of the bars
         float bouncing_line_positions[NUM_BARS]; // Hold the position of the bottom of the bouncing lines
+        float bouncing_line_speeds[NUM_BARS]; // Hold the speeds of teh bouncing lines
         int bouncing_line_directions[NUM_BARS]; // Hold the direction each line is moving
+        int bouncing_line_colors[NUM_BARS][3];
 
         void
             decay(double factor),
