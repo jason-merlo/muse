@@ -58,7 +58,7 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     color_table_idx = 0;
     snakes[0] = Snake(1, 30, -30, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
-    snakes[1] = Snake(-1, 30, 4*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[1] = Snake(-1, 25, 4*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
     snakes[2] = Snake(1, 20, 185, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
@@ -751,7 +751,7 @@ void Bar_Matrix::snake_lines(float speed) {
             color_table_idx += random(0, 10);
             color_table_idx = color_table_idx % 50;
 
-            s->pos = s->dir > 0 ? -s->len : 8*70-s->len;
+            s->pos = s->dir > 0 ? -s->len : 8*70;
         }
     }
 }
