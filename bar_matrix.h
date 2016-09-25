@@ -34,10 +34,11 @@ class Bar_Matrix {
 
         // Misc drawing functions
         void
+            ambient_lighting(Color_Value color),
             bar_test(),
-            bouncing_lines(float speed),
+            bouncing_lines(),
             pixel_test(),
-            ambient_lighting(Color_Value color);
+            snake_lines(float speed);
 
         // Visualizer drawing functions
         void

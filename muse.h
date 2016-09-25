@@ -54,6 +54,7 @@
 #define AMBIENT_LIGHTING        66
 
 #define BOUNCING_LINES          77
+#define SNAKE_LINES             78
 
 #define BAR_TEST                88
 #define PIXEL_TEST              99

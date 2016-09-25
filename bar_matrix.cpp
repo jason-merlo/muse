@@ -210,8 +210,11 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
 
         // Tests and misc
         case BOUNCING_LINES:
-          bouncing_lines(0.75);
+          bouncing_lines();
           break;
+        case SNAKE_LINES:
+            snake_lines(0.75);
+            break;
         case BAR_TEST:
           bar_test();
           break;
@@ -244,7 +247,7 @@ void Bar_Matrix::bar_test() {
  * Description: Bounces a solid line of LEDs up and down in each matrix bar
  * Parameters: none
  * ================================================================== */
-void Bar_Matrix::bouncing_lines(float speed) {
+void Bar_Matrix::bouncing_lines() {
     for (int i = 0; i < disp_width; i++) {
         int bottom = bouncing_line_positions[i];
 
@@ -685,6 +688,15 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             }
         }
     }
+}
+
+/* ================================================================== *
+ * Function: snake_lines
+ * Description: Snake runs up and down each bar
+ * Parameters: [float] speed - speed snake moves at
+ * ================================================================== */
+void Bar_Matrix::snake_lines(float speed) {
+
 }
 
 /* ================================================================== *
