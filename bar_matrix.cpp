@@ -722,7 +722,7 @@ void Bar_Matrix::snake_lines(float speed) {
         color_table_idx++;
         color_table_idx = color_table_idx % 50;
 
-        snake_pos = 0;
+        snake_pos = -snake_length;
         snake_color[0] = COLOR_TABLE[color_table_idx][0];
         snake_color[1] = COLOR_TABLE[color_table_idx][1];
         snake_color[2] = COLOR_TABLE[color_table_idx][2];
