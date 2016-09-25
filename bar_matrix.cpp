@@ -56,11 +56,23 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     }
 
     color_table_idx = 0;
-    snake_color[0] = COLOR_TABLE[color_table_idx][0];
-    snake_color[1] = COLOR_TABLE[color_table_idx][1];
-    snake_color[2] = COLOR_TABLE[color_table_idx][2];
-    snake_pos = 0;
-    snake_length = 30;
+    snakes[0] = Snake(1, 30, -30, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    color_table_idx++;
+    snakes[1] = Snake(-1, 30, 4*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    color_table_idx++;
+    snakes[2] = Snake(1, 20, 185, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    color_table_idx++;
+    snakes[3] = Snake(-1, 15, 8*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    color_table_idx++;
+
+    snakes[0].posTicks = 0;
+    snakes[0].ticksNeeded = 1;
+    snakes[1].posTicks = 0;
+    snakes[1].ticksNeeded = 1;
+    snakes[2].posTicks = 0;
+    snakes[2].ticksNeeded = 1;
+    snakes[3].posTicks = 0;
+    snakes[3].ticksNeeded = 1;
 
     init_matrix();
     clear_matrix();
@@ -703,29 +715,44 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
  * Parameters: [float] speed - speed snake moves at
  * ================================================================== */
 void Bar_Matrix::snake_lines(float speed) {
+    bool noChange = true;
 
     fill_matrix(Color_Value(0, 0, 0));
 
-    for (int i = 0; i < snake_length; i++) {
-        int b = (snake_pos+i) / 70; // bar
-        int p = (snake_pos+i) % 70; // pixel
+    for (int x = 0; x < NUM_SNAKES; x++) {
+        Snake *s = &snakes[x];
 
-        if (b % 2 == 1) {
-            p = 69-p;
+        for (int i = 0; i < s->len; i++) {
+            int b = (s->pos + i) / 70; // bar
+            int p = (s->pos + i) % 70; // pixel
+
+            if (b % 2 == 1) {
+                p = 69-p;
+            }
+
+            mix_pixel(b, p, .95, s->r, s->g, s->b);
         }
 
-        mix_pixel(b, p, .95, snake_color[0], snake_color[1], snake_color[2]);
-    }
+        if (noChange && random(0, 10) > 7) {
+            s->r = bd->r();
+            s->g = bd->g();
+            s->b = bd->b();
+            noChange = false;
+        }
 
-    snake_pos++;
-    if (snake_pos > 8*70+snake_length) {
-        color_table_idx++;
-        color_table_idx = color_table_idx % 50;
+        s->posTicks++;
+        if (s->posTicks >= s->ticksNeeded) {
+            s->posTicks = 0;
+            s->pos += s->dir;
+        }
+        if ((s->dir > 0 && s->pos > 8*70+s->len) ||
+            (s->dir < 0 && s->pos < -s->len))
+        {
+            color_table_idx += random(0, 10);
+            color_table_idx = color_table_idx % 50;
 
-        snake_pos = -snake_length;
-        snake_color[0] = COLOR_TABLE[color_table_idx][0];
-        snake_color[1] = COLOR_TABLE[color_table_idx][1];
-        snake_color[2] = COLOR_TABLE[color_table_idx][2];
+            s->pos = s->dir > 0 ? -s->len : 8*70-s->len;
+        }
     }
 }
 

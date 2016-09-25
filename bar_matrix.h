@@ -16,11 +16,14 @@
 #include "beat_detection.h"
 #include "neopixel.h"
 #include "muse.h"
+#include "snake.h"
 
 #include "math.h"
 
 // constants
 #define PI 3.141592
+
+#define NUM_SNAKES 4
 
 class Bar_Matrix {
     public:
@@ -57,9 +60,7 @@ class Bar_Matrix {
         int bouncing_line_directions[NUM_BARS]; // Hold the direction each line is moving
         int bouncing_line_colors[NUM_BARS][3];
 
-        int snake_color[3];
-        int snake_pos;
-        int snake_length;
+        Snake snakes[NUM_SNAKES];
 
         void
             decay(double factor),
