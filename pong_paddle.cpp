@@ -4,12 +4,14 @@
 
 PongPaddle::PongPaddle() {}
 
-PongPaddle::PongPaddle(int len, float x, float y, float xVel, float yVel, unsigned int tickTime, int r, int g, int b) {
+PongPaddle::PongPaddle(int len, float x, float y, float maxXVel, float maxYVel, unsigned int tickTime, int r, int g, int b) {
     this->len = len;
     this->x = x;
     this->y = y;
-    this->xVel = xVel;
-    this->yVel = yVel;
+    this->maxXVel = maxXVel;
+    this->maxYVel = maxYVel;
+    this->xVel = maxXVel;
+    this->yVel = maxYVel;
 
     this->setColor(r, g, b);
 
@@ -17,13 +19,31 @@ PongPaddle::PongPaddle(int len, float x, float y, float xVel, float yVel, unsign
     tick_time = tickTime;
 }
 
-void PongPaddle::tick() {
+void PongPaddle::tick(PongBall * pb) {
     if (millis() - last_tick > tick_time) {
         last_tick = millis();
 
+        // Control movement of paddle based on ball movement
+        if ((x < pb->x && pb->xVel < 0) || (x > pb->x && pb->xVel > 0)) {
+            if (y+len < pb->y) { yVel = maxYVel; }
+            else if (y > pb->y) { yVel = -maxYVel; }
+        } else {
+            if (abs(y+len/2 - STRIP_LENGTH/2) > 0) {
+                if (y+len/2 > STRIP_LENGTH/2) { yVel = 1.0 < maxYVel ? -1.0 : -maxYVel; }
+                else { yVel = 1.0 < maxYVel ? 1.0 : maxYVel; }
+            } else {
+                yVel = 0;
+            }
+        }
+
+        // Update paddle position
         y += yVel;
-        if (y > STRIP_LENGTH || y < 0) {
-            yVel = -yVel;
+        if ((y+len) >= STRIP_LENGTH) {
+            y = STRIP_LENGTH-len;
+            yVel = 0;
+        } else if (y <= 0) {
+            y = 0;
+            yVel = 0;
         }
     }
 }

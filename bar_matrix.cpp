@@ -74,9 +74,9 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     snakes[3].posTicks = 0;
     snakes[3].ticksNeeded = 1;
 
-    pongPaddles[0] = PongPaddle(10, 0, STRIP_LENGTH/2, 0, 3, 250, 100, 100, 100);
-    pongPaddles[1] = PongPaddle(10, NUM_BARS-1, STRIP_LENGTH/2, 0, 3, 250, 100, 100, 100);
-    pongBall = PongBall(3, 0.0625, 1, 250, 100, 100, 100);
+    pongPaddles[0] = PongPaddle(15, 0, STRIP_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
+    pongPaddles[1] = PongPaddle(15, NUM_BARS-1, STRIP_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
+    pongBall = PongBall(3, 0.0625, 0.80, 15, 100, 100, 100);
     last_beat_count = 0;
 
     init_matrix();
@@ -560,8 +560,8 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
 }
 
 void Bar_Matrix::visualizer_pong(float in_factor) {
-    pongPaddles[0].tick();
-    pongPaddles[1].tick();
+    pongPaddles[0].tick(&pongBall);
+    pongPaddles[1].tick(&pongBall);
     pongBall.tick();
 
     if (bd->num_beats() != last_beat_count) {

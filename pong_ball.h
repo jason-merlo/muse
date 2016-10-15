@@ -13,6 +13,8 @@ class PongBall {
         void tick();
         void setColor(int r, int g, int b);
 
+        float maxXVel;
+        float maxYVel;
         float xVel;
         float yVel;
         float x;
