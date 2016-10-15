@@ -74,6 +74,11 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     snakes[3].posTicks = 0;
     snakes[3].ticksNeeded = 1;
 
+    pongPaddles[0] = PongPaddle(10, 0, STRIP_LENGTH/2, 0, 3, 250, 100, 100, 100);
+    pongPaddles[1] = PongPaddle(10, NUM_BARS-1, STRIP_LENGTH/2, 0, 3, 250, 100, 100, 100);
+    pongBall = PongBall(3, 0.0625, 1, 250, 100, 100, 100);
+    last_beat_count = 0;
+
     init_matrix();
     clear_matrix();
 
@@ -216,6 +221,9 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
             break;
         case VISUALIZER_PLASMA:
           visualizer_plasma(bins, 0.5, 0.965);
+          break;
+        case VISUALIZER_PONG:
+          visualizer_pong(0.965);
           break;
         case VISUALIZER_PULSE:
           visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
@@ -548,6 +556,37 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
 
         //bars[i]->setPixelColor(0, cos(val - 2*PI/3)*intensity, cos(val)*intensity, cos(val - 4*PI/3)*intensity);
 
+    }
+}
+
+void Bar_Matrix::visualizer_pong(float in_factor) {
+    pongPaddles[0].tick();
+    pongPaddles[1].tick();
+    pongBall.tick();
+
+    if (bd->num_beats() != last_beat_count) {
+        last_beat_count = bd->num_beats();
+        if (random(0, 3) == 0 ) {
+            pongPaddles[1].setColor(bd->r(), bd->g(), bd->b());
+        } else if (random(0, 2) == 0) {
+            pongPaddles[0].setColor(bd->r(), bd->g(), bd->b());
+        } else {
+            pongBall.setColor(bd->r(), bd->g(), bd->b());
+        }
+    }
+
+    clear_matrix();
+
+    // Draw paddles
+    for (int i = 0; i < 2; i++) {
+        for (int y = 0; y < pongPaddles[i].len; y++) {
+            mix_pixel(pongPaddles[i].xPos(), pongPaddles[i].yPos()+y, in_factor, pongPaddles[i].r, pongPaddles[i].g, pongPaddles[i].b);
+        }
+    }
+
+    // Draw Ball
+    for (int i = 0; i < pongBall.len; i++) {
+        mix_pixel(pongBall.xPos(), pongBall.yPos()+i, in_factor, pongBall.r, pongBall.g, pongBall.b);
     }
 }
 

@@ -50,6 +50,7 @@
 #define VISUALIZER_RAINBOW      4
 #define VISUALIZER_WHEEL        5
 #define VISUALIZER_CLASSIC      6
+#define VISUALIZER_PONG         7
 
 #define AMBIENT_LIGHTING        66
 

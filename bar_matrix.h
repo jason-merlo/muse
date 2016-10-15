@@ -16,6 +16,8 @@
 #include "beat_detection.h"
 #include "neopixel.h"
 #include "muse.h"
+#include "pong_ball.h"
+#include "pong_paddle.h"
 #include "snake.h"
 
 #include "math.h"
@@ -49,6 +51,7 @@ class Bar_Matrix {
             visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor),
             visualizer_classic(audio_bins* bins, float in_factor, float out_factor),
             visualizer_plasma(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_pong(float in_factor),
             visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float decay_x, float decay_y),
             visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor),
             visualizer_wheel(float intensity, float speed);
@@ -61,6 +64,9 @@ class Bar_Matrix {
         int bouncing_line_colors[NUM_BARS][3];
 
         Snake snakes[NUM_SNAKES];
+        PongPaddle pongPaddles[2];
+        PongBall pongBall;
+        int last_beat_count;
 
         void
             decay(double factor),
