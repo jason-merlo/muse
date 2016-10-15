@@ -292,7 +292,7 @@ void powered_on_tick() {
     #if ENABLE_PSU_CONTROL
     if (!psu_is_on) { psu_startup(); }
     #endif
-    
+
     #if ENABLE_MSGEQ7
     if (millis() - last_sample_millis >= SAMPLE_UPDATE_INTERVAL) {
         last_sample_millis = millis();
@@ -304,7 +304,11 @@ void powered_on_tick() {
     #if ENABLE_BARS
     if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
         last_display_update = millis();
+        #if ENABLE_PI_SERVER
         matrix->tick(&bins, pi_server.visualizer());
+        #else
+        matrix->tick(&bins, STATIC_VISUALIZER);
+        #endif
         frame_count++;
     }
     #endif
