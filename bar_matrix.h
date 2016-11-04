@@ -49,6 +49,7 @@ class Bar_Matrix {
         void
             visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe),
             visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_bass_middle(audio_bins* bins, float in_factor, float out_factor),
             visualizer_classic(audio_bins* bins, float in_factor, float out_factor),
             visualizer_plasma(audio_bins* bins, float in_factor, float out_factor),
             visualizer_pong(float in_factor),

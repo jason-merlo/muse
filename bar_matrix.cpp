@@ -216,6 +216,9 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
         case VISUALIZER_BARS_MIDDLE:
           visualizer_bars_middle(bins, 0.15, 0.9);
           break;
+        case VISUALIZER_BASS_MIDDLE:
+          visualizer_bass_middle(bins, 0.15, 0.80);
+          break;
         case VISUALIZER_CLASSIC:
             visualizer_classic(bins, 0.15, 0.9);
             break;
@@ -491,6 +494,41 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
                 //mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);
                 mix_pixel(i, j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             }
+        }
+    }
+}
+
+/* ================================================================== *
+ * Function: visualizer_bass_middle
+ * Description: All bars react to bass beats. Bulge in middle of display
+ * Parameters: none.
+ * ================================================================== */
+void Bar_Matrix::visualizer_bass_middle(audio_bins* bins, float in_factor, float out_factor) {
+    decay(out_factor);
+
+    if (bd->num_beats() != last_beat_count) {
+        last_beat_count = bd->num_beats();
+        color_table_idx++;
+        color_table_idx %= 51;
+    }
+
+    // Average all 4 low frequency bins
+    float energy = bins->right[RIGHT_63] + bins->left[LEFT_63] + bins->right[RIGHT_160] + bins->left[LEFT_160];
+    energy /= 4.0;
+    energy /= (float) BINS_MAX;
+    energy *= energy;
+    // Use the "energy" of the low frequency bins to determine number of LEDs to light
+    // Add 0.5 forces round to nearest integer
+    int max_lit = (energy * (float)STRIP_LENGTH) + 0.5;
+    int middle_led = STRIP_LENGTH / 2;
+
+    for (int x = 0; x < NUM_BARS / 2; x++) {
+        int num_lit = max_lit / (NUM_BARS/2 - x);
+        int y = (STRIP_LENGTH / 2) - (num_lit / 2);
+
+        for (int i = 0; i < num_lit; i++) {
+            mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+            mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
         }
     }
 }

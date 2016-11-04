@@ -87,6 +87,7 @@ void PiServer::tick() {
         switch (last_byte) {
             case VISUALIZER_BARS:
             case VISUALIZER_BARS_MIDDLE:
+            case VISUALIZER_BASS_MIDDLE:
             case VISUALIZER_CLASSIC:
             case VISUALIZER_PLASMA:
             case VISUALIZER_PONG:

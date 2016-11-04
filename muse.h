@@ -51,6 +51,7 @@
 #define VISUALIZER_WHEEL        5
 #define VISUALIZER_CLASSIC      6
 #define VISUALIZER_PONG         7
+#define VISUALIZER_BASS_MIDDLE  8
 
 #define AMBIENT_LIGHTING        66
 
