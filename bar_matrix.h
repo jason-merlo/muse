@@ -19,6 +19,7 @@
 #include "pong_ball.h"
 #include "pong_paddle.h"
 #include "snake.h"
+#include "tcp_beats.h"
 
 #include "math.h"
 
@@ -68,6 +69,8 @@ class Bar_Matrix {
         PongPaddle pongPaddles[2];
         PongBall pongBall;
         int last_beat_count;
+
+        TCPBeats tcpBeats;
 
         void
             decay(double factor),

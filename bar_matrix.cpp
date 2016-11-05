@@ -83,6 +83,8 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     clear_matrix();
 
     bd = beat_detection;
+
+    tcpBeats = TCPBeats();
 }
 
 /* ======================== PRIVATE FUNCTIONS ======================= */
@@ -510,6 +512,8 @@ void Bar_Matrix::visualizer_bass_middle(audio_bins* bins, float in_factor, float
         last_beat_count = bd->num_beats();
         color_table_idx++;
         color_table_idx %= 51;
+
+        tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     }
 
     // Average all 4 low frequency bins
