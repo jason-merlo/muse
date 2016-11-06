@@ -16,6 +16,12 @@
 #define PI_SERVER_POWER_ON  1
 #define PI_SERVER_POWER_OFF 0
 
+#define PI_MSG_LEN          3
+#define PI_MAX_MSG_LEN      3
+
+#define PI_MSG_START        0xAB
+#define PI_MSG_END          0xCD
+
 class PiServer {
     public:
         PiServer();
@@ -30,15 +36,17 @@ class PiServer {
         int visualizer();
 
     private:
-        bool get_byte();
+        bool get_msg();
+        bool is_valid_msg();
 
-        int bits_read;
-        int data_ready_value;
-        int data_rec_value;
-        int incoming_byte;
-        int last_byte;
+        UDP udp;
+
+        unsigned char message[PI_MAX_MSG_LEN];
+
         int power_status;
         int visualizer_type;
+        int num_msgs;
+        int last_msg;
 
         bool pi_clock_went_low;
 };
