@@ -84,7 +84,7 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
 
     bd = beat_detection;
 
-    tcpBeats = TCPBeats();
+    tcpBeats.init();
 }
 
 /* ======================== PRIVATE FUNCTIONS ======================= */

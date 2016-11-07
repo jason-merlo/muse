@@ -1,32 +1,26 @@
 #include "tcp_beats.h"
 
-#include <stdio.h>
-
-const unsigned char server[] = {10, 0, 0, 70}; // Cabinet light RPi
+//const unsigned char server[] = {10, 0, 0, 70}; // Cabinet light RPi
+IPAddress remoteIP(10, 0, 0, 70);
 
 TCPBeats::TCPBeats() {
-    tcp.connect(server, 80);
-    tcp.flush();
+
+}
+
+void TCPBeats::init() {
+    udp.begin(0);
+    Particle.variable("UDPSends", &udpsends, INT);
+    Particle.variable("UDPCode", &udpcode, INT);
+    udpsends = 0;
+    udpcode = 0;
 }
 
 void TCPBeats::stevenSendRGB(int r, int g, int b) {
-    if (tcp.connected()) {
-        tcp.flush();
+    str = String::format("AB,%03d,%03d,%03d,CD", r, g, b);
+    str.getBytes(cmd_buffer, 18);
 
-        char nums [20];
-        sprintf(nums, "&r=%03d&g=%03d&b=%03d\r\n", r, g, b);
-
-        tcp.print("POST /rgb/web_input/ HTTP/1.1\r\nHost: rgb.local\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 26\r\n\r\ntype=rgb");
-        tcp.print(nums);
-
-        // tcp.print(r, DEC);
-        // tcp.print("&g=");
-        // tcp.print(g, DEC);
-        // tcp.print("&b=");
-        // tcp.print(b, DEC);
-        // tcp.print("\r\n");
-    }
-
+    udpcode = udp.sendPacket(cmd_buffer, str.length(), remoteIP, 1738);
+    udpsends++;
 }
 
 //"POST /rgb/web_input/ HTTP/1.1\r\nHost: rgb.local\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 22\r\n\r\ntype=rgb&rgb=#"
