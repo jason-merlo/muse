@@ -23,15 +23,25 @@ SYSTEM_MODE(AUTOMATIC);
 
 /* ======================= Pin Decls. =============================== */
 
+#if EXTENDED_LAYOUT
+// Digital Outputs
+static const char rst     = RX;
+static const char strobe  = TX;
+
+// Analog Inputs (0-4096)
+static const char audio_r = A2;
+static const char audio_l = A3;
+
+#if RGB_LIGHTS
+static char rgb_pins_l[3] = {10, 11, 14};
+static char rgb_pins_r[3] = {15, 16, 17};
+#endif
+#else
+
 // Digital Outputs
 static const char ps_on   = TX;
 static const char rst     = A3;
 static const char strobe  = A4;
-
-// Pi communication pins, defined/used in pi_server
-// static const char pi_data_ready     = A5;
-// static const char pi_data           = A6;
-// static const char pi_data_rec       = A7;
 
 // Digital Inputs
 static const char pwr_sw  = D4;
@@ -39,6 +49,7 @@ static const char pwr_sw  = D4;
 // Analog Inputs (0-4096)
 static const char audio_r = A0;
 static const char audio_l = A1;
+#endif
 
 // Declare memory for audio bin structure
 static struct audio_bins bins;
@@ -121,8 +132,18 @@ void setup() {
 
     // Create new bar matrix inistance
     #if ENABLE_BARS
-    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins, &beat_detect);
+    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins,
+                            rgb_pins_r, rgb_pins_l, &beat_detect);
     last_display_update = 0;
+    #endif
+
+    #if RGB_LIGHTS
+    pinMode(rgb_pins_r[0], OUTPUT);
+    pinMode(rgb_pins_r[1], OUTPUT);
+    pinMode(rgb_pins_r[2], OUTPUT);
+    pinMode(rgb_pins_l[0], OUTPUT);
+    pinMode(rgb_pins_l[1], OUTPUT);
+    pinMode(rgb_pins_l[2], OUTPUT);
     #endif
 
     // Initialize screenaver variables
@@ -160,7 +181,7 @@ void setup() {
  * ================================================================== */
 void loop() {
     #if ENABLE_SERIAL
-    //Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
+    Serial.printf("%d, %d, %d, %d\n", bins.left[0], bins.left[1], bins.right[0], bins.right[1]);
     #endif
 
     // Check each bin to see if they are below the threshold to be "off"
@@ -203,6 +224,8 @@ void loop() {
             psu_shutdown();
         }
         #endif
+    #else
+      powered_on_tick();
     #endif
 
     #if ENABLE_MDNS
@@ -304,6 +327,7 @@ void powered_on_tick() {
     #if ENABLE_BARS
     if (millis() - last_display_update >= DISPLAY_UPDATE_INTERVAL) {
         last_display_update = millis();
+
         #if ENABLE_PI_SERVER
         matrix->tick(&bins, pi_server.visualizer());
         #else

@@ -29,7 +29,8 @@
 
 class Bar_Matrix {
     public:
-        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins, Beat_Detection * beat_detection);
+        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* ia_pins,
+                    char* r, char* l, Beat_Detection * beat_detection);
 
         // General functions
         void
@@ -57,6 +58,9 @@ class Bar_Matrix {
             visualizer_wheel(float intensity, float speed);
 
     private:
+        char* rgb_pins_r;
+        char* rgb_pins_l;
+
         int bouncing_line_lengths[NUM_BARS];  // Hold the lengths of the bars
         float bouncing_line_positions[NUM_BARS]; // Hold the position of the bottom of the bouncing lines
         float bouncing_line_speeds[NUM_BARS]; // Hold the speeds of teh bouncing lines
@@ -74,7 +78,8 @@ class Bar_Matrix {
             fill_bar(int bar, int r, int g, int b),
             fill_matrix(Color_Value color),
             init_matrix(),
-            mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b);
+            mix_pixel(unsigned char bar, unsigned short pixel, float factor,
+                      unsigned char r, unsigned char g, unsigned char b);
 };
 
 const int COLOR_TABLE[50][3] {

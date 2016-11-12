@@ -16,20 +16,31 @@
 short disp_width;
 short disp_height;
 unsigned long** display;
+
 Adafruit_NeoPixel** bars;
 
 Beat_Detection * bd;
 
 int color_table_idx = 0;
 
+bool rgb_enabled;
+
+float tmp_color;
+
 /* ================================================================== *
  * Bar_matrix
- *
+ * TODO: migrate visualizer-specific intitialization code to first-run
+ *       section of each visualizer (need to keep first run variable)
  * num_bars - number of LED bars
  * bar_len - number of leds in each bar (strip length)
  * orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
  * ================================================================== */
-Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const char* pins, Beat_Detection* beat_detection) {
+Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type,
+  const char* ia_pins, char* r, char* l, Beat_Detection* beat_detection) :
+   rgb_pins_r(r), rgb_pins_l(l) {
+
+    rgb_enabled = 1;
+
     disp_width = num_bars; //(orientation) ? num_bars : bar_len;
     disp_height = bar_len; //(orientation) ? bar_len : num_bars;
 
@@ -37,9 +48,10 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     for (int i = 0; i < disp_width; i++)
     display[i] = new unsigned long[disp_height];
 
+    // Initialize IA Bars
     bars = new Adafruit_NeoPixel*[num_bars];
     for(short i = 0; i < num_bars; i++) {
-        bars[i] = new Adafruit_NeoPixel(bar_len, pins[i], led_type);
+        bars[i] = new Adafruit_NeoPixel(bar_len, ia_pins[i], led_type);
 
         // Set up variables to track bouncing lines
         bouncing_line_lengths[i] = random(10, STRIP_LENGTH / 2);
@@ -56,13 +68,17 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     }
 
     color_table_idx = 0;
-    snakes[0] = Snake(1, 30, -30, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[0] = Snake(1, 30, -30, COLOR_TABLE[color_table_idx][0],
+      COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
-    snakes[1] = Snake(-1, 25, 4*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[1] = Snake(-1, 25, 4*70, COLOR_TABLE[color_table_idx][0],
+      COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
-    snakes[2] = Snake(1, 20, 185, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[2] = Snake(1, 20, 185, COLOR_TABLE[color_table_idx][0],
+      COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
-    snakes[3] = Snake(-1, 15, 8*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[3] = Snake(-1, 15, 8*70, COLOR_TABLE[color_table_idx][0],
+      COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     color_table_idx++;
 
     snakes[0].posTicks = 0;
@@ -74,8 +90,10 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     snakes[3].posTicks = 0;
     snakes[3].ticksNeeded = 1;
 
-    pongPaddles[0] = PongPaddle(15, 0, STRIP_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
-    pongPaddles[1] = PongPaddle(15, NUM_BARS-1, STRIP_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
+    pongPaddles[0] = PongPaddle(15, 0, STRIP_LENGTH/2,
+       0, 0.9, 15, 100, 100, 100);
+    pongPaddles[1] = PongPaddle(15, NUM_BARS-1, STRIP_LENGTH/2,
+       0, 0.9, 15, 100, 100, 100);
     pongBall = PongBall(3, 0.0625, 0.80, 15, 100, 100, 100);
     last_beat_count = 0;
 
@@ -170,7 +188,8 @@ void Bar_Matrix::init_matrix() {
     }
 }
 
-void Bar_Matrix::mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b) {
+void Bar_Matrix::mix_pixel(unsigned char bar, unsigned short pixel,
+  float factor, unsigned char r, unsigned char g, unsigned char b) {
     unsigned int color = bars[bar]->getPixelColor(pixel);
     bars[bar]->setPixelColor(pixel, (char)(color >> 16) * (1-factor) + r * factor,
     (char)(color >> 8) * (1-factor) + g * factor,
@@ -281,22 +300,28 @@ void Bar_Matrix::bouncing_lines() {
         // Clear the pixel the line just left, light the one it entered
         if (bouncing_line_directions[i] == 1) {
             if (bottom > 0) mix_pixel(i, bottom-1, 1, 0, 0, 0);
-            mix_pixel(i, 1+bottom+bouncing_line_lengths[i], 1, bouncing_line_colors[i][0], bouncing_line_colors[i][1], bouncing_line_colors[i][2]);//bd->r(), bd->g(), bd->b());
+            mix_pixel(i, 1+bottom+bouncing_line_lengths[i], 1,
+              bouncing_line_colors[i][0], bouncing_line_colors[i][1],
+              bouncing_line_colors[i][2]);//bd->r(), bd->g(), bd->b());
         } else {
-            if (bottom > 0) mix_pixel(i, bottom-1, 1, bouncing_line_colors[i][0], bouncing_line_colors[i][1], bouncing_line_colors[i][2]);//bd->r(), bd->g(), bd->b());
+            if (bottom > 0) mix_pixel(i, bottom-1, 1, bouncing_line_colors[i][0],
+               bouncing_line_colors[i][1], bouncing_line_colors[i][2]);
             mix_pixel(i, 1+bottom+bouncing_line_lengths[i], 1, 0, 0, 0);
         }
 
         // Move the line
-        bouncing_line_positions[i] += bouncing_line_directions[i] * bouncing_line_speeds[i];
+        bouncing_line_positions[i] += bouncing_line_directions[i] *
+                                      bouncing_line_speeds[i];
 
         // Ensure we are moving in the proper direction
-        if (bouncing_line_positions[i] < -.5*bouncing_line_lengths[i] && bouncing_line_directions[i] < 0) {
+        if (bouncing_line_positions[i] < -.5*bouncing_line_lengths[i] &&
+           bouncing_line_directions[i] < 0) {
             bouncing_line_directions[i] = 1;
             if (random(0, 10) > 5) {
                 int newlength = random(10, STRIP_LENGTH / 2);
                 if (newlength > bouncing_line_lengths[i]) {
-                    bouncing_line_positions[i] = (-1*newlength/2) - (newlength/2 - bouncing_line_lengths[i]/2);
+                    bouncing_line_positions[i] = (-1*newlength/2) -
+                     (newlength/2 - bouncing_line_lengths[i]/2);
                 } else {
                     bouncing_line_positions[i] = -1 * newlength / 2;
                 }
@@ -311,7 +336,8 @@ void Bar_Matrix::bouncing_lines() {
             bouncing_line_colors[i][0] = bd->r();
             bouncing_line_colors[i][1] = bd->g();
             bouncing_line_colors[i][2] = bd->b();
-        } else if (bouncing_line_positions[i] > STRIP_LENGTH-.5*bouncing_line_lengths[i] && bouncing_line_directions[i] > 0) {
+        } else if (bouncing_line_positions[i] > STRIP_LENGTH-.5 *
+          bouncing_line_lengths[i] && bouncing_line_directions[i] > 0) {
             bouncing_line_directions[i] = -1;
 
             bouncing_line_colors[i][0] = bd->r();
@@ -339,13 +365,15 @@ void Bar_Matrix::pixel_test() {
  * Description: Sets all pixel values to given color value
  * Parameters: [audio_bins]* bins - frequency bins read from chip
  * ================================================================== */
- void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe) {
+ void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor,
+   float out_factor, bool strobe) {
    decay(out_factor);
    float bass_level = 0;
    int red, green, blue;
 
    if (strobe)
-     bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/4096.0f)+0.7f) * 5 * 255.0f;
+     bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/
+                    4096.0f)+0.7f) * 5 * 255.0f;
 
    for (char i = 0; i < disp_width; i++) {
      for (char j = 0; j < disp_height; j++) {
@@ -410,8 +438,23 @@ void Bar_Matrix::pixel_test() {
              break;
          }
 
+         tmp_color = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/
+                        4096.0f) + 0.7f) * 5 * 255.0f;
+
+         tmp_color = (tmp_color > 255) ? 255 : tmp_color;
+
+         if (rgb_enabled && i == 0 && j == 0) {
+           analogWrite(rgb_pins_r[0], 255); // red right
+           analogWrite(rgb_pins_r[1], 255); // green right
+           analogWrite(rgb_pins_r[2], 255); // blue right
+           analogWrite(rgb_pins_l[0], 255); // red left
+           analogWrite(rgb_pins_l[1], 255); // does not work
+           analogWrite(rgb_pins_l[2], 255); // left blue
+         }
+
          mix_pixel(i, j, in_factor, red, green, blue);
-         /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255, cos(val - 4*pi/3)*255);*/
+         /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255,
+                      cos(val - 4*pi/3)*255);*/
 
          /*mix_pixel(i, j, in_factor, bins->left[0]/16,
                                     bins->left[1]/16,
@@ -431,11 +474,13 @@ void Bar_Matrix::pixel_test() {
  *              One channel fills up, the other fills down.
  * Parameters: none.
  * ================================================================== */
-void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor) {
+void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor,
+  float out_factor) {
     decay(out_factor);
 
     if (bd->beat_on_bin(0) || bd->beat_on_bin(1)) {
-        //fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+        /*fill_bar(i, COLOR_TABLE[color_table_idx][0],
+        COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);*/
         color_table_idx = (color_table_idx+1) % 51;
     }
 
@@ -461,9 +506,14 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
             if (j < p*p * (STRIP_LENGTH/2)) {
                 //j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
                 float val = level*2*PI/4096.0;
-                //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, bd->r(), bd->g(), bd->b());
-                mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+                /*mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255,
+                            cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);*/
+                /*mix_pixel(i, STRIP_LENGTH/2 - j, in_factor,
+                            bd->r(), bd->g(), bd->b());*/
+                mix_pixel(i, STRIP_LENGTH/2 - j, in_factor,
+                  COLOR_TABLE[color_table_idx][0],
+                  COLOR_TABLE[color_table_idx][1],
+                  COLOR_TABLE[color_table_idx][2]);
             }
         }
 
@@ -485,11 +535,15 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
             // set bar
             float p = (float)(level)/(float)(BINS_MAX);
             if (j-STRIP_LENGTH/2 < p*p * (STRIP_LENGTH/2)) {
-                //j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
+                /*j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) *
+                    (STRIP_LENGTH/2)) {*/
                 float val = level*2*PI/4096.0;
-                //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                //mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);
-                mix_pixel(i, j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+                /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255,
+                    cos(val - 4*PI/3)*255);*/
+                /*mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());*/
+                mix_pixel(i, j, in_factor, COLOR_TABLE[color_table_idx][0],
+                                           COLOR_TABLE[color_table_idx][1],
+                                           COLOR_TABLE[color_table_idx][2]);
             }
         }
     }
@@ -505,11 +559,15 @@ void Bar_Matrix::visualizer_classic(audio_bins* bins, float in_factor, float out
 
     for (int i = 0; i < NUM_BINS; i++) {
         if (bd->beat_on_bin(i)) {
-            fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+            fill_bar(i, COLOR_TABLE[color_table_idx][0],
+                        COLOR_TABLE[color_table_idx][1],
+                        COLOR_TABLE[color_table_idx][2]);
             color_table_idx = (color_table_idx+1) % 51;
 
             if (i == 6) {
-                fill_bar(7, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+                fill_bar(7, COLOR_TABLE[color_table_idx][0],
+                            COLOR_TABLE[color_table_idx][1],
+                            COLOR_TABLE[color_table_idx][2]);
                 color_table_idx = (color_table_idx+1) % 51;
             }
         }
@@ -521,15 +579,20 @@ void Bar_Matrix::visualizer_classic(audio_bins* bins, float in_factor, float out
  * Description: slowly fades out matrix values
  * Parameters: [float] factor - decay factor to be multiplied by
  * ================================================================== */
-void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_factor) {
+void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor,
+                                    float out_factor) {
     decay(out_factor);
 
     for (char i = 0; i < disp_width; i++) {
         for (short j = disp_height - 1; j > 0; j-=2) {
             // Move wave up
             unsigned int color = bars[i]->getPixelColor(j-1);
-            mix_pixel(i, j, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
-            mix_pixel(i, j+1, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
+            mix_pixel(i, j, in_factor,  (char)(color >> 16),
+                                        (char)(color >> 8),
+                                        (char)(color));
+            mix_pixel(i, j+1, in_factor,(char)(color >> 16),
+                                        (char)(color >> 8),
+                                        (char)(color));
         }
 
         // Set bar levels
@@ -552,9 +615,13 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
         float intensity = (level)/(BINS_MAX)*255.0f;
         intensity *= intensity;
         if (intensity > 255) intensity = 255.0;
-        mix_pixel(i, 0, in_factor, cos(val - 4*PI/3)*intensity, cos(val - 2*PI/3)*intensity, cos(val)*intensity);
+        mix_pixel(i, 0, in_factor, cos(val - 4*PI/3)*intensity,
+                                    cos(val - 2*PI/3)*intensity,
+                                    cos(val)*intensity);
 
-        //bars[i]->setPixelColor(0, cos(val - 2*PI/3)*intensity, cos(val)*intensity, cos(val - 4*PI/3)*intensity);
+        /*bars[i]->setPixelColor(0, cos(val - 2*PI/3)*intensity,
+                                    cos(val)*intensity,
+                                    cos(val - 4*PI/3)*intensity);*/
 
     }
 }
@@ -580,13 +647,15 @@ void Bar_Matrix::visualizer_pong(float in_factor) {
     // Draw paddles
     for (int i = 0; i < 2; i++) {
         for (int y = 0; y < pongPaddles[i].len; y++) {
-            mix_pixel(pongPaddles[i].xPos(), pongPaddles[i].yPos()+y, in_factor, pongPaddles[i].r, pongPaddles[i].g, pongPaddles[i].b);
+            mix_pixel(pongPaddles[i].xPos(), pongPaddles[i].yPos() + y, in_factor,
+                      pongPaddles[i].r, pongPaddles[i].g, pongPaddles[i].b);
         }
     }
 
     // Draw Ball
     for (int i = 0; i < pongBall.len; i++) {
-        mix_pixel(pongBall.xPos(), pongBall.yPos()+i, in_factor, pongBall.r, pongBall.g, pongBall.b);
+        mix_pixel(pongBall.xPos(), pongBall.yPos()+i, in_factor,
+                  pongBall.r, pongBall.g, pongBall.b);
     }
 }
 
@@ -595,7 +664,8 @@ void Bar_Matrix::visualizer_pong(float in_factor) {
  * Description: Creates pulses where sound appears to be originating from
  * Parameters:  None
  * ================================================================== */
-void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float distance_x, float distance_y) {
+void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_factor,
+                                  float distance_x, float distance_y) {
     decay (out_factor);
 
     // Calculate frequency pan and "fade"
@@ -612,12 +682,14 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
 
             // Calculate level intensity
             for (char x = 0; x < NUM_BINS; x++) {
-                float distance = distance_x * 1.0f/(abs(pans[x]-(i/disp_width))) + distance_y * 1.0f/(abs((x/NUM_BINS)-(j/disp_height)));
+                float distance = distance_x * 1.0f/(abs(pans[x]-(i/disp_width))) +
+                                 distance_y * 1.0f/(abs((x/NUM_BINS)-(j/disp_height)));
                 level += intensities[x] * distance;
             }
 
             //level *= 2*PI;
-            //mix_pixel(i, j, in_factor, cos(level)*255*level, cos(level - 2*PI/3)*255*level, cos(level - 4*PI/3)*255*level);
+            /*mix_pixel(i, j, in_factor, cos(level)*255*level, cos(level - 2*PI/3) *
+                          255*level, cos(level - 4*PI/3)*255*level);*/
             mix_pixel(i, j, in_factor, level*255, level*255, level*255);
         }
     }
@@ -636,8 +708,11 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             if (i < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
                 float val = level*PI/4096.0;
                 for (int x = 0; x < 10; x++) {
-                    //mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                    mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, bd->r(), bd->g(), bd->b());
+                    /*mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor,
+                                  cos(val)*255, cos(val - 2*PI/3)*255,
+                                  cos(val - 4*PI/3)*255);*/
+                    mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor,
+                                bd->r(), bd->g(), bd->b());
                 }
             }
 
@@ -653,11 +728,15 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             int level = bins->right[j/10];
             level *= FREQ_GAIN;
             // set bar
-            if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
+            if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) *
+                (disp_width/2)) {
                 float val = level*PI/4096.0;
                 for (int x = 0; x < 10; x++) {
-                    //mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                    mix_pixel(i, x*NUM_BARS+led_index, in_factor, bd->r(), bd->g(), bd->b());
+                    /*mix_pixel(i, x*NUM_BARS+led_index, in_factor,
+                                  cos(val)*255, cos(val - 2*PI/3)*255,
+                                  cos(val - 4*PI/3)*255);*/
+                    mix_pixel(i, x*NUM_BARS+led_index, in_factor,
+                              bd->r(), bd->g(), bd->b());
                 }
             }
 
@@ -701,7 +780,8 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             // set bar
             if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
                 float val = level*2*PI/4096.0;
-                mix_pixel(i, STRIP_LENGTH/2 - j, .95, 255-bd->r(), 255-bd->g(), 255-bd->b());
+                mix_pixel(i, STRIP_LENGTH/2 - j, .95,
+                            255-bd->r(), 255-bd->g(), 255-bd->b());
             }
         }
 
@@ -738,11 +818,14 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
             level *= FREQ_GAIN;
             // set bar
             float p = (float)(level)/(float)(BINS_MAX);
-            if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                //j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
+            if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) *
+                (STRIP_LENGTH/2)) {
+                /*j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) *
+                  (STRIP_LENGTH/2)) {*/
                 float val = level*2*PI/4096.0;
-                //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                mix_pixel(i, j, .95, 255-bd->r(), 255-bd->g(), 255-bd->b());//reds[i], greens[i], blues[i]);
+                /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3) *
+                              255, cos(val - 4*PI/3)*255);*/
+                mix_pixel(i, j, .95, 255-bd->r(), 255-bd->g(), 255-bd->b());
             }
         }
     }
@@ -804,5 +887,25 @@ void Bar_Matrix::snake_lines(float speed) {
  * ================================================================== */
 void Bar_Matrix::visualizer_wheel(float intensity, float speed) {
     float val = fmod(millis()/10000.0f,1.0f)*2.0f*PI;
-    fill_matrix(Color_Value(cos(val)*255*intensity, cos(val - 2*PI/3)*255*intensity, cos(val - 4*PI/3)*255*intensity));
+
+    Color_Value color = Color_Value(cos(val)*255*intensity,
+                      cos(val - 2*PI/3) * 255 * intensity,
+                      cos(val - 4*PI/3)*255*intensity);
+
+    fill_matrix(Color_Value(color.r, color.g, color.b));
+
+    if (rgb_enabled) {
+      analogWrite(rgb_pins_r[0], color.r);
+      analogWrite(rgb_pins_r[1], color.g);
+      analogWrite(rgb_pins_r[2], color.b);
+      analogWrite(rgb_pins_l[0], color.r);
+      analogWrite(rgb_pins_l[1], color.g);
+      analogWrite(rgb_pins_l[2], color.b);
+      //analogWrite(rgb_pins_r[0], 255); // yellow
+      //analogWrite(rgb_pins_r[1], 255); // yellow
+      //analogWrite(rgb_pins_r[2], 255); // blue
+      //analogWrite(rgb_pins_l[0], 255);
+      //analogWrite(rgb_pins_l[1], 255);
+      //analogWrite(rgb_pins_l[2], 255);
+    }
 }

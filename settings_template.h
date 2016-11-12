@@ -25,6 +25,8 @@
 #define ENABLE_SERIAL         0
 #define ENABLE_MDNS           0
 #define ENABLE_PI_SERVER      0
+#define EXTENDED_LAYOUT       0
+#define RGB_LIGHTS            0
 
 // Visaulizer to display if no pi control
 #define STATIC_VISUALIZER     VISUALIZER_BARS
