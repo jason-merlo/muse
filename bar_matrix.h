@@ -51,6 +51,7 @@ class Bar_Matrix {
             visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe),
             visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor),
             visualizer_bass_middle(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_bass_slide(audio_bins* bins, float in_factor, float out_factor),
             visualizer_classic(audio_bins* bins, float in_factor, float out_factor),
             visualizer_plasma(audio_bins* bins, float in_factor, float out_factor),
             visualizer_pong(float in_factor),
@@ -71,6 +72,10 @@ class Bar_Matrix {
         int last_beat_count;
 
         TCPBeats tcpBeats;
+
+        int bass_slide_heights[NUM_BARS];
+        float bass_slide_ema;
+        unsigned long bass_slide_millis;
 
         void
             decay(double factor),

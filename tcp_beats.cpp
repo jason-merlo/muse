@@ -1,7 +1,7 @@
 #include "tcp_beats.h"
 
 //const unsigned char server[] = {10, 0, 0, 70}; // Cabinet light RPi
-IPAddress remoteIP(10, 0, 0, 70);
+IPAddress remoteIP(192, 168, 1, 69);
 
 TCPBeats::TCPBeats() {
 
