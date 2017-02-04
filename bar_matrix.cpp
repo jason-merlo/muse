@@ -27,6 +27,8 @@ bool rgb_enabled;
 
 float tmp_color;
 
+unsigned int pix_color[3];
+
 /* ================================================================== *
  * Bar_matrix
  * TODO: migrate visualizer-specific intitialization code to first-run
@@ -417,7 +419,7 @@ void Bar_Matrix::pixel_test() {
        if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH)) {
        //if (j < (float)(level)/(float)(BINS_MAX) * (STRIP_LENGTH))
 
-         float val = level*2*PI/4096.0;
+         float val = level*2*PI/2703.36;
 
          // Select colors
          switch(bd->num_beats() % 3) {
@@ -438,18 +440,24 @@ void Bar_Matrix::pixel_test() {
              break;
          }
 
-         tmp_color = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/
-                        4096.0f) + 0.7f) * 5 * 255.0f;
+         tmp_color = (((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/
+                       2703.36f);
 
-         tmp_color = (tmp_color > 255) ? 255 : tmp_color;
+         tmp_color = (tmp_color > 1.0f) ? 1.0f : tmp_color;
 
          if (rgb_enabled && i == 0 && j == 0) {
-           analogWrite(rgb_pins_r[0], 255); // red right
-           analogWrite(rgb_pins_r[1], 255); // green right
-           analogWrite(rgb_pins_r[2], 255); // blue right
-           analogWrite(rgb_pins_l[0], 255); // red left
-           analogWrite(rgb_pins_l[1], 255); // does not work
-           analogWrite(rgb_pins_l[2], 255); // left blue
+            pix_color[0] = bars[0]->getPixelColor(35);
+
+            uint8_t pix_r = pix_color[0] >> 16;
+            uint8_t pix_g = pix_color[0] >> 8;
+            uint8_t pix_b = pix_color[0];
+
+            analogWrite(rgb_pins_l[2], pix_b*tmp_color);
+            analogWrite(rgb_pins_l[1], pix_g*tmp_color);
+            analogWrite(rgb_pins_l[0], pix_r*tmp_color);
+            analogWrite(rgb_pins_r[2], pix_b*tmp_color);
+            analogWrite(rgb_pins_r[1], pix_g*tmp_color);
+            analogWrite(rgb_pins_r[0], pix_r*tmp_color);
          }
 
          mix_pixel(i, j, in_factor, red, green, blue);

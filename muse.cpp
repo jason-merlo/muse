@@ -26,20 +26,20 @@ SYSTEM_MODE(AUTOMATIC);
 #if EXTENDED_LAYOUT
 // Digital Outputs
 static const char rst     = RX;
-static const char strobe  = TX;
+static const char strobe  = DAC;
 
 // Analog Inputs (0-4096)
 static const char audio_r = A2;
 static const char audio_l = A3;
 
 #if RGB_LIGHTS
-static char rgb_pins_l[3] = {10, 11, 14};
-static char rgb_pins_r[3] = {15, 16, 17};
+static char rgb_pins_l[3] = {A5, TX, WKP};
+static char rgb_pins_r[3] = {D0, D1, A4};
 #endif
 #else
 
 // Digital Outputs
-static const char ps_on   = TX;
+static const char ps_on   = -1;
 static const char rst     = A3;
 static const char strobe  = A4;
 
@@ -56,7 +56,7 @@ static struct audio_bins bins;
 
 // Declare matrix pins
 //static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
-static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
+static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, A1, A0};
 
 #if ENABLE_BARS
 // Declare matrix variables
