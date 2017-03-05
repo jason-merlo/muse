@@ -28,7 +28,7 @@ void PongPaddle::tick(PongBall * pb) {
             if (y+len < pb->y) { yVel = maxYVel; }
             else if (y > pb->y) { yVel = -maxYVel; }
         } else {
-            if (abs(y+len/2 - STRIP_LENGTH/2) > 0) {
+            if (abs(y+len/2 - STRIP_LENGTH/2) > len/4) {
                 if (y+len/2 > STRIP_LENGTH/2) { yVel = 1.0 < maxYVel ? -1.0 : -maxYVel; }
                 else { yVel = 1.0 < maxYVel ? 1.0 : maxYVel; }
             } else {
