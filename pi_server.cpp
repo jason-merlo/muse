@@ -37,33 +37,22 @@ int bytes_read;
 int time_outs;
 unsigned long byte_start_time;
 void PiServer::init() {
-    // Initialize input pins
-    pinMode(pi_data_ready, INPUT);
-    pinMode(pi_data, INPUT);
-    pinMode(pi_data_rec, OUTPUT);
 
-    digitalWrite(pi_data_rec, LOW);
+    // Begin UDP socket
+    udp.begin(1738);
 
-    // Initializer variables
-    data_ready_value = LOW;
-    data_rec_value = LOW;
-
-    bits_read = 0;
-    incoming_byte = 0;
-    last_byte = 0;
-    byte_start_time = 0;
+    for (int i = 0; i < PI_MAX_MSG_LEN; i++) {
+        message[i] = 0;
+    }
 
     power_status = PI_SERVER_POWER_OFF;
     visualizer_type = VISUALIZER_BARS;
 
     // Debug infos
-    Particle.variable("LastByte", &last_byte_out, INT);
-    Particle.variable("BytesRead", &bytes_read, INT);
-    Particle.variable("BitsRead", &bits_read, INT);
-    Particle.variable("TimeOuts", &time_outs, INT);
-    last_byte_out = 0;
-    bytes_read = 0;
-    time_outs = 0;
+    Particle.variable("LastMsg", &last_msg, INT);
+    Particle.variable("MsgsRead", &num_msgs, INT);
+    num_msgs = 0;
+    last_msg = 0;
 }
 
 /* ================================================================== *
@@ -72,23 +61,16 @@ void PiServer::init() {
  * Parameters: none
  * ================================================================== */
 void PiServer::tick() {
-    if (bits_read > 0 && millis() - byte_start_time > TIMEOUT_MILLIS) {
-        time_outs++;
-        byte_start_time = millis();
-        bits_read = 0;
-        incoming_byte = 0;
-        data_rec_value = LOW;
-        data_ready_value = LOW;
-        last_byte_out = (int) last_byte;
-    }
-
-    // Get a byte, process if a full byte was recieved
-    if (get_byte()) {
-        switch (last_byte) {
+    // Get a message, process if a full byte was recieved
+    if (get_msg()) {
+        switch (message[1]) {
             case VISUALIZER_BARS:
             case VISUALIZER_BARS_MIDDLE:
+            case VISUALIZER_BASS_MIDDLE:
+            case VISUALIZER_BASS_SLIDE:
             case VISUALIZER_CLASSIC:
             case VISUALIZER_PLASMA:
+            case VISUALIZER_PONG:
             case VISUALIZER_PULSE:
             case VISUALIZER_RAINBOW:
             case VISUALIZER_WHEEL:
@@ -96,7 +78,8 @@ void PiServer::tick() {
             case BAR_TEST:
             case BOUNCING_LINES:
             case PIXEL_TEST:
-                set_visualizer(last_byte);
+            case SNAKE_LINES:
+                set_visualizer(message[1]);
                 break;
             case PI_POWER_ON_MSG:
                 set_power(PI_SERVER_POWER_ON);
@@ -105,67 +88,51 @@ void PiServer::tick() {
                 set_power(PI_SERVER_POWER_OFF);
                 break;
             default:
-                // Reset communication by default
-                bits_read = 0;
-                incoming_byte = 0;
-
-                data_rec_value = LOW;
-                data_ready_value = LOW;
-
-                last_byte_out = (int) last_byte;
+                // Do nothing for default
                 break;
         }
     }
 }
 
 /* ================================================================== *
- * Function: get_byte
- * Description: Attempts to get a byte from the Pi for BYTE_SCAN_MICROS microseconds
+ * Function: get_msg
+ * Description: Attempts to get a message from the Pi
  * Parameters: none
- * Returns: true - If a full byte was received within BYTE_SCAN_MICROS microseconds
+ * Returns: true - If a message was received
  *          false - otherwise
  * ================================================================== */
-bool PiServer::get_byte() {
-    unsigned long start_micros = micros();
-    while(micros() - start_micros < BYTE_SCAN_MICROS && micros() > start_micros) {
-        if (digitalRead(pi_data_ready) != data_ready_value) {
-            if (bits_read == 0) {
-                byte_start_time = millis();
-            }
+bool PiServer::get_msg() {
 
-            // Flip the data ready value we are looking for
-            if (data_ready_value == LOW) data_ready_value = HIGH;
-            else data_ready_value = LOW;
+    // Required for udp.available/read
+    udp.parsePacket();
 
-            // Grab the next bit
-            int next_bit = digitalRead(pi_data);
+    // Check if we have enough data, if we do then process message
+    if (udp.available() >= PI_MSG_LEN) {
+        message[0] = udp.read();
+        message[1] = udp.read();
+        message[2] = udp.read();
 
-            // Flip the data rec value so the pi will send next bit
-            if (data_rec_value == LOW) data_rec_value = HIGH;
-            else data_rec_value = LOW;
-            digitalWrite(pi_data_rec, data_rec_value);
+        return is_valid_msg();
+    } else {
+        // Else flush unneeded bytes
+        while (udp.read() != -1);
+    }
 
-            // Update the incoming byte
-            incoming_byte = incoming_byte >> 1;
-            if (next_bit) incoming_byte += 0x80;
+    return false;
+}
 
-            // Update location within byte
-            bits_read++;
-            if (bits_read >= 8) {
-                last_byte = incoming_byte;
-                bits_read = 0;
-                incoming_byte = 0;
-
-                data_rec_value = LOW;
-                data_ready_value = LOW;
-
-                last_byte_out = (int) last_byte;
-                bytes_read++;
-
-                byte_start_time = millis();
-                return true; // Only get one byte at a time
-            }
-        }
+/* ================================================================== *
+ * Function: is_valid_message
+ * Description: Checks if a message is valid
+ * Parameters: none
+ * Returns: true - message contains a valid message
+ *          false - otherwise
+ * ================================================================== */
+bool PiServer::is_valid_msg() {
+    if (message[0] == PI_MSG_START && message[2] == PI_MSG_END) {
+        num_msgs++;
+        last_msg = message[1];
+        return true;
     }
 
     return false;

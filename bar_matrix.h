@@ -16,11 +16,17 @@
 #include "beat_detection.h"
 #include "neopixel.h"
 #include "muse.h"
+#include "pong_ball.h"
+#include "pong_paddle.h"
+#include "snake.h"
+#include "tcp_beats.h"
 
 #include "math.h"
 
 // constants
 #define PI 3.141592
+
+#define NUM_SNAKES 4
 
 class Bar_Matrix {
     public:
@@ -34,17 +40,21 @@ class Bar_Matrix {
 
         // Misc drawing functions
         void
+            ambient_lighting(Color_Value color),
             bar_test(),
-            bouncing_lines(float speed),
+            bouncing_lines(),
             pixel_test(),
-            ambient_lighting(Color_Value color);
+            snake_lines(float speed);
 
         // Visualizer drawing functions
         void
             visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe),
             visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_bass_middle(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_bass_slide(audio_bins* bins, float in_factor, float out_factor),
             visualizer_classic(audio_bins* bins, float in_factor, float out_factor),
             visualizer_plasma(audio_bins* bins, float in_factor, float out_factor),
+            visualizer_pong(float in_factor),
             visualizer_pulse(audio_bins* bins, float in_factor, float out_factor, float decay_x, float decay_y),
             visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor),
             visualizer_wheel(float intensity, float speed);
@@ -52,7 +62,20 @@ class Bar_Matrix {
     private:
         int bouncing_line_lengths[NUM_BARS];  // Hold the lengths of the bars
         float bouncing_line_positions[NUM_BARS]; // Hold the position of the bottom of the bouncing lines
+        float bouncing_line_speeds[NUM_BARS]; // Hold the speeds of teh bouncing lines
         int bouncing_line_directions[NUM_BARS]; // Hold the direction each line is moving
+        int bouncing_line_colors[NUM_BARS][3];
+
+        Snake snakes[NUM_SNAKES];
+        PongPaddle pongPaddles[2];
+        PongBall pongBall;
+        int last_beat_count;
+
+        TCPBeats tcpBeats;
+
+        int bass_slide_heights[NUM_BARS];
+        float bass_slide_ema;
+        unsigned long bass_slide_millis;
 
         void
             decay(double factor),

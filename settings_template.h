@@ -11,6 +11,8 @@
 #ifndef MUSE_SETTINGS_H
 #define MUSE_SETTINGS_H
 
+#include "muse.h"
+
 // Enable/disable major systems
 #define ENABLE_BARS           0
 #define ENABLE_MSGEQ7         0
@@ -23,6 +25,9 @@
 #define ENABLE_SERIAL         0
 #define ENABLE_MDNS           0
 #define ENABLE_PI_SERVER      0
+
+// Visaulizer to display if no pi control
+#define STATIC_VISUALIZER     VISUALIZER_BARS
 
 // Screensaver constants
 #define SCREENSAVER_MINIMUM         1300
