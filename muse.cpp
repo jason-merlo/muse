@@ -44,8 +44,8 @@ static const char audio_l = A1;
 static struct audio_bins bins;
 
 // Declare matrix pins
-//static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
-static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
+static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+//static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 
 #if ENABLE_BARS
 // Declare matrix variables
@@ -152,6 +152,10 @@ void setup() {
     frame_count_publish = 0;
     Particle.variable("Ticks10s", &tick_count_publish, INT);
     Particle.variable("Frames10s", &frame_count_publish, INT);
+
+    IPAddress myIP = WiFi.localIP();
+  String ipStr = String(myIP[0])+"."+String(myIP[1])+"."+String(myIP[2])+"."+String(myIP[3]);
+  Spark.publish("LocalIP", ipStr, 60,PRIVATE);
 }
 
 /* ================================================================== *

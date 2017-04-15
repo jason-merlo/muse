@@ -219,7 +219,7 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
           visualizer_bars(bins, 0.15, 0.85, false);
           break;
         case VISUALIZER_BARS_MIDDLE:
-          visualizer_bars_middle(bins, 0.15, 0.9);
+          visualizer_bars_middle(bins, 0.15, 0.85);
           break;
         case VISUALIZER_BASS_MIDDLE:
           visualizer_bass_middle(bins, 0.15, 0.80);
@@ -618,7 +618,8 @@ void Bar_Matrix::visualizer_classic(audio_bins* bins, float in_factor, float out
 
     for (int i = 0; i < NUM_BINS; i++) {
         if (bd->beat_on_bin(i)) {
-            fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+            fill_bar(i, 200, 200, 200);
+            //fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             color_table_idx = (color_table_idx+1) % 51;
 
             if (i == 6) {
