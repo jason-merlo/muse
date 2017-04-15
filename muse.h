@@ -93,7 +93,6 @@ void powered_on_tick();
 void psu_shutdown();
 void psu_startup();
 void sample_freq(audio_bins* bins);
-void serve_webpage();
 uint32_t Wheel(byte WheelPos, float intensity);
 uint32_t Color(uint8_t r, uint8_t g, uint8_t b);
 

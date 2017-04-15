@@ -20,8 +20,6 @@
 #define ENABLE_RGB_SR         0
 #define ENABLE_SCREENSAVER    0
 #define ENABLE_AUTO_SHUTDOWN  0
-#define ENABLE_WEB_SERVER     0
-#define ENABLE_WEB_POWER      0
 #define ENABLE_SERIAL         0
 #define ENABLE_MDNS           0
 #define ENABLE_PI_SERVER      0

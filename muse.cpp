@@ -14,9 +14,7 @@
 
 #include "application.h"
 #include "bar_matrix.h"
-#include "MDNS.h"
 #include "neopixel.h"
-#include "server.h"
 #include "pi_server.h"
 
 SYSTEM_MODE(AUTOMATIC);
@@ -55,11 +53,6 @@ unsigned long last_display_update;
 Beat_Detection beat_detect;
 #endif
 
-#if ENABLE_MDNS
-MDNS mdns;
-unsigned int last_mdns_update = 0;
-#endif
-
 #if ENABLE_MSGEQ7
 unsigned long last_sample_millis;
 #endif
@@ -75,12 +68,6 @@ static bool psu_is_on = false;
 
 #if ENABLE_SCREENSAVER || ENABLE_AUTO_SHUTDOWN
 static unsigned long last_sound_seconds;
-#endif
-
-#if ENABLE_WEB_SERVER
-// Declare webserver variables
-Server server;
-unsigned int last_server_update = 0;
 #endif
 
 // Stat trackers for number of loop ticks and number of frames
@@ -130,20 +117,9 @@ void setup() {
     last_sound_seconds = Time.now();
     #endif
 
-    #if ENABLE_WEB_SERVER
-    server.init();
-    last_server_update = 0;
-    #endif
-
     #if ENABLE_PI_SERVER
     pi_server.init();
     last_pi_server_update = 0;
-    #endif
-
-    #if ENABLE_MDNS
-    mdns.setHostname("muse");
-    mdns.begin();
-    last_mdns_update = 0;
     #endif
 
     tick_count = 0;
@@ -190,39 +166,14 @@ void loop() {
         }
         #endif
 
-        // Handle web power
-        #if ENABLE_WEB_POWER
-        if (server.powered_on() == SERVER_POWER_ON) {
-            powered_on_tick();
-        } else {
-            psu_shutdown();
-        }
-        #endif
-
         // Handle Pi server power
         #if ENABLE_PI_SERVER
-        if (pi_server.powered_on() == SERVER_POWER_ON) {
+        if (pi_server.powered_on() == PI_SERVER_POWER_ON) {
             powered_on_tick();
         } else {
             psu_shutdown();
         }
         #endif
-    #endif
-
-    #if ENABLE_MDNS
-    if (millis() - last_mdns_update > MDNS_UPDATE_INTERVAL ||
-        millis() - last_mdns_update < 0) {
-            last_mdns_update = millis();
-            mdns.processQueries();
-    }
-    #endif
-
-    #if ENABLE_WEB_SERVER
-    if (millis() - last_server_update > SERVER_UPDATE_INTERVAL ||
-        millis() - last_server_update < 0) {
-            last_server_update = millis();
-            server.tick();
-    }
     #endif
 
     #if ENABLE_PI_SERVER
