@@ -129,9 +129,9 @@ void setup() {
     Particle.variable("Ticks10s", &tick_count_publish, INT);
     Particle.variable("Frames10s", &frame_count_publish, INT);
 
-    IPAddress myIP = WiFi.localIP();
-  String ipStr = String(myIP[0])+"."+String(myIP[1])+"."+String(myIP[2])+"."+String(myIP[3]);
-  Spark.publish("LocalIP", ipStr, 60,PRIVATE);
+    //IPAddress myIP = WiFi.localIP();
+    // String ipStr = String(myIP[0])+"."+String(myIP[1])+"."+String(myIP[2])+"."+String(myIP[3]);
+    // Spark.publish("LocalIP", ipStr, 60,PRIVATE);
 }
 
 /* ================================================================== *

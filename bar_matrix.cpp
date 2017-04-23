@@ -12,6 +12,11 @@
 #include "bar_matrix.h"
 #include "math.h"
 
+#include "bars.h"
+#include "bars_middle.h"
+#include "bass_middle.h"
+#include "classic.h"
+
 // Display variables
 short disp_width;
 short disp_height;
@@ -21,6 +26,11 @@ Adafruit_NeoPixel** bars;
 Beat_Detection * bd;
 
 int color_table_idx = 0;
+
+Bars        * visualizerBars;
+BarsMiddle  * visualizerBarsMiddle;
+BassMiddle  * visualizerBassMiddle;
+Classic     * visualizerClassic;
 
 /* ================================================================== *
  * Bar_matrix
@@ -88,6 +98,11 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     bd = beat_detection;
 
     tcpBeats.init();
+
+    visualizerBars          = new Bars      (bars, 0, bd, 0.15, 0.85);
+    visualizerBarsMiddle    = new BarsMiddle(bars, 0, bd, 0.15, 0.85);
+    visualizerBassMiddle    = new BassMiddle(bars, 0, bd, 0.15, 0.80);
+    visualizerClassic       = new Classic   (bars, 0, bd, 0.15, 0.90);
 }
 
 /* ======================== PRIVATE FUNCTIONS ======================= */
@@ -216,35 +231,35 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
     switch (visualizer_type) {
         // Visualizers
         case VISUALIZER_BARS:
-          visualizer_bars(bins, 0.15, 0.85, false);
-          break;
+            visualizerBars->tick(bins);
+            break;
         case VISUALIZER_BARS_MIDDLE:
-          visualizer_bars_middle(bins, 0.15, 0.85);
-          break;
+            visualizerBarsMiddle->tick(bins);
+            break;
         case VISUALIZER_BASS_MIDDLE:
-          visualizer_bass_middle(bins, 0.15, 0.80);
-          break;
+            visualizerBassMiddle->tick(bins);
+            break;
         case VISUALIZER_BASS_SLIDE:
-          visualizer_bass_slide(bins, 0.15, 0.75);
-          break;
+            visualizer_bass_slide(bins, 0.15, 0.75);
+            break;
         case VISUALIZER_CLASSIC:
-            visualizer_classic(bins, 0.15, 0.9);
+            visualizerClassic->tick(bins);
             break;
         case VISUALIZER_PLASMA:
-          visualizer_plasma(bins, 0.5, 0.965);
-          break;
+            visualizer_plasma(bins, 0.5, 0.965);
+            break;
         case VISUALIZER_PONG:
-          visualizer_pong(0.965);
-          break;
+            visualizer_pong(0.965);
+            break;
         case VISUALIZER_PULSE:
-          visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
-          break;
+            visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
+            break;
         case VISUALIZER_RAINBOW:
-          visualizer_rainbow(bins, 0.15, 0.8);
-          break;
+            visualizer_rainbow(bins, 0.15, 0.8);
+            break;
         case VISUALIZER_WHEEL:
-          visualizer_wheel(0.25, 10);
-          break;
+            visualizer_wheel(0.25, 10);
+            break;
 
         // Tests and misc
         case BOUNCING_LINES:
