@@ -17,7 +17,7 @@ void BassMiddle::tick() {
         color_table_idx++;
         color_table_idx %= 51;
 
-        //tcpBeats.stevenSendRGB(COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+        //tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     }
 
     // Average all 4 low frequency bins
@@ -35,8 +35,8 @@ void BassMiddle::tick() {
         int y = (STRIP_LENGTH / 2) - (num_lit / 2);
 
         for (int i = 0; i < num_lit; i++) {
-            mix_pixel(x, y+i, in_factor, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+            mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+            mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
         }
     }
 }

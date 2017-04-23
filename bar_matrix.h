@@ -88,7 +88,7 @@ class Bar_Matrix {
             mix_pixel(unsigned char bar, unsigned short pixel, float factor, unsigned char r, unsigned char g, unsigned char b);
 };
 
-const int COLOR_TABLE[50][3] {
+const int COLOR_TABLE2[50][3] {
   { 25,  50,  75},
   { 50, 100, 150},
   { 75, 150, 225},

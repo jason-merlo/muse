@@ -21,12 +21,12 @@ void Classic::tick() {
 
     classic_fill_in--;
     if (classic_fill_in == 0){
-        fill_bar(7, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+        fill_bar(7, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     }
 
     for (int i = 0; i < NUM_BINS; i++) {
         if (bd->beat_on_bin(i)) {
-            fill_bar(i, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+            fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
 
             if (i == 6) {
                 classic_fill_in = 3;

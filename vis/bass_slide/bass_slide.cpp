@@ -17,7 +17,7 @@ void BassSlide::tick() {
         color_table_idx++;
         color_table_idx %= 51;
 
-        tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+        //tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
     }
 
     // Average all 4 low frequency bins

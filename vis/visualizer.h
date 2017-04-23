@@ -47,7 +47,7 @@ class Visualizer {
         int last_beat_count;
 };
 
-const int COLOR_TABLE2[50][3] {
+const int COLOR_TABLE[50][3] {
     { 25,  50,  75},
     { 50, 100, 150},
     { 75, 150, 225},

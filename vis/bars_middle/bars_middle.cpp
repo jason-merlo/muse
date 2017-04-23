@@ -13,7 +13,7 @@ void BarsMiddle::tick() {
     decay(out_factor);
 
     if (bd->beat_on_bin(0) || bd->beat_on_bin(1)) {
-        //fill_bar(i, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+        //fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
         color_table_idx = (color_table_idx+1) % 51;
     }
 
@@ -41,7 +41,7 @@ void BarsMiddle::tick() {
                 float val = level*2*PI/BINS_MAX;
                 //mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
                 //mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, bd->r(), bd->g(), bd->b());
-                mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+                mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             }
         }
 
@@ -67,7 +67,7 @@ void BarsMiddle::tick() {
                 float val = level*2*PI/BINS_MAX;
                 //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
                 //mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);
-                mix_pixel(i, j, in_factor, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
+                mix_pixel(i, j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             }
         }
     }

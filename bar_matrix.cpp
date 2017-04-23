@@ -36,7 +36,7 @@ BassMiddle  * visualizerBassMiddle;
 BassSlide   * visualizerBassSlide;
 Classic     * visualizerClassic;
 Plasma      * visualizerPlasma;
-Rainbow     * visaulizerRainbow;
+Rainbow     * visualizerRainbow;
 
 /* ================================================================== *
  * Bar_matrix
@@ -72,13 +72,13 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     }
 
     color_table_idx = 0;
-    snakes[0] = Snake(1, 30, -30, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[0] = Snake(1, 30, -30, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
     color_table_idx++;
-    snakes[1] = Snake(-1, 25, 4*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[1] = Snake(-1, 25, 4*70, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
     color_table_idx++;
-    snakes[2] = Snake(1, 20, 185, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[2] = Snake(1, 20, 185, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
     color_table_idx++;
-    snakes[3] = Snake(-1, 15, 8*70, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+    snakes[3] = Snake(-1, 15, 8*70, COLOR_TABLE2[color_table_idx][0], COLOR_TABLE2[color_table_idx][1], COLOR_TABLE2[color_table_idx][2]);
     color_table_idx++;
 
     snakes[0].posTicks = 0;
