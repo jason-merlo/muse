@@ -10,6 +10,8 @@ class Classic : public Visualizer {
 
         void tick(audio_bins * bins);
 
+        int classic_fill_in;
+
         float in_factor;
         float out_factor;
 };

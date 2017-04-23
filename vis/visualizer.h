@@ -11,15 +11,17 @@
 class Visualizer {
     public:
         Visualizer() {
-            this->bars = NULL;
-            this->bins = NULL;
+            this->bars  = NULL;
+            this->bd    = NULL;
+            this->bins  = NULL;
 
             this->color_table_idx = 0;
             this->last_beat_count = 0;
         };
         Visualizer(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detection * bd) {
-            this->bars = bars;
-            this->bins = bins;
+            this->bars  = bars;
+            this->bd    = bd;
+            this->bins  = bins;
 
             this->color_table_idx = 0;
             this->last_beat_count = 0;
