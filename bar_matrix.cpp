@@ -15,7 +15,10 @@
 #include "bars.h"
 #include "bars_middle.h"
 #include "bass_middle.h"
+#include "bass_slide.h"
 #include "classic.h"
+#include "plasma.h"
+#include "rainbow.h"
 
 // Display variables
 short disp_width;
@@ -30,7 +33,10 @@ int color_table_idx = 0;
 Bars        * visualizerBars;
 BarsMiddle  * visualizerBarsMiddle;
 BassMiddle  * visualizerBassMiddle;
+BassSlide   * visualizerBassSlide;
 Classic     * visualizerClassic;
+Plasma      * visualizerPlasma;
+Rainbow     * visaulizerRainbow;
 
 /* ================================================================== *
  * Bar_matrix
@@ -103,7 +109,10 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     visualizerBars          = new Bars      (bars, bins, bd, 0.15, 0.85);
     visualizerBarsMiddle    = new BarsMiddle(bars, bins, bd, 0.15, 0.85);
     visualizerBassMiddle    = new BassMiddle(bars, bins, bd, 0.15, 0.80);
+    visualizerBassSlide     = new BassSlide (bars, bins, bd, 0.15, 0.75);
     visualizerClassic       = new Classic   (bars, bins, bd, 0.15, 0.90);
+    visualizerPlasma        = new Plasma    (bars, bins, bd, 0.50, 0.965);
+    visualizerRainbow       = new Rainbow   (bars, bins, bd, 0.15, 0.80);
 }
 
 /* ======================== PRIVATE FUNCTIONS ======================= */
@@ -231,33 +240,19 @@ void Bar_Matrix::show_all() {
 void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
     switch (visualizer_type) {
         // Visualizers
-        case VISUALIZER_BARS:
-            visualizerBars->tick();
-            break;
-        case VISUALIZER_BARS_MIDDLE:
-            visualizerBarsMiddle->tick();
-            break;
-        case VISUALIZER_BASS_MIDDLE:
-            visualizerBassMiddle->tick();
-            break;
-        case VISUALIZER_BASS_SLIDE:
-            visualizer_bass_slide(bins, 0.15, 0.75);
-            break;
-        case VISUALIZER_CLASSIC:
-            visualizerClassic->tick();
-            break;
-        case VISUALIZER_PLASMA:
-            visualizer_plasma(bins, 0.5, 0.965);
-            break;
+        case VISUALIZER_BARS:           visualizerBars->tick();         break;
+        case VISUALIZER_BARS_MIDDLE:    visualizerBarsMiddle->tick();   break;
+        case VISUALIZER_BASS_MIDDLE:    visualizerBassMiddle->tick();   break;
+        case VISUALIZER_BASS_SLIDE:     visualizerBassSlide->tick();    break;
+        case VISUALIZER_CLASSIC:        visualizerClassic->tick();      break;
+        case VISUALIZER_PLASMA:         visualizerPlasma->tick();       break;
         case VISUALIZER_PONG:
             visualizer_pong(0.965);
             break;
         case VISUALIZER_PULSE:
             visualizer_pulse(bins, 0.15, 0.8, 1.0f, 20.0f);
             break;
-        case VISUALIZER_RAINBOW:
-            visualizer_rainbow(bins, 0.15, 0.8);
-            break;
+        case VISUALIZER_RAINBOW:        visualizerRainbow->tick();      break;
         case VISUALIZER_WHEEL:
             visualizer_wheel(0.25, 10);
             break;
@@ -361,334 +356,6 @@ void Bar_Matrix::pixel_test() {
 
 /* ================== VISUALIZER DRAWING FUNCTIONS ================== */
 
-/* ================================================================== *
- * Function: fill_matrix
- * Description: Sets all pixel values to given color value
- * Parameters: [audio_bins]* bins - frequency bins read from chip
- * ================================================================== */
- void Bar_Matrix::visualizer_bars(audio_bins* bins, float in_factor, float out_factor, bool strobe) {
-   decay(out_factor);
-   float bass_level = 0;
-   int red, green, blue;
-
-   if (strobe)
-     bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/BINS_MAX)+0.7f) * 5 * 255.0f;
-
-   for (char i = 0; i < disp_width; i++) {
-     for (char j = 0; j < disp_height; j++) {
-       // get bin
-       //int level = (i < disp_width/2) ? bar_levels[i] : bar_levels[7-i];
-
-       if (strobe)
-         mix_pixel(i, j, 0.5f, bass_level, bass_level, bass_level);
-
-       // Set bar levels
-       int level = 0;
-       switch(i) {
-         case 0:
-           level = bins->left[LEFT_160];
-           break;
-         case 1:
-           level = bins->left[LEFT_1000];
-           break;
-         case 2:
-           level = bins->left[LEFT_6250];
-           break;
-         case 3:
-           level = bins->left[LEFT_16000];
-           break;
-         case 4:
-           level = bins->right[RIGHT_16000];
-           break;
-         case 5:
-           level = bins->right[RIGHT_6250];
-           break;
-         case 6:
-           level = bins->right[RIGHT_1000];
-           break;
-         case 7:
-           level = bins->right[RIGHT_160];
-           break;
-       }
-
-       level *= FREQ_GAIN;
-       // set bar
-       if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH)) {
-       //if (j < (float)(level)/(float)(BINS_MAX) * (STRIP_LENGTH))
-
-         float val = level*2*PI/BINS_MAX;
-
-         // Select colors
-         switch(bd->num_beats() % 3) {
-           case 0:
-             red = cos(val)*255;
-             green = cos(val - 2*PI/3)*255;
-             blue = cos(val - 4*PI/3)*255;
-             break;
-           case 1:
-             red = cos(val - 4*PI/3)*255;
-             green = cos(val)*255;
-             blue = cos(val - 2*PI/3)*255;
-             break;
-           case 2:
-             red = cos(val - 2*PI/3)*255;
-             green = cos(val - 4*PI/3)*255;
-             blue = cos(val)*255;
-             break;
-         }
-
-         mix_pixel(i, j, in_factor, red, green, blue);
-         /*mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*pi/3)*255, cos(val - 4*pi/3)*255);*/
-
-         /*mix_pixel(i, j, in_factor, bins->left[0]/16,
-                                    bins->left[1]/16,
-                                    bins->left[2]/16);*/
-
-         /*mix_pixel(i, j, in_factor, bins->left[0]/(64-(bins->left[1]/128)),
-                                    bins->left[1]/(64-(bins->left[2]/128)),
-                                    bins->left[2]/(64-(bins->left[0]/128)));*/
-       }
-     }
-   }
- }
-
-/* ================================================================== *
- * Function: visualizer_bars_middle
- * Description: Bars start at the middle and go to the edges.
- *              One channel fills up, the other fills down.
- * Parameters: none.
- * ================================================================== */
-void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float out_factor) {
-    decay(out_factor);
-
-    if (bd->beat_on_bin(0) || bd->beat_on_bin(1)) {
-        //fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-        color_table_idx = (color_table_idx+1) % 51;
-    }
-
-    // Right bins, grows downwards
-    for (char i = 0; i < disp_width; i++) {
-        for (char j = 0; j < STRIP_LENGTH/2; j++) {
-            // get bin
-            // Set bar levels
-            int level = 0;
-            switch(i) {
-                case 0: level = bins->left[LEFT_63];    break;
-                case 1: level = bins->left[LEFT_160];   break;
-                case 2: level = bins->left[LEFT_400];   break;
-                case 3: level = bins->left[LEFT_1000];  break;
-                case 4: level = bins->left[LEFT_2500];  break;
-                case 5: level = bins->left[LEFT_6250];  break;
-                case 6: level = bins->left[LEFT_1000];  break;
-                case 7: level = bins->left[LEFT_16000]; break;
-            }
-            level *= FREQ_GAIN;
-            // set bar
-            float p = (float)(level)/(float)(BINS_MAX);
-            if (j < p*p * (STRIP_LENGTH/2)) {
-                //j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                float val = level*2*PI/BINS_MAX;
-                //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                //mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, bd->r(), bd->g(), bd->b());
-                mix_pixel(i, STRIP_LENGTH/2 - j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-            }
-        }
-
-        // Left bins, grow upwards
-        for (char j = STRIP_LENGTH/2; j < STRIP_LENGTH; j++) {
-            // get bin
-            int level = 0;
-            switch(i) {
-                case 0: level = bins->right[RIGHT_63];    break;
-                case 1: level = bins->right[RIGHT_160];   break;
-                case 2: level = bins->right[RIGHT_400];   break;
-                case 3: level = bins->right[RIGHT_1000];  break;
-                case 4: level = bins->right[RIGHT_2500];  break;
-                case 5: level = bins->right[RIGHT_6250];  break;
-                case 6: level = bins->right[RIGHT_1000];  break;
-                case 7: level = bins->right[RIGHT_16000]; break;
-            }
-            level *= FREQ_GAIN;
-            // set bar
-            float p = (float)(level)/(float)(BINS_MAX);
-            if (j-STRIP_LENGTH/2 < p*p * (STRIP_LENGTH/2)) {
-                //j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                float val = level*2*PI/BINS_MAX;
-                //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                //mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);
-                mix_pixel(i, j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-            }
-        }
-    }
-}
-
-/* ================================================================== *
- * Function: visualizer_bass_middle
- * Description: All bars react to bass beats. Bulge in middle of display
- * Parameters: none.
- * ================================================================== */
-void Bar_Matrix::visualizer_bass_middle(audio_bins* bins, float in_factor, float out_factor) {
-    decay(out_factor);
-
-    if (bd->num_beats() != last_beat_count) {
-        last_beat_count = bd->num_beats();
-        color_table_idx++;
-        color_table_idx %= 51;
-
-        tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-    }
-
-    // Average all 4 low frequency bins
-    float energy = bins->right[RIGHT_63] + bins->left[LEFT_63] + bins->right[RIGHT_160] + bins->left[LEFT_160];
-    energy /= 4.0;
-    energy /= (float) BINS_MAX;
-    energy *= energy;
-    // Use the "energy" of the low frequency bins to determine number of LEDs to light
-    // Add 0.5 forces round to nearest integer
-    int max_lit = (energy * (float)STRIP_LENGTH) + 0.5;
-    int middle_led = STRIP_LENGTH / 2;
-
-    for (int x = 0; x < NUM_BARS / 2; x++) {
-        int num_lit = max_lit / (NUM_BARS/2 - x);
-        int y = (STRIP_LENGTH / 2) - (num_lit / 2);
-
-        for (int i = 0; i < num_lit; i++) {
-            mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-        }
-    }
-}
-
-/* ================================================================== *
- * Function: visualizer_bass_slide
- * Description: All bars react to bass beats. Bulge in middle of display
- * Parameters: none.
- * ================================================================== */
-void Bar_Matrix::visualizer_bass_slide(audio_bins* bins, float in_factor, float out_factor) {
-    decay(out_factor);
-
-    if (bd->num_beats() != last_beat_count) {
-        last_beat_count = bd->num_beats();
-        color_table_idx++;
-        color_table_idx %= 51;
-
-        tcpBeats.stevenSendRGB(COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-    }
-
-    // Average all 4 low frequency bins
-    float energy = (bins->right[RIGHT_63] + bins->left[LEFT_63]) + (bins->right[RIGHT_160] + bins->left[LEFT_160])+ (bins->right[RIGHT_400] + bins->left[LEFT_400])+ (bins->right[RIGHT_1000] + bins->left[LEFT_1000])+ (bins->right[RIGHT_2500] + bins->left[LEFT_2500])+ (bins->right[RIGHT_6250] + bins->left[LEFT_6250])+ (bins->right[RIGHT_16000] + bins->left[LEFT_16000]);
-    energy = energy / 2;
-    bass_slide_ema = 0.5 * energy + 0.5 * bass_slide_ema;
-    energy = bass_slide_ema;
-
-    energy /= 4.0;
-    energy /= (float) BINS_MAX;
-    energy *= energy;
-    // Use the "energy" of the low frequency bins to determine number of LEDs to light
-    // Add 0.5 forces round to nearest integer
-    //bass_slide_ema = 0.9 * energy + 0.1 * bass_slide_ema;
-    int max_lit = (energy * (float)STRIP_LENGTH) + 0.5;
-    int middle_led = STRIP_LENGTH / 2;
-
-    if (millis() - bass_slide_millis > 35) {
-        bass_slide_millis = millis();
-
-        bass_slide_heights[0] = bass_slide_heights[1];
-        bass_slide_heights[1] = bass_slide_heights[2];
-        bass_slide_heights[2] = bass_slide_heights[3];
-        bass_slide_heights[3] = bass_slide_heights[4];
-        bass_slide_heights[4] = max_lit;
-
-        /*for (int x = 0; x < NUM_BARS / 2; x++) {
-            bass_slide_heights[x] = bass_slide_heights[(x+1)%(NUM_BARS/2)];
-        }*/
-
-        /*bass_slide_heights[NUM_BARS/2] = max_lit;*/
-    }
-
-    for (int x = 0; x < NUM_BARS / 2; x++) {
-        int num_lit = bass_slide_heights[x];// / (float)(NUM_BARS/2 - x);
-        int y = (STRIP_LENGTH / 2) - (num_lit / 2);
-
-        for (int i = 0; i < num_lit; i++) {
-            mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-        }
-
-        /*for (int i = 0; i < (STRIP_LENGTH - num_lit) / 2; i++) {
-            mix_pixel(x, i, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, i, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(x, y+i+num_lit, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, y+i+num_lit, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-        }*/
-    }
-}
-
-/* ================================================================== *
- * Function: visualizer_classic
- * Description: Emulate Steven's original, pre-muse, visualizer.
- * Parameters: none.
- * ================================================================== */
-void Bar_Matrix::visualizer_classic(audio_bins* bins, float in_factor, float out_factor) {
-    decay_to_rgb(out_factor, 0, 0, 10);
-
-    for (int i = 0; i < NUM_BINS; i++) {
-        if (bd->beat_on_bin(i)) {
-            fill_bar(i, 200, 200, 200);
-            //fill_bar(i, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-            color_table_idx = (color_table_idx+1) % 51;
-
-            if (i == 6) {
-                fill_bar(7, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
-                color_table_idx = (color_table_idx+1) % 51;
-            }
-        }
-    }
-}
-
-/* ================================================================== *
- * Function: decay
- * Description: slowly fades out matrix values
- * Parameters: [float] factor - decay factor to be multiplied by
- * ================================================================== */
-void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_factor) {
-    decay(out_factor);
-
-    for (char i = 0; i < disp_width; i++) {
-        for (short j = disp_height - 1; j > 0; j-=2) {
-            // Move wave up
-            unsigned int color = bars[i]->getPixelColor(j-1);
-            mix_pixel(i, j, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
-            mix_pixel(i, j+1, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));
-        }
-
-        // Set bar levels
-        int level = 0;
-        switch(i) {
-            case 0: level = bins->left[LEFT_160];       break;
-            case 1: level = bins->left[LEFT_1000];      break;
-            case 2: level = bins->left[LEFT_6250];      break;
-            case 3: level = bins->left[LEFT_16000];     break;
-            case 4: level = bins->right[RIGHT_16000];   break;
-            case 5: level = bins->right[RIGHT_6250];    break;
-            case 6: level = bins->right[RIGHT_1000];    break;
-            case 7: level = bins->right[RIGHT_160];     break;
-        }
-
-        level *= FREQ_GAIN;
-        // set bar
-        float val = level*2*PI/BINS_MAX;
-        //float intensity = (pow((float)(level)/(float)(BINS_MAX), 2))*255;
-        float intensity = (level)/(BINS_MAX)*255.0f;
-        intensity *= intensity;
-        if (intensity > 255) intensity = 255.0;
-        mix_pixel(i, 0, in_factor, cos(val - 4*PI/3)*intensity, cos(val - 2*PI/3)*intensity, cos(val)*intensity);
-
-        //bars[i]->setPixelColor(0, cos(val - 2*PI/3)*intensity, cos(val)*intensity, cos(val - 4*PI/3)*intensity);
-
-    }
-}
-
 void Bar_Matrix::visualizer_pong(float in_factor) {
     pongPaddles[0].tick(&pongBall);
     pongPaddles[1].tick(&pongBall);
@@ -749,131 +416,6 @@ void Bar_Matrix::visualizer_pulse(audio_bins* bins, float in_factor, float out_f
             //level *= 2*PI;
             //mix_pixel(i, j, in_factor, cos(level)*255*level, cos(level - 2*PI/3)*255*level, cos(level - 4*PI/3)*255*level);
             mix_pixel(i, j, in_factor, level*255, level*255, level*255);
-        }
-    }
-}
-
-void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out_factor) {
-    decay(out_factor);
-
-    for (char i = 0; i < disp_width/2; i++) {
-        int led_index = 0;
-        for (char j = 0; j < STRIP_LENGTH; j+=10) {
-            // get bin
-            int level = bins->left[j/10];
-            level *= FREQ_GAIN;
-            // set bar
-            if (i < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
-                float val = level*PI/BINS_MAX;
-                for (int x = 0; x < 10; x++) {
-                    //mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                    mix_pixel((disp_width/2)-i-1, x*NUM_BARS+led_index, in_factor, bd->r(), bd->g(), bd->b());
-                }
-            }
-
-            led_index++;
-            led_index = led_index%10;
-        }
-    }
-
-    for (char i = disp_width/2; i < disp_width; i++) {
-        int led_index = 0;
-        for (char j = 0; j < STRIP_LENGTH; j+=10) {
-            // get bin
-            int level = bins->right[j/10];
-            level *= FREQ_GAIN;
-            // set bar
-            if (i-disp_width/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (disp_width/2)) {
-                float val = level*PI/BINS_MAX;
-                for (int x = 0; x < 10; x++) {
-                    //mix_pixel(i, x*NUM_BARS+led_index, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                    mix_pixel(i, x*NUM_BARS+led_index, in_factor, bd->r(), bd->g(), bd->b());
-                }
-            }
-
-            led_index++;
-            led_index = led_index%10;
-        }
-    }
-
-    for (char i = 0; i < disp_width; i++) {
-        for (char j = 0; j < STRIP_LENGTH/4; j++) {
-            // get bin
-            int level = 0;//bins->left[i%(NUM_BARS-1)];
-            switch(i) {
-                case 0:
-                level = bins->left[LEFT_63]; //1kHz
-                break;
-                case 1:
-                level = bins->left[LEFT_160]; //6.25kHz
-                break;
-                case 2:
-                level = bins->left[LEFT_400]; //63Hz
-                break;
-                case 3:
-                level = bins->left[LEFT_1000]; //400Hz
-                break;
-                case 4:
-                level = bins->left[LEFT_2500]; //400Hz
-                break;
-                case 5:
-                level = bins->left[LEFT_6250]; //63Hz
-                break;
-                case 6:
-                level = bins->left[LEFT_1000]; //6.25kHz
-                break;
-                case 7:
-                level = bins->left[LEFT_16000]; //1kHz
-                break;
-            }
-            level *= FREQ_GAIN;
-
-            // set bar
-            if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                float val = level*2*PI/BINS_MAX;
-                mix_pixel(i, STRIP_LENGTH/2 - j, .95, 255-bd->r(), 255-bd->g(), 255-bd->b());
-            }
-        }
-
-        // Left bins, grow upwards
-        for (char j = STRIP_LENGTH/2; j < STRIP_LENGTH*0.75f; j++) {
-            // get bin
-            int level = 0;
-            switch(i) {
-                case 0:
-                level = bins->right[LEFT_63]; //1kHz
-                break;
-                case 1:
-                level = bins->right[LEFT_160]; //6.25kHz
-                break;
-                case 2:
-                level = bins->right[LEFT_400]; //63Hz
-                break;
-                case 3:
-                level = bins->right[LEFT_1000]; //400Hz
-                break;
-                case 4:
-                level = bins->right[LEFT_2500]; //400Hz
-                break;
-                case 5:
-                level = bins->right[LEFT_6250]; //63Hz
-                break;
-                case 6:
-                level = bins->right[LEFT_1000]; //6.25kHz
-                break;
-                case 7:
-                level = bins->right[LEFT_16000]; //1kHz
-                break;
-            }
-            level *= FREQ_GAIN;
-            // set bar
-            float p = (float)(level)/(float)(BINS_MAX);
-            if (j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                //j-STRIP_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH/2)) {
-                float val = level*2*PI/BINS_MAX;
-                //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                mix_pixel(i, j, .95, 255-bd->r(), 255-bd->g(), 255-bd->b());//reds[i], greens[i], blues[i]);
-            }
         }
     }
 }
