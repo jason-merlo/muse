@@ -9,7 +9,7 @@ BarsMiddle::BarsMiddle(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detecti
     this->out_factor = out_factor;
 }
 
-void BarsMiddle::tick(audio_bins* bins) {
+void BarsMiddle::tick() {
     decay(out_factor);
 
     if (bd->beat_on_bin(0) || bd->beat_on_bin(1)) {

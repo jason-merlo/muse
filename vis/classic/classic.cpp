@@ -11,7 +11,7 @@ Classic::Classic(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detection * b
     classic_fill_in = 0;
 }
 
-void Classic::tick(audio_bins* bins) {
+void Classic::tick() {
     decay_to_rgb(out_factor, 0, 0, 10);
 
     if (bd->num_beats() - last_beat_count > 4) {

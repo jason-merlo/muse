@@ -39,7 +39,7 @@ Classic     * visualizerClassic;
  * bar_len - number of leds in each bar (strip length)
  * orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
  * ================================================================== */
-Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const char* pins, Beat_Detection* beat_detection) {
+Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const char* pins, Beat_Detection* beat_detection, audio_bins* bins) {
     disp_width = num_bars; //(orientation) ? num_bars : bar_len;
     disp_height = bar_len; //(orientation) ? bar_len : num_bars;
 
@@ -96,13 +96,14 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     clear_matrix();
 
     bd = beat_detection;
+    this->bins = bins;
 
     tcpBeats.init();
 
-    visualizerBars          = new Bars      (bars, 0, bd, 0.15, 0.85);
-    visualizerBarsMiddle    = new BarsMiddle(bars, 0, bd, 0.15, 0.85);
-    visualizerBassMiddle    = new BassMiddle(bars, 0, bd, 0.15, 0.80);
-    visualizerClassic       = new Classic   (bars, 0, bd, 0.15, 0.90);
+    visualizerBars          = new Bars      (bars, bins, bd, 0.15, 0.85);
+    visualizerBarsMiddle    = new BarsMiddle(bars, bins, bd, 0.15, 0.85);
+    visualizerBassMiddle    = new BassMiddle(bars, bins, bd, 0.15, 0.80);
+    visualizerClassic       = new Classic   (bars, bins, bd, 0.15, 0.90);
 }
 
 /* ======================== PRIVATE FUNCTIONS ======================= */
@@ -231,19 +232,19 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
     switch (visualizer_type) {
         // Visualizers
         case VISUALIZER_BARS:
-            visualizerBars->tick(bins);
+            visualizerBars->tick();
             break;
         case VISUALIZER_BARS_MIDDLE:
-            visualizerBarsMiddle->tick(bins);
+            visualizerBarsMiddle->tick();
             break;
         case VISUALIZER_BASS_MIDDLE:
-            visualizerBassMiddle->tick(bins);
+            visualizerBassMiddle->tick();
             break;
         case VISUALIZER_BASS_SLIDE:
             visualizer_bass_slide(bins, 0.15, 0.75);
             break;
         case VISUALIZER_CLASSIC:
-            visualizerClassic->tick(bins);
+            visualizerClassic->tick();
             break;
         case VISUALIZER_PLASMA:
             visualizer_plasma(bins, 0.5, 0.965);

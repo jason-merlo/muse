@@ -9,7 +9,7 @@ BassMiddle::BassMiddle(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detecti
     this->out_factor = out_factor;
 }
 
-void BassMiddle::tick(audio_bins* bins) {
+void BassMiddle::tick() {
     decay(out_factor);
 
     if (bd->num_beats() != last_beat_count) {

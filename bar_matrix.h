@@ -30,7 +30,7 @@
 
 class Bar_Matrix {
     public:
-        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins, Beat_Detection * beat_detection);
+        Bar_Matrix(short num_bars, short bar_len, char led_type, const char* pins, Beat_Detection * beat_detection, audio_bins* bins);
 
         // General functions
         void
@@ -76,6 +76,8 @@ class Bar_Matrix {
         int bass_slide_heights[NUM_BARS];
         float bass_slide_ema;
         unsigned long bass_slide_millis;
+
+        audio_bins* bins;
 
         void
             decay(double factor),

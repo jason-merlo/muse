@@ -8,7 +8,7 @@ class BarsMiddle : public Visualizer {
         BarsMiddle();
         BarsMiddle(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detection * bd, float in_factor, float out_factor);
 
-        void tick(audio_bins * bins);
+        void tick();
 
         float in_factor;
         float out_factor;
