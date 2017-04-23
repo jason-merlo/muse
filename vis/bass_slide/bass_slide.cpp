@@ -7,6 +7,9 @@ BassSlide::BassSlide(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detection
 {
     this->in_factor = in_factor;
     this->out_factor = out_factor;
+
+    bass_slide_ema = 0.0;
+    bass_slide_millis = millis();
 }
 
 void BassSlide::tick() {
@@ -43,12 +46,6 @@ void BassSlide::tick() {
         bass_slide_heights[2] = bass_slide_heights[3];
         bass_slide_heights[3] = bass_slide_heights[4];
         bass_slide_heights[4] = max_lit;
-
-        /*for (int x = 0; x < NUM_BARS / 2; x++) {
-            bass_slide_heights[x] = bass_slide_heights[(x+1)%(NUM_BARS/2)];
-        }*/
-
-        /*bass_slide_heights[NUM_BARS/2] = max_lit;*/
     }
 
     for (int x = 0; x < NUM_BARS / 2; x++) {
@@ -59,12 +56,5 @@ void BassSlide::tick() {
             mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             mix_pixel(NUM_BARS-x-1, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
         }
-
-        /*for (int i = 0; i < (STRIP_LENGTH - num_lit) / 2; i++) {
-            mix_pixel(x, i, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, i, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(x, y+i+num_lit, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-            mix_pixel(NUM_BARS-x-1, y+i+num_lit, in_factor, 255-COLOR_TABLE[color_table_idx][0], 255-COLOR_TABLE[color_table_idx][1], 255-COLOR_TABLE[color_table_idx][2]);
-        }*/
     }
 }
