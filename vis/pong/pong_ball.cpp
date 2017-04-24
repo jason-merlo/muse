@@ -8,7 +8,7 @@ PongBall::PongBall(int len, float velX, float velY, unsigned int tickTime, int r
     xVel = velX;
     yVel = velY;
     x = NUM_BARS / 2;
-    y = STRIP_LENGTH / 2;
+    y = BAR_LENGTH / 2;
 
     tick_time = tickTime;
     last_tick = millis();
@@ -33,8 +33,8 @@ void PongBall::tick() {
         if (y <= 0) {
             y = 0;
             yVel = -yVel;
-        } else if (y+len >= STRIP_LENGTH) {
-            y = STRIP_LENGTH-len;
+        } else if (y+len >= BAR_LENGTH) {
+            y = BAR_LENGTH-len;
             yVel = -yVel;
         }
     }

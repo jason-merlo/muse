@@ -28,8 +28,8 @@ void PongPaddle::tick(PongBall * pb) {
             if (y+len < pb->y) { yVel = maxYVel; }
             else if (y > pb->y) { yVel = -maxYVel; }
         } else {
-            if (abs(y+len/2 - STRIP_LENGTH/2) > len/4) {
-                if (y+len/2 > STRIP_LENGTH/2) { yVel = 1.0 < maxYVel ? -1.0 : -maxYVel; }
+            if (abs(y+len/2 - BAR_LENGTH/2) > len/4) {
+                if (y+len/2 > BAR_LENGTH/2) { yVel = 1.0 < maxYVel ? -1.0 : -maxYVel; }
                 else { yVel = 1.0 < maxYVel ? 1.0 : maxYVel; }
             } else {
                 yVel = 0;
@@ -38,8 +38,8 @@ void PongPaddle::tick(PongBall * pb) {
 
         // Update paddle position
         y += yVel;
-        if ((y+len) >= STRIP_LENGTH) {
-            y = STRIP_LENGTH-len;
+        if ((y+len) >= BAR_LENGTH) {
+            y = BAR_LENGTH-len;
             yVel = 0;
         } else if (y <= 0) {
             y = 0;

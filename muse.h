@@ -29,11 +29,11 @@
 #define BINS_MAX          4095.0f
 
 // LED bars
-#define LED_TYPE          WS2812B
-#define STRIP_LENGTH      70
-#define NUM_BARS          8
-#define BINS_TO_LEDS      (70.0f/(BINS_MAX - 240))
-#define FREQ_GAIN         1.0f
+#define LED_TYPE        WS2812B
+#define BAR_LENGTH      70
+#define NUM_BARS        8
+#define BINS_TO_LEDS    (70.0f/(BINS_MAX - 240))
+#define FREQ_GAIN       1.0f
 
 // Update intervals, min time between updates of subsystems in millis
 #define DISPLAY_UPDATE_INTERVAL     20
@@ -93,7 +93,6 @@ void powered_on_tick();
 void psu_shutdown();
 void psu_startup();
 void sample_freq(audio_bins* bins);
-uint32_t Wheel(byte WheelPos, float intensity);
 uint32_t Color(uint8_t r, uint8_t g, uint8_t b);
 
 #endif // MUSE_H

@@ -19,7 +19,7 @@ void BarsMiddle::tick() {
 
     // Right bins, grows downwards
     for (char i = 0; i < NUM_BARS; i++) {
-        for (char j = 0; j < BAR_HEIGHT/2; j++) {
+        for (char j = 0; j < BAR_LENGTH/2; j++) {
             // get bin
             // Set bar levels
             int level = 0;
@@ -36,17 +36,17 @@ void BarsMiddle::tick() {
             level *= FREQ_GAIN;
             // set bar
             float p = (float)(level)/(float)(BINS_MAX);
-            if (j < p*p * (BAR_HEIGHT/2)) {
-                //j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (BAR_HEIGHT/2)) {
+            if (j < p*p * (BAR_LENGTH/2)) {
+                //j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (BAR_LENGTH/2)) {
                 float val = level*2*PI/BINS_MAX;
-                //mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
-                //mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, bd->r(), bd->g(), bd->b());
-                mix_pixel(i, BAR_HEIGHT/2 - j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
+                //mix_pixel(i, BAR_LENGTH/2 - j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
+                //mix_pixel(i, BAR_LENGTH/2 - j, in_factor, bd->r(), bd->g(), bd->b());
+                mix_pixel(i, BAR_LENGTH/2 - j, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);
             }
         }
 
         // Left bins, grow upwards
-        for (char j = BAR_HEIGHT/2; j < BAR_HEIGHT; j++) {
+        for (char j = BAR_LENGTH/2; j < BAR_LENGTH; j++) {
             // get bin
             int level = 0;
             switch(i) {
@@ -62,8 +62,8 @@ void BarsMiddle::tick() {
             level *= FREQ_GAIN;
             // set bar
             float p = (float)(level)/(float)(BINS_MAX);
-            if (j-BAR_HEIGHT/2 < p*p * (BAR_HEIGHT/2)) {
-                //j-BAR_HEIGHT/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (BAR_HEIGHT/2)) {
+            if (j-BAR_LENGTH/2 < p*p * (BAR_LENGTH/2)) {
+                //j-BAR_LENGTH/2 < (pow((float)(level)/(float)(BINS_MAX), 2)) * (BAR_LENGTH/2)) {
                 float val = level*2*PI/BINS_MAX;
                 //mix_pixel(i, j, in_factor, cos(val)*255, cos(val - 2*PI/3)*255, cos(val - 4*PI/3)*255);
                 //mix_pixel(i, j, in_factor, bd->r(), bd->g(), bd->b());//reds[i], greens[i], blues[i]);

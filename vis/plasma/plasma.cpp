@@ -13,7 +13,7 @@ void Plasma::tick() {
     decay(out_factor);
 
     for (char i = 0; i < NUM_BARS; i++) {
-        for (short j = BAR_HEIGHT - 1; j > 0; j-=2) {
+        for (short j = BAR_LENGTH - 1; j > 0; j-=2) {
             // Move wave up
             unsigned int color = bars[i]->getPixelColor(j-1);
             mix_pixel(i, j, in_factor, (char)(color >> 16), (char)(color >> 8), (char)(color));

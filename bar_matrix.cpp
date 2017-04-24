@@ -15,7 +15,6 @@
 // Display variables
 short disp_width;
 short disp_height;
-unsigned long** display;
 Adafruit_NeoPixel** bars;
 
 Beat_Detection * bd;
@@ -28,12 +27,8 @@ Beat_Detection * bd;
  * orientation - horizontal or vertical bars (horizontal/ladder = 0; vertical/fence = 1)
  * ================================================================== */
 Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const char* pins, Beat_Detection* beat_detection, audio_bins* bins) {
-    disp_width = num_bars; //(orientation) ? num_bars : bar_len;
-    disp_height = bar_len; //(orientation) ? bar_len : num_bars;
-
-    display = new unsigned long*[disp_width];
-    for (int i = 0; i < disp_width; i++)
-    display[i] = new unsigned long[disp_height];
+    disp_width = NUM_BARS;//num_bars; //(orientation) ? num_bars : bar_len;
+    disp_height = BAR_LENGTH;//bar_len; //(orientation) ? bar_len : num_bars;
 
     bars = new Adafruit_NeoPixel*[num_bars];
     for(short i = 0; i < num_bars; i++) {
@@ -70,7 +65,7 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
  * ================================================================== */
 void Bar_Matrix::ambient_lighting(Color_Value c) {
     for (int i = 0; i < NUM_BARS; i++) {
-        for (int j =0; j< BAR_HEIGHT; j++) {
+        for (int j =0; j< BAR_LENGTH; j++) {
             bars[i]->setPixelColor(j, c.c);
         }
     }
@@ -157,7 +152,7 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
  * Parameters: None
  * ================================================================== */
 void Bar_Matrix::bar_test() {
-    for (int i = 0; i < STRIP_LENGTH; i++)
+    for (int i = 0; i < BAR_LENGTH; i++)
     bars[int(millis()/1000)%8]->setPixelColor(i, 64, 64, 64);
 }
 
@@ -169,5 +164,5 @@ void Bar_Matrix::bar_test() {
 void Bar_Matrix::pixel_test() {
     clear_matrix();
     for (int i = 0; i < NUM_BARS; i++)
-    bars[i]->setPixelColor(STRIP_LENGTH-int(millis()/1000)%10, 64, 64, 64);
+    bars[i]->setPixelColor(BAR_LENGTH-int(millis()/1000)%10, 64, 64, 64);
 }

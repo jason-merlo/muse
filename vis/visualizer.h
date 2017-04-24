@@ -5,9 +5,6 @@
 #include "muse.h"
 #include "neopixel.h"
 
-#define NUM_BARS 8
-#define BAR_HEIGHT 70
-
 class Visualizer {
     public:
         Visualizer() {

@@ -10,8 +10,8 @@ Pong::Pong(Adafruit_NeoPixel** bars, audio_bins * bins, Beat_Detection * bd, flo
 
     last_beat_count = 0;
 
-    pongPaddles[0]  = new PongPaddle(15, 0, BAR_HEIGHT/2, 0, 0.9, 15, 100, 100, 100);
-    pongPaddles[1]  = new PongPaddle(15, NUM_BARS-1, BAR_HEIGHT/2, 0, 0.9, 15, 100, 100, 100);
+    pongPaddles[0]  = new PongPaddle(15, 0, BAR_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
+    pongPaddles[1]  = new PongPaddle(15, NUM_BARS-1, BAR_LENGTH/2, 0, 0.9, 15, 100, 100, 100);
     pongBall        = new PongBall(3, 0.0625, 0.80, 15, 100, 100, 100);
 }
 

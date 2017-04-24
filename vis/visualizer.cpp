@@ -7,7 +7,7 @@
  * ================================================================== */
 void Visualizer::decay(double factor) {
     for (char i = 0; i < NUM_BARS; i++) {
-        for (char j = 0; j < BAR_HEIGHT; j++) {
+        for (char j = 0; j < BAR_LENGTH; j++) {
             unsigned int color = bars[i]->getPixelColor(j);
             bars[i]->setPixelColor(j, (char)(color >> 16) * factor,
             (char)(color >> 8) * factor,
@@ -26,7 +26,7 @@ void Visualizer::decay(double factor) {
  * ================================================================== */
 void Visualizer::decay_to_rgb(double factor, int r, int g, int b) {
     for (char i = 0; i < NUM_BARS; i++) {
-        for (char j = 0; j < BAR_HEIGHT; j++) {
+        for (char j = 0; j < BAR_LENGTH; j++) {
             unsigned int color = bars[i]->getPixelColor(j);
 
             // Decay and do bounds checking on rgb values
@@ -43,7 +43,7 @@ void Visualizer::decay_to_rgb(double factor, int r, int g, int b) {
 }
 
 void Visualizer::fill_bar(int bar, int r, int g, int b) {
-    for (int j =0; j < BAR_HEIGHT; j++) {
+    for (int j =0; j < BAR_LENGTH; j++) {
         bars[bar]->setPixelColor(j, (uint8_t)r, (uint8_t)g, (uint8_t)b);
     }
 }
@@ -55,7 +55,7 @@ void Visualizer::fill_bar(int bar, int r, int g, int b) {
  * ================================================================== */
 void Visualizer::fill_matrix(Color_Value c) {
     for (int i = 0; i < NUM_BARS; i++) {
-        for (int j =0; j< BAR_HEIGHT; j++) {
+        for (int j =0; j< BAR_LENGTH; j++) {
             bars[i]->setPixelColor(j, c.c);
         }
     }
@@ -88,7 +88,7 @@ void Visualizer::mix_pixel(unsigned char bar, unsigned short pixel, float factor
  * ================================================================== */
 void Visualizer::clear_matrix() {
     for (int i = 0; i < NUM_BARS; i++) {
-        for (int j =0; j< BAR_HEIGHT; j++) {
+        for (int j =0; j< BAR_LENGTH; j++) {
             bars[i]->setPixelColor(j, 0);
         }
     }

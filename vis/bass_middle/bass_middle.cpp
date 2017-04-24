@@ -27,12 +27,12 @@ void BassMiddle::tick() {
     energy *= energy;
     // Use the "energy" of the low frequency bins to determine number of LEDs to light
     // Add 0.5 forces round to nearest integer
-    int max_lit = (energy * (float)STRIP_LENGTH) + 0.5;
-    int middle_led = STRIP_LENGTH / 2;
+    int max_lit = (energy * (float)BAR_LENGTH) + 0.5;
+    int middle_led = BAR_LENGTH / 2;
 
     for (int x = 0; x < NUM_BARS / 2; x++) {
         int num_lit = max_lit / (NUM_BARS/2 - x);
-        int y = (STRIP_LENGTH / 2) - (num_lit / 2);
+        int y = (BAR_LENGTH / 2) - (num_lit / 2);
 
         for (int i = 0; i < num_lit; i++) {
             mix_pixel(x, y+i, in_factor, COLOR_TABLE[color_table_idx][0], COLOR_TABLE[color_table_idx][1], COLOR_TABLE[color_table_idx][2]);

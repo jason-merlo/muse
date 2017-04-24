@@ -24,12 +24,12 @@ void Pulse::tick() {
     intensities[i] = ((float(bins->left[i])+float(bins->right[i]))/2.0f)/BINS_MAX;
 
     for (char i = 0; i < NUM_BARS; i++) {
-        for (char j = 0; j < BAR_HEIGHT; j++) {
+        for (char j = 0; j < BAR_LENGTH; j++) {
             float level = 0;
 
             // Calculate level intensity
             for (char x = 0; x < NUM_BINS; x++) {
-                float distance = distance_x * 1.0f/(abs(pans[x]-(i/NUM_BARS))) + distance_y * 1.0f/(abs((x/NUM_BINS)-(j/BAR_HEIGHT)));
+                float distance = distance_x * 1.0f/(abs(pans[x]-(i/NUM_BARS))) + distance_y * 1.0f/(abs((x/NUM_BINS)-(j/BAR_LENGTH)));
                 level += intensities[x] * distance;
             }
 

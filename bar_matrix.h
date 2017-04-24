@@ -20,6 +20,7 @@
 
 #include "math.h"
 
+// Visualizer files
 #include "bars.h"
 #include "bars_middle.h"
 #include "bass_middle.h"

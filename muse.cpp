@@ -108,7 +108,7 @@ void setup() {
 
     // Create new bar matrix inistance
     #if ENABLE_BARS
-    matrix = new Bar_Matrix(NUM_BARS, STRIP_LENGTH, LED_TYPE, matrix_pins, &beat_detect, &bins);
+    matrix = new Bar_Matrix(NUM_BARS, BAR_LENGTH, LED_TYPE, matrix_pins, &beat_detect, &bins);
     last_display_update = 0;
     #endif
 

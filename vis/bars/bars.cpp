@@ -18,7 +18,7 @@ void Bars::tick() {
     //   bass_level = (log(((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/BINS_MAX)+0.7f) * 5 * 255.0f;
 
     for (char i = 0; i < NUM_BARS; i++) {
-      for (char j = 0; j < BAR_HEIGHT; j++) {
+      for (char j = 0; j < BAR_LENGTH; j++) {
         // get bin
         //int level = (i < NUM_BARS/2) ? bar_levels[i] : bar_levels[7-i];
 
@@ -40,8 +40,8 @@ void Bars::tick() {
 
         level *= FREQ_GAIN;
         // set bar
-        if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (STRIP_LENGTH)) {
-        //if (j < (float)(level)/(float)(BINS_MAX) * (STRIP_LENGTH))
+        if (j < (pow((float)(level)/(float)(BINS_MAX), 2)) * (BAR_LENGTH)) {
+        //if (j < (float)(level)/(float)(BINS_MAX) * (BAR_LENGTH))
 
           float val = level*2*PI/BINS_MAX;
 
