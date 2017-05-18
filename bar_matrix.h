@@ -27,6 +27,7 @@
 #include "bass_slide.h"
 #include "bouncing_lines.h"
 #include "classic.h"
+#include "mesh.h"
 #include "plasma.h"
 #include "pong.h"
 #include "pulse.h"
@@ -67,6 +68,7 @@ class Bar_Matrix {
         BassSlide   * bassSlide;
         BouncingLines * bouncingLines;
         Classic     * classic;
+        Mesh        * mesh;
         Plasma      * plasma;
         Pong        * pong;
         Pulse       * pulse;

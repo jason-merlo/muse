@@ -49,6 +49,7 @@ Bar_Matrix::Bar_Matrix(short num_bars, short bar_len, const char led_type, const
     bassSlide       = new BassSlide     (bars, bins, bd, 0.15, 0.75);
     bouncingLines   = new BouncingLines (bars, bins, bd, 0.00, 0.00);
     classic         = new Classic       (bars, bins, bd, 0.15, 0.90);
+    mesh            = new Mesh          (bars, bins, bd, 0.15, 0.85);
     pulse           = new Pulse         (bars, bins, bd, 0.15, 0.80);
     plasma          = new Plasma        (bars, bins, bd, 0.50, 0.965);
     rainbow         = new Rainbow       (bars, bins, bd, 0.15, 0.80);
@@ -121,6 +122,7 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
         case VISUALIZER_BASS_MIDDLE:    bassMiddle->tick();     break;
         case VISUALIZER_BASS_SLIDE:     bassSlide->tick();      break;
         case VISUALIZER_CLASSIC:        classic->tick();        break;
+        case VISUALIZER_MESH:           mesh->tick();           break;
         case VISUALIZER_PLASMA:         plasma->tick();         break;
         case VISUALIZER_PONG:           pong->tick();           break;
         case VISUALIZER_PULSE:          pulse->tick();          break;

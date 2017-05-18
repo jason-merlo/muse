@@ -53,6 +53,7 @@
 #define VISUALIZER_PONG         7
 #define VISUALIZER_BASS_MIDDLE  8
 #define VISUALIZER_BASS_SLIDE   9
+#define VISUALIZER_MESH         10
 
 #define AMBIENT_LIGHTING        66
 

@@ -69,6 +69,7 @@ void PiServer::tick() {
             case VISUALIZER_BASS_MIDDLE:
             case VISUALIZER_BASS_SLIDE:
             case VISUALIZER_CLASSIC:
+            case VISUALIZER_MESH:
             case VISUALIZER_PLASMA:
             case VISUALIZER_PONG:
             case VISUALIZER_PULSE:
