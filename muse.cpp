@@ -14,10 +14,10 @@
 
 #include "application.h"
 #include "bar_matrix.h"
-#include "MDNS.h"
+//#include "MDNS.h"
 #include "neopixel.h"
-#include "server.h"
-#include "pi_server.h"
+//#include "server.h"
+//#include "pi_server.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
@@ -56,7 +56,9 @@ static struct audio_bins bins;
 
 // Declare matrix pins
 //static const char matrix_pins[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
-static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, A1, A0};
+//static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, A1, A0};
+// Bar 1 is in bar 6 place in 108 Oakland
+static const char matrix_pins[8] = {A1, D5, D4, D3, D2, D6, D7, A0};
 
 #if ENABLE_BARS
 // Declare matrix variables
@@ -331,7 +333,7 @@ void powered_on_tick() {
         #if ENABLE_PI_SERVER
         matrix->tick(&bins, pi_server.visualizer());
         #else
-        matrix->tick(&bins, STATIC_VISUALIZER);
+        matrix->tick(&bins, VISUALIZER_PULSE);
         #endif
         frame_count++;
     }

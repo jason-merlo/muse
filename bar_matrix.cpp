@@ -286,8 +286,14 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
  * Parameters: None
  * ================================================================== */
 void Bar_Matrix::bar_test() {
-    for (int i = 0; i < STRIP_LENGTH; i++)
-    bars[int(millis()/1000)%8]->setPixelColor(i, 64, 64, 64);
+  //for (int i = 0; i < NUM_BARS; i++)
+  //  for (int j = 0; j < STRIP_LENGTH; j++)
+  //    bars[i]->setPixelColor(j, 0, 0, 0);
+
+  for (int i = 0; i < STRIP_LENGTH; i++)
+    //bars[int(millis()/1000)%8]->setPixelColor(i, 64, 64, 64);
+    bars[7]->setPixelColor(i, 64, 64, 64);
+
 }
 
 /* ================================================================== *

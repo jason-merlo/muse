@@ -7,7 +7,7 @@
  *
  *  Description: Class to run the http server
  * ================================================================== */
-
+#if ENABLE_WEB_SERVER
 #include "server.h"
 
 #include "muse.h"
@@ -176,3 +176,4 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
             server.printP(control_panel);
         }
 }
+#endif
