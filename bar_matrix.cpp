@@ -440,13 +440,14 @@ void Bar_Matrix::pixel_test() {
              break;
          }
 
-         tmp_color = (((bins->left[LEFT_63]+bins->right[LEFT_63])/2.0f)/
-                       2703.36f);
+         tmp_color = (((bins->left[LEFT_63]+bins->right[LEFT_63]+
+                        bins->left[LEFT_160]+bins->right[LEFT_160])/4.0f)/
+                        2703.36f);
 
          tmp_color = (tmp_color > 1.0f) ? 1.0f : tmp_color;
 
          if (rgb_enabled && i == 0 && j == 0) {
-            pix_color[0] = bars[0]->getPixelColor(35);
+            pix_color[0] = bars[0]->getPixelColor(15);
 
             uint8_t pix_r = pix_color[0] >> 16;
             uint8_t pix_g = pix_color[0] >> 8;
