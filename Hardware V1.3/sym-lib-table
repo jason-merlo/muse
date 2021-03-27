@@ -1,0 +1,7 @@
+(sym_lib_table
+  (lib (name muse-rescue)(type Legacy)(uri ${KIPRJMOD}/muse-rescue.lib)(options "")(descr ""))
+  (lib (name musev3)(type Legacy)(uri ${KIPRJMOD}/lib/musev3.lib)(options "")(descr ""))
+  (lib (name muse_mini)(type Legacy)(uri ${KIPRJMOD}/lib/muse_mini.lib)(options "")(descr ""))
+  (lib (name musev2)(type Legacy)(uri ${KIPRJMOD}/lib/musev2.lib)(options "")(descr ""))
+  (lib (name particle)(type Legacy)(uri ${KIPRJMOD}/lib/particle_lib/particle.lib)(options "")(descr ""))
+)

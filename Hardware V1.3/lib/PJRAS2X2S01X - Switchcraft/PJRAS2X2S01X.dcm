@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PJRAS2X2S01X
+D RCA Phono Connectors 4P R/A PHONO JACK
+K
+F http://www.switchcraft.com/Drawings/pjras2x2s__x_series_cd.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,1938 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 1
+Title "muse"
+Date "2015-11-30"
+Rev "2.0"
+Comp "Jason Merlo"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L muse-rescue:MSGEQ7 U2
+U 1 1 55FEEE5E
+P 2200 9750
+F 0 "U2" H 2700 9400 60  0000 C CNN
+F 1 "MSGEQ7" H 1850 10400 60  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 1900 9650 60  0001 C CNN
+F 3 "" H 1900 9650 60  0000 C CNN
+	1    2200 9750
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:C-RESCUE-muse C6
+U 1 1 55FEEF59
+P 2450 10500
+F 0 "C6" H 2475 10600 50  0000 L CNN
+F 1 "0.1uF" H 2475 10400 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 2488 10350 30  0001 C CNN
+F 3 "" H 2450 10500 60  0000 C CNN
+	1    2450 10500
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR014
+U 1 1 55FEEFC4
+P 2450 10750
+F 0 "#PWR014" H 2450 10500 50  0001 C CNN
+F 1 "GND" H 2450 10600 50  0000 C CNN
+F 2 "" H 2450 10750 60  0000 C CNN
+F 3 "" H 2450 10750 60  0000 C CNN
+	1    2450 10750
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR08
+U 1 1 55FEF032
+P 2250 10750
+F 0 "#PWR08" H 2250 10500 50  0001 C CNN
+F 1 "GND" H 2250 10600 50  0000 C CNN
+F 2 "" H 2250 10750 60  0000 C CNN
+F 3 "" H 2250 10750 60  0000 C CNN
+	1    2250 10750
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:C-RESCUE-muse C4
+U 1 1 55FEF1B3
+P 1650 10050
+F 0 "C4" H 1675 10150 50  0000 L CNN
+F 1 "33pF" H 1675 9950 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 1688 9900 30  0001 C CNN
+F 3 "" H 1650 10050 60  0000 C CNN
+	1    1650 10050
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR05
+U 1 1 55FEF250
+P 1650 10350
+F 0 "#PWR05" H 1650 10100 50  0001 C CNN
+F 1 "GND" H 1650 10200 50  0000 C CNN
+F 2 "" H 1650 10350 60  0000 C CNN
+F 3 "" H 1650 10350 60  0000 C CNN
+	1    1650 10350
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:R-RESCUE-muse R4
+U 1 1 55FEF28C
+P 1350 9750
+F 0 "R4" V 1430 9750 50  0000 C CNN
+F 1 "200k" V 1350 9750 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 1280 9750 30  0001 C CNN
+F 3 "" H 1350 9750 30  0000 C CNN
+	1    1350 9750
+	0    1    1    0   
+$EndComp
+Text Label 1250 9550 0    60   ~ 0
+EQ7_STROBE
+Text Label 1250 9450 0    60   ~ 0
+EQ7_RST
+$Comp
+L muse-rescue:C-RESCUE-muse C5
+U 1 1 55FEFBBF
+P 2450 8000
+F 0 "C5" H 2475 8100 50  0000 L CNN
+F 1 "0.1uF" H 2475 7900 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 2488 7850 30  0001 C CNN
+F 3 "" H 2450 8000 60  0000 C CNN
+	1    2450 8000
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR013
+U 1 1 55FEFBC6
+P 2450 8250
+F 0 "#PWR013" H 2450 8000 50  0001 C CNN
+F 1 "GND" H 2450 8100 50  0000 C CNN
+F 2 "" H 2450 8250 60  0000 C CNN
+F 3 "" H 2450 8250 60  0000 C CNN
+	1    2450 8250
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR07
+U 1 1 55FEFBD0
+P 2250 8250
+F 0 "#PWR07" H 2250 8000 50  0001 C CNN
+F 1 "GND" H 2250 8100 50  0000 C CNN
+F 2 "" H 2250 8250 60  0000 C CNN
+F 3 "" H 2250 8250 60  0000 C CNN
+	1    2250 8250
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:C-RESCUE-muse C3
+U 1 1 55FEFBD7
+P 1650 7550
+F 0 "C3" H 1675 7650 50  0000 L CNN
+F 1 "33pF" H 1675 7450 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 1688 7400 30  0001 C CNN
+F 3 "" H 1650 7550 60  0000 C CNN
+	1    1650 7550
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR04
+U 1 1 55FEFBDE
+P 1650 7850
+F 0 "#PWR04" H 1650 7600 50  0001 C CNN
+F 1 "GND" H 1650 7700 50  0000 C CNN
+F 2 "" H 1650 7850 60  0000 C CNN
+F 3 "" H 1650 7850 60  0000 C CNN
+	1    1650 7850
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:R-RESCUE-muse R3
+U 1 1 55FEFBE7
+P 1350 7250
+F 0 "R3" V 1430 7250 50  0000 C CNN
+F 1 "200k" V 1350 7250 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 1280 7250 30  0001 C CNN
+F 3 "" H 1350 7250 30  0000 C CNN
+	1    1350 7250
+	0    1    1    0   
+$EndComp
+Text Label 1250 7050 0    60   ~ 0
+EQ7_STROBE
+Text Label 1250 6950 0    60   ~ 0
+EQ7_RST
+$Comp
+L muse-rescue:C-RESCUE-muse C8
+U 1 1 55FEFD67
+P 2600 8850
+F 0 "C8" H 2625 8950 50  0000 L CNN
+F 1 "0.1uF" H 2625 8750 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 2638 8700 30  0001 C CNN
+F 3 "" H 2600 8850 60  0000 C CNN
+	1    2600 8850
+	0    1    1    0   
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR019
+U 1 1 55FEFE86
+P 2800 9050
+F 0 "#PWR019" H 2800 8800 50  0001 C CNN
+F 1 "GND" H 2800 8900 50  0000 C CNN
+F 2 "" H 2800 9050 60  0000 C CNN
+F 3 "" H 2800 9050 60  0000 C CNN
+	1    2800 9050
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR018
+U 1 1 55FEFF3D
+P 2800 6550
+F 0 "#PWR018" H 2800 6300 50  0001 C CNN
+F 1 "GND" H 2800 6400 50  0000 C CNN
+F 2 "" H 2800 6550 60  0000 C CNN
+F 3 "" H 2800 6550 60  0000 C CNN
+	1    2800 6550
+	1    0    0    -1  
+$EndComp
+Text Label 3450 7100 2    60   ~ 0
+EQ7_OUT_L
+Text Label 3450 9600 2    60   ~ 0
+EQ7_OUT_R
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR025
+U 1 1 55FF0425
+P 5750 3450
+F 0 "#PWR025" H 5750 3200 50  0001 C CNN
+F 1 "GND" H 5750 3300 50  0000 C CNN
+F 2 "" H 5750 3450 60  0000 C CNN
+F 3 "" H 5750 3450 60  0000 C CNN
+	1    5750 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:R-RESCUE-muse R1
+U 1 1 55FF0A1E
+P 1100 6450
+F 0 "R1" V 1180 6450 50  0000 C CNN
+F 1 "22k" V 1100 6450 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 1030 6450 30  0001 C CNN
+F 3 "" H 1100 6450 30  0000 C CNN
+	1    1100 6450
+	-1   0    0    1   
+$EndComp
+$Comp
+L muse-rescue:C-RESCUE-muse C1
+U 1 1 55FF0BF3
+P 1100 6950
+F 0 "C1" H 1125 7050 50  0000 L CNN
+F 1 "0.01uF" H 1125 6850 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 1138 6800 30  0001 C CNN
+F 3 "" H 1100 6950 60  0000 C CNN
+	1    1100 6950
+	-1   0    0    1   
+$EndComp
+Text Label 4600 2750 0    60   ~ 0
+EQ7_STROBE
+Text Label 8650 2100 0    60   ~ 0
+LED_0
+Text Label 8650 2200 0    60   ~ 0
+LED_1
+Text Label 8650 2300 0    60   ~ 0
+LED_2
+Text Label 8650 2400 0    60   ~ 0
+LED_3
+Text Label 8650 2500 0    60   ~ 0
+LED_4
+Text Label 8650 2600 0    60   ~ 0
+LED_5
+Text Label 8650 2700 0    60   ~ 0
+LED_6
+Text Label 8650 2800 0    60   ~ 0
+LED_7
+Text Label 650  6200 0    60   ~ 0
+AUDIO_L
+$Comp
+L muse-rescue:R-RESCUE-muse R2
+U 1 1 55FF5CAB
+P 1100 8950
+F 0 "R2" V 1180 8950 50  0000 C CNN
+F 1 "22k" V 1100 8950 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 1030 8950 30  0001 C CNN
+F 3 "" H 1100 8950 30  0000 C CNN
+	1    1100 8950
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:C-RESCUE-muse C2
+U 1 1 55FF5CB1
+P 1100 9450
+F 0 "C2" H 1125 9550 50  0000 L CNN
+F 1 "0.01uF" H 1125 9350 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 1138 9300 30  0001 C CNN
+F 3 "" H 1100 9450 60  0000 C CNN
+	1    1100 9450
+	-1   0    0    1   
+$EndComp
+Text Label 650  8700 0    60   ~ 0
+AUDIO_R
+Text Notes 600  6000 0    79   ~ 0
+Audio Samplers
+$Comp
+L muse-rescue:C-RESCUE-muse C7
+U 1 1 55FEFDC4
+P 2600 6350
+F 0 "C7" H 2625 6450 50  0000 L CNN
+F 1 "0.1uF" H 2625 6250 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 2638 6200 30  0001 C CNN
+F 3 "" H 2600 6350 60  0000 C CNN
+	1    2600 6350
+	0    1    1    0   
+$EndComp
+Text Label 4600 2550 0    60   ~ 0
+ATX_PWR_ON
+Text Label 4600 2650 0    60   ~ 0
+ATX_PWR_OK
+Wire Wire Line
+	800  9700 800  9750
+Wire Wire Line
+	800  7200 800  7250
+Wire Wire Line
+	2350 10300 2450 10300
+Wire Wire Line
+	2350 10300 2350 10250
+Wire Wire Line
+	2250 10750 2250 10250
+Connection ~ 1650 9750
+Wire Wire Line
+	1850 9550 1250 9550
+Wire Wire Line
+	1850 9450 1250 9450
+Wire Wire Line
+	2350 7800 2450 7800
+Wire Wire Line
+	2350 7800 2350 7750
+Wire Wire Line
+	2250 8250 2250 7750
+Connection ~ 1650 7250
+Wire Wire Line
+	1100 7150 1850 7150
+Wire Wire Line
+	1850 7050 1250 7050
+Wire Wire Line
+	1850 6950 1250 6950
+Wire Wire Line
+	2300 8750 2300 8850
+Wire Wire Line
+	2300 6250 2300 6350
+Wire Wire Line
+	2400 6350 2300 6350
+Connection ~ 2300 6350
+Connection ~ 2300 8850
+Wire Wire Line
+	2800 8850 2800 9050
+Wire Wire Line
+	2800 6550 2800 6350
+Wire Wire Line
+	2800 7100 3450 7100
+Wire Wire Line
+	2800 9600 3450 9600
+Wire Wire Line
+	5700 1650 5700 1550
+Wire Wire Line
+	5650 3300 5650 3350
+Wire Wire Line
+	5650 3350 5750 3350
+Wire Wire Line
+	5750 3350 5750 3450
+Wire Wire Line
+	5800 3350 5800 3300
+Connection ~ 5750 3350
+Wire Wire Line
+	5250 2950 4600 2950
+Wire Wire Line
+	5250 2850 4600 2850
+Wire Wire Line
+	4600 2750 5250 2750
+Wire Wire Line
+	10050 2100 9100 2100
+Wire Wire Line
+	10050 2200 9200 2200
+Wire Wire Line
+	10050 2300 9300 2300
+Wire Wire Line
+	10050 2500 9500 2500
+Wire Wire Line
+	10050 2600 9600 2600
+Wire Wire Line
+	10050 2700 9700 2700
+Wire Wire Line
+	10050 2800 9800 2800
+Wire Wire Line
+	1100 6200 650  6200
+Wire Wire Line
+	1100 8700 650  8700
+Wire Wire Line
+	1600 7250 1650 7250
+Wire Wire Line
+	1650 7350 1650 7250
+Wire Wire Line
+	1650 7850 1650 7750
+Wire Wire Line
+	800  7250 1100 7250
+Wire Wire Line
+	1100 6750 1100 6700
+Wire Wire Line
+	2450 8200 2450 8250
+Wire Wire Line
+	2450 10750 2450 10700
+Wire Wire Line
+	1600 9750 1650 9750
+Wire Wire Line
+	1650 9850 1650 9750
+Wire Wire Line
+	1650 10350 1650 10250
+Wire Wire Line
+	800  9750 1100 9750
+Wire Wire Line
+	1100 9250 1100 9200
+Wire Wire Line
+	2300 8850 2400 8850
+Wire Wire Line
+	5250 2650 4600 2650
+Wire Wire Line
+	5250 2550 4600 2550
+Wire Wire Line
+	1100 9650 1850 9650
+Wire Wire Line
+	5900 1550 5900 1650
+Wire Wire Line
+	1650 9750 1850 9750
+Wire Wire Line
+	1650 7250 1850 7250
+Wire Wire Line
+	2300 6350 2300 6450
+Wire Wire Line
+	2300 8850 2300 8950
+Wire Wire Line
+	5750 3350 5800 3350
+$Comp
+L Connector:ATX-24 J1
+U 1 1 6045E419
+P 1750 1700
+F 0 "J1" H 2100 1150 50  0000 C CNN
+F 1 "ATX-24" H 1500 2250 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-24A1_2x12_P4.20mm_Horizontal" H 1750 1600 50  0001 C CNN
+F 3 "https://www.intel.com/content/dam/www/public/us/en/documents/guides/power-supply-design-guide-june.pdf#page=33" H 4150 1150 50  0001 C CNN
+	1    1750 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L particle:Photon U3
+U 1 1 6047B91E
+P 5700 2750
+F 0 "U3" H 6050 2350 60  0000 C CNN
+F 1 "Photon" H 5400 3700 60  0000 C CNN
+F 2 "particle:photon_tht" H 6250 3800 60  0001 C CNN
+F 3 "" H 6250 3800 60  0000 C CNN
+	1    5700 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 2100 6850 2100
+Text Label 6850 2100 2    60   ~ 0
+~MCU_RST
+Text Label 8650 2900 0    60   ~ 0
+LED_8
+Text Label 8650 3000 0    60   ~ 0
+LED_9
+Wire Wire Line
+	8650 2900 9900 2900
+Wire Wire Line
+	10050 3000 10000 3000
+Wire Wire Line
+	5250 2450 4600 2450
+Text Label 4600 2450 0    60   ~ 0
+EQ7_RST
+Wire Wire Line
+	5250 2350 4600 2350
+Text Label 4600 2350 0    60   ~ 0
+DAC
+Wire Wire Line
+	5250 2250 4600 2250
+Text Label 4600 2250 0    60   ~ 0
+WKP
+Text Label 4600 2950 0    60   ~ 0
+EQ7_OUT_L
+Text Label 4600 2850 0    60   ~ 0
+EQ7_OUT_R
+Wire Notes Line
+	3950 2850 500  2850
+Wire Notes Line
+	3950 500  3950 11200
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR06
+U 1 1 605CEE4A
+P 1750 2450
+F 0 "#PWR06" H 1750 2450 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 1750 2380 30  0001 C CNN
+F 2 "" H 1750 2450 60  0000 C CNN
+F 3 "" H 1750 2450 60  0000 C CNN
+	1    1750 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1750 2450 1750 2300
+Wire Wire Line
+	2250 1300 3400 1300
+Text Label 3400 1300 2    60   ~ 0
+ATX_PWR_OK
+Wire Wire Line
+	1250 1300 600  1300
+Text Label 600  1300 0    60   ~ 0
+ATX_PWR_ON
+Wire Wire Line
+	2250 1500 2300 1500
+Wire Wire Line
+	2300 1500 2300 950 
+$Comp
+L muse-rescue:+12V #PWR09
+U 1 1 605E2EA3
+P 2300 950
+F 0 "#PWR09" H 2300 900 20  0001 C CNN
+F 1 "+12V" H 2300 1088 30  0000 C CNN
+F 2 "" H 2300 950 60  0000 C CNN
+F 3 "" H 2300 950 60  0000 C CNN
+	1    2300 950 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2250 1600 2450 1600
+Wire Wire Line
+	2450 1600 2450 950 
+$Comp
+L muse-rescue:+5V #PWR012
+U 1 1 605E7471
+P 2450 950
+F 0 "#PWR012" H 2450 1040 20  0001 C CNN
+F 1 "+5V" H 2446 1078 30  0000 C CNN
+F 2 "" H 2450 950 60  0000 C CNN
+F 3 "" H 2450 950 60  0000 C CNN
+	1    2450 950 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2250 1700 2600 1700
+Wire Wire Line
+	2600 1700 2600 950 
+$Comp
+L musev3:3.5mm_conn CON2
+U 2 1 606A3678
+P 3150 3800
+F 0 "CON2" H 3150 3500 60  0000 R CNN
+F 1 "3.5mm_conn" H 3250 3600 60  0000 R CNN
+F 2 "STX-4235-3_3-N:STX423535N" H 3150 3800 60  0001 C CNN
+F 3 "" H 3150 3800 60  0000 C CNN
+	2    3150 3800
+	-1   0    0    1   
+$EndComp
+$Comp
+L musev3:3.5mm_conn CON2
+U 1 1 6064C6CD
+P 1000 3800
+F 0 "CON2" H 950 3500 60  0000 R CNN
+F 1 "3.5mm_conn" H 1100 3600 60  0000 R CNN
+F 2 "STX-4235-3_3-N:STX423535N" H 1000 3800 60  0001 C CNN
+F 3 "" H 1000 3800 60  0000 C CNN
+	1    1000 3800
+	1    0    0    1   
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR017
+U 1 1 606E5FC7
+P 2750 5150
+F 0 "#PWR017" H 2750 4900 50  0001 C CNN
+F 1 "GND" H 2750 5000 50  0000 C CNN
+F 2 "" H 2750 5150 60  0000 C CNN
+F 3 "" H 2750 5150 60  0000 C CNN
+	1    2750 5150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 5150 2750 4950
+Wire Wire Line
+	2750 4950 2850 4950
+Wire Wire Line
+	2750 4950 2750 4050
+Wire Wire Line
+	2750 4050 2850 4050
+Connection ~ 2750 4950
+Wire Wire Line
+	2850 3700 2700 3700
+Wire Wire Line
+	2850 3950 2650 3950
+Text Label 2200 3700 0    60   ~ 0
+AUDIO_R
+Text Label 2200 3950 0    60   ~ 0
+AUDIO_L
+Wire Wire Line
+	1450 3950 1950 3950
+Connection ~ 1450 3950
+Wire Wire Line
+	1450 4800 1450 3950
+Wire Wire Line
+	1200 4800 1450 4800
+Wire Wire Line
+	1400 3700 1950 3700
+Connection ~ 1400 3700
+Wire Wire Line
+	1400 4550 1400 3700
+Wire Wire Line
+	1200 4550 1400 4550
+Connection ~ 1350 4950
+Wire Wire Line
+	1350 4050 1300 4050
+Wire Wire Line
+	1350 4950 1350 4050
+Wire Wire Line
+	1300 3700 1400 3700
+Wire Wire Line
+	1300 3950 1450 3950
+Wire Wire Line
+	1350 4950 1350 5150
+Wire Wire Line
+	1200 4950 1350 4950
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR03
+U 1 1 606748F6
+P 1350 5150
+F 0 "#PWR03" H 1350 4900 50  0001 C CNN
+F 1 "GND" H 1350 5000 50  0000 C CNN
+F 2 "" H 1350 5150 60  0000 C CNN
+F 3 "" H 1350 5150 60  0000 C CNN
+	1    1350 5150
+	1    0    0    -1  
+$EndComp
+Text Label 1950 3950 2    60   ~ 0
+AUDIO_L
+Text Label 1950 3700 2    60   ~ 0
+AUDIO_R
+Wire Wire Line
+	2700 3700 2700 4550
+Wire Wire Line
+	2700 4550 2850 4550
+Connection ~ 2700 3700
+Wire Wire Line
+	2700 3700 2200 3700
+Wire Wire Line
+	2850 4800 2650 4800
+Wire Wire Line
+	2650 4800 2650 3950
+Connection ~ 2650 3950
+Wire Wire Line
+	2650 3950 2200 3950
+Text Label 4600 2050 0    60   ~ 0
+LED_0
+Text Label 4600 2150 0    60   ~ 0
+LED_1
+Text Label 6850 2250 2    60   ~ 0
+LED_2
+Text Label 6850 2350 2    60   ~ 0
+LED_3
+Text Label 6850 2450 2    60   ~ 0
+LED_4
+Text Label 6850 2550 2    60   ~ 0
+LED_5
+Text Label 6850 2650 2    60   ~ 0
+LED_6
+Text Label 6850 2750 2    60   ~ 0
+LED_7
+Wire Wire Line
+	6250 2250 6850 2250
+Wire Wire Line
+	6250 2350 6850 2350
+Wire Wire Line
+	6250 2450 6850 2450
+Wire Wire Line
+	6250 2550 6850 2550
+Wire Wire Line
+	6250 2650 6850 2650
+Wire Wire Line
+	6250 2750 6850 2750
+Wire Wire Line
+	6250 2850 6850 2850
+Wire Wire Line
+	6250 2950 6850 2950
+Text Label 6850 2850 2    60   ~ 0
+LED_8
+Text Label 6850 2950 2    60   ~ 0
+LED_9
+Wire Wire Line
+	4600 2050 5250 2050
+Wire Wire Line
+	5250 2150 4600 2150
+Wire Wire Line
+	10000 1550 10050 1550
+Wire Wire Line
+	10000 1950 10000 3000
+Connection ~ 10000 3000
+Wire Wire Line
+	10000 3000 8650 3000
+Wire Wire Line
+	9900 1950 9900 2900
+Connection ~ 9900 2900
+Wire Wire Line
+	9900 2900 10050 2900
+Wire Wire Line
+	9800 1950 9800 2800
+Connection ~ 9800 2800
+Wire Wire Line
+	9800 2800 8650 2800
+Wire Wire Line
+	9700 1950 9700 2700
+Connection ~ 9700 2700
+Wire Wire Line
+	9700 2700 8650 2700
+Wire Wire Line
+	9600 1950 9600 2600
+Connection ~ 9600 2600
+Wire Wire Line
+	9600 2600 8650 2600
+Wire Wire Line
+	9500 1950 9500 2500
+Connection ~ 9500 2500
+Wire Wire Line
+	9500 2500 8650 2500
+Wire Wire Line
+	9400 1950 9400 2400
+Wire Wire Line
+	8650 2400 9400 2400
+Connection ~ 9400 2400
+Wire Wire Line
+	9400 2400 10050 2400
+Wire Wire Line
+	9300 1950 9300 2300
+Connection ~ 9300 2300
+Wire Wire Line
+	9300 2300 8650 2300
+Wire Wire Line
+	9200 1950 9200 2200
+Connection ~ 9200 2200
+Wire Wire Line
+	9200 2200 8650 2200
+Wire Wire Line
+	9100 1950 9100 2100
+Connection ~ 9100 2100
+Wire Wire Line
+	9100 2100 8650 2100
+$Comp
+L muse-rescue:+3.3V #PWR030
+U 1 1 6086A630
+P 10000 1000
+F 0 "#PWR030" H 10000 960 30  0001 C CNN
+F 1 "+3.3V" H 10009 1138 30  0000 C CNN
+F 2 "" H 10000 1000 60  0000 C CNN
+F 3 "" H 10000 1000 60  0000 C CNN
+	1    10000 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10000 1000 10000 1550
+NoConn ~ 5800 1650
+NoConn ~ 2250 2100
+$Comp
+L Device:C_Small C9
+U 1 1 608A054C
+P 11050 1750
+F 0 "C9" H 11100 1850 50  0000 L CNN
+F 1 "0.1uF" H 11100 1650 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L4.6mm_W3.0mm_P2.50mm_MKS02_FKP02" H 11050 1750 50  0001 C CNN
+F 3 "~" H 11050 1750 50  0001 C CNN
+	1    11050 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10950 1650 11050 1650
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR033
+U 1 1 608A9876
+P 11050 1900
+F 0 "#PWR033" H 11050 1900 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 11050 1830 30  0001 C CNN
+F 2 "" H 11050 1900 60  0000 C CNN
+F 3 "" H 11050 1900 60  0000 C CNN
+	1    11050 1900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11050 1900 11050 1850
+Wire Wire Line
+	10950 1550 11050 1550
+Wire Wire Line
+	11050 1550 11050 1650
+Connection ~ 11050 1650
+Connection ~ 11050 1550
+$Comp
+L Device:R_Small R7
+U 1 1 608C186F
+P 11050 1200
+F 0 "R7" V 11000 1300 50  0000 L CNN
+F 1 "200k" V 11000 900 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" H 11050 1200 50  0001 C CNN
+F 3 "~" H 11050 1200 50  0001 C CNN
+	1    11050 1200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11050 1300 11050 1550
+$Comp
+L muse-rescue:+5V #PWR032
+U 1 1 608E1874
+P 11050 1000
+F 0 "#PWR032" H 11050 1090 20  0001 C CNN
+F 1 "+5V" H 11046 1128 30  0000 C CNN
+F 2 "" H 11050 1000 60  0000 C CNN
+F 3 "" H 11050 1000 60  0000 C CNN
+	1    11050 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11050 1000 11050 1100
+Wire Wire Line
+	11400 1950 11400 3000
+Wire Wire Line
+	11500 1950 11500 2900
+Wire Wire Line
+	11600 1950 11600 2800
+Wire Wire Line
+	11700 1950 11700 2700
+Wire Wire Line
+	11800 1950 11800 2600
+Wire Wire Line
+	11900 1950 11900 2500
+Wire Wire Line
+	12000 1950 12000 2400
+Wire Wire Line
+	12100 1950 12100 2300
+Wire Wire Line
+	12200 1950 12200 2200
+Wire Wire Line
+	12300 1950 12300 2100
+Wire Wire Line
+	10950 2100 12300 2100
+Wire Wire Line
+	10950 2200 12200 2200
+Wire Wire Line
+	12100 2300 10950 2300
+Wire Wire Line
+	10950 2400 12000 2400
+Wire Wire Line
+	11900 2500 10950 2500
+Wire Wire Line
+	10950 2600 11800 2600
+Wire Wire Line
+	11700 2700 10950 2700
+Wire Wire Line
+	10950 2800 11600 2800
+Wire Wire Line
+	11500 2900 10950 2900
+Wire Wire Line
+	10950 3000 11400 3000
+Text Label 15050 2100 2    60   ~ 0
+LED_0_5V
+Text Label 15050 2200 2    60   ~ 0
+LED_1_5V
+Text Label 15050 2300 2    60   ~ 0
+LED_2_5V
+Text Label 15050 2400 2    60   ~ 0
+LED_3_5V
+Text Label 15050 2500 2    60   ~ 0
+LED_4_5V
+Text Label 15050 2600 2    60   ~ 0
+LED_5_5V
+Text Label 15050 2700 2    60   ~ 0
+LED_6_5V
+Text Label 15050 2800 2    60   ~ 0
+LED_7_5V
+Text Label 15050 2900 2    60   ~ 0
+LED_8_5V
+Text Label 15050 3000 2    60   ~ 0
+LED_9_5V
+Wire Wire Line
+	10500 3450 10500 3300
+Text Notes 8450 800  0    79   ~ 0
+LED Level Shifter
+Wire Notes Line
+	2100 2850 2100 5800
+Text Notes 600  750  0    79   ~ 0
+ATX Power Supply Input
+Text Notes 2250 3050 0    79   ~ 0
+Audio Out
+Text Notes 600  3050 0    79   ~ 0
+Audio In
+$Comp
+L Device:R_Network10 RN1
+U 1 1 60A7D756
+P 9500 1750
+F 0 "RN1" H 10150 1850 50  0000 R CNN
+F 1 "300" H 10150 1650 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP11" V 10075 1750 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 9500 1750 50  0001 C CNN
+	1    9500 1750
+	-1   0    0    -1  
+$EndComp
+Connection ~ 10000 1550
+$Comp
+L Device:R_Network10 RN2
+U 1 1 60AE02B2
+P 11900 1750
+F 0 "RN2" H 12550 1850 50  0000 R CNN
+F 1 "470" H 12550 1650 50  0000 R CNN
+F 2 "Resistor_THT:R_Array_SIP11" V 12475 1750 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 11900 1750 50  0001 C CNN
+	1    11900 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11050 1550 11400 1550
+$Comp
+L Device:R_Pack05_SIP RN3
+U 1 1 60AED563
+P 13350 1750
+F 0 "RN3" H 14200 1900 50  0000 C CNN
+F 1 "500" H 14250 1650 50  0000 C CNN
+F 2 "Resistor_THT:R_Array_SIP10" V 14225 1750 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 13350 1750 50  0001 C CNN
+	1    13350 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	12750 2100 12750 1950
+Wire Wire Line
+	12850 1950 12850 2100
+Wire Wire Line
+	12850 2100 15050 2100
+Wire Wire Line
+	13050 2200 13050 1950
+Wire Wire Line
+	13150 1950 13150 2200
+Wire Wire Line
+	13150 2200 15050 2200
+Wire Wire Line
+	13350 2300 13350 1950
+Wire Wire Line
+	13450 1950 13450 2300
+Wire Wire Line
+	13450 2300 15050 2300
+Wire Wire Line
+	13650 2400 13650 1950
+Wire Wire Line
+	13950 2500 13950 1950
+Wire Wire Line
+	14050 1950 14050 2500
+Wire Wire Line
+	14050 2500 15050 2500
+Wire Wire Line
+	13750 2400 13750 1950
+Wire Wire Line
+	13750 2400 15050 2400
+$Comp
+L Device:R_Pack05_SIP RN4
+U 1 1 60B713D0
+P 13350 3350
+F 0 "RN4" H 14200 3500 50  0000 C CNN
+F 1 "500" H 14250 3250 50  0000 C CNN
+F 2 "Resistor_THT:R_Array_SIP10" V 14225 3350 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 13350 3350 50  0001 C CNN
+	1    13350 3350
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	12750 3000 12750 3150
+Wire Wire Line
+	12850 3150 12850 3000
+Wire Wire Line
+	12850 3000 15050 3000
+Wire Wire Line
+	13050 2900 13050 3150
+Wire Wire Line
+	13350 2800 13350 3150
+Wire Wire Line
+	13650 3150 13650 2700
+Wire Wire Line
+	13950 2600 13950 3150
+Wire Wire Line
+	13150 3150 13150 2900
+Wire Wire Line
+	13150 2900 15050 2900
+Wire Wire Line
+	13450 3150 13450 2800
+Wire Wire Line
+	13450 2800 15050 2800
+Wire Wire Line
+	13750 3150 13750 2700
+Wire Wire Line
+	13750 2700 15050 2700
+Wire Wire Line
+	14050 3150 14050 2600
+Wire Wire Line
+	14050 2600 15050 2600
+Connection ~ 12300 2100
+Connection ~ 12200 2200
+Connection ~ 12100 2300
+Connection ~ 12000 2400
+Connection ~ 11900 2500
+Connection ~ 11800 2600
+Connection ~ 11700 2700
+Connection ~ 11600 2800
+Connection ~ 11500 2900
+Connection ~ 11400 3000
+Wire Wire Line
+	12300 2100 12750 2100
+Wire Wire Line
+	12200 2200 13050 2200
+Wire Wire Line
+	12100 2300 13350 2300
+Wire Wire Line
+	12000 2400 13650 2400
+Wire Wire Line
+	11900 2500 13950 2500
+Wire Wire Line
+	11400 3000 12750 3000
+Wire Wire Line
+	11500 2900 13050 2900
+Wire Wire Line
+	11600 2800 13350 2800
+Wire Wire Line
+	11700 2700 13650 2700
+Wire Wire Line
+	11800 2600 13950 2600
+Text Notes 4150 800  0    79   ~ 0
+Microcontroller
+Wire Notes Line
+	7600 500  7600 3850
+Wire Notes Line
+	3950 3850 16050 3850
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR031
+U 1 1 6049738F
+P 10500 3450
+F 0 "#PWR031" H 10500 3200 50  0001 C CNN
+F 1 "GND" H 10500 3300 50  0000 C CNN
+F 2 "" H 10500 3450 60  0000 C CNN
+F 3 "" H 10500 3450 60  0000 C CNN
+	1    10500 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Fuse F1
+U 1 1 604B366B
+P 4350 6950
+F 0 "F1" V 4153 6950 50  0000 C CNN
+F 1 "LED_PWR_12V_B0" V 4244 6950 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Blade_Mini_Keystone_3568" V 4280 6950 50  0001 C CNN
+F 3 "~" H 4350 6950 50  0001 C CNN
+	1    4350 6950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J3
+U 1 1 6055C21F
+P 9050 8200
+F 0 "J3" H 9100 8000 50  0000 C CNN
+F 1 "LED_0" H 9100 8326 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 9050 8200 50  0001 C CNN
+F 3 "~" H 9050 8200 50  0001 C CNN
+	1    9050 8200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 10500 9400 10400
+Wire Wire Line
+	9400 8300 9350 8300
+Wire Wire Line
+	9400 8300 9400 8200
+Wire Wire Line
+	9400 8200 9350 8200
+Connection ~ 9400 8300
+Text Label 6950 7550 0    60   ~ 0
+LED_PWR_B0
+Wire Wire Line
+	8850 8300 7800 8300
+Text Label 7800 8300 0    60   ~ 0
+LED_0_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J4
+U 1 1 6055C234
+P 9050 8750
+F 0 "J4" H 9100 8550 50  0000 C CNN
+F 1 "LED_1" H 9100 8876 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 9050 8750 50  0001 C CNN
+F 3 "~" H 9050 8750 50  0001 C CNN
+	1    9050 8750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 8850 9350 8850
+Wire Wire Line
+	9400 8850 9400 8750
+Wire Wire Line
+	9400 8750 9350 8750
+Connection ~ 9400 8850
+Wire Wire Line
+	8850 8850 7800 8850
+Text Label 7800 8850 0    60   ~ 0
+LED_1_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J5
+U 1 1 6055C249
+P 9050 9300
+F 0 "J5" H 9100 9100 50  0000 C CNN
+F 1 "LED_2" H 9100 9426 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 9050 9300 50  0001 C CNN
+F 3 "~" H 9050 9300 50  0001 C CNN
+	1    9050 9300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 9400 9350 9400
+Wire Wire Line
+	9400 9400 9400 9300
+Wire Wire Line
+	9400 9300 9350 9300
+Connection ~ 9400 9400
+Wire Wire Line
+	8850 9400 7800 9400
+Text Label 7800 9400 0    60   ~ 0
+LED_2_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J6
+U 1 1 6055C25E
+P 9050 9850
+F 0 "J6" H 9100 9650 50  0000 C CNN
+F 1 "LED_3" H 9100 9976 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 9050 9850 50  0001 C CNN
+F 3 "~" H 9050 9850 50  0001 C CNN
+	1    9050 9850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 9950 9350 9950
+Wire Wire Line
+	9400 9950 9400 9850
+Wire Wire Line
+	9400 9850 9350 9850
+Connection ~ 9400 9950
+Wire Wire Line
+	8850 9950 7800 9950
+Text Label 7800 9950 0    60   ~ 0
+LED_3_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J7
+U 1 1 6055C273
+P 9050 10400
+F 0 "J7" H 9100 10200 50  0000 C CNN
+F 1 "LED_4" H 9100 10526 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 9050 10400 50  0001 C CNN
+F 3 "~" H 9050 10400 50  0001 C CNN
+	1    9050 10400
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR029
+U 1 1 6055C279
+P 9400 10650
+F 0 "#PWR029" H 9400 10650 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 9400 10580 30  0001 C CNN
+F 2 "" H 9400 10650 60  0000 C CNN
+F 3 "" H 9400 10650 60  0000 C CNN
+	1    9400 10650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 10650 9400 10500
+Wire Wire Line
+	9400 10500 9350 10500
+Wire Wire Line
+	9400 10400 9350 10400
+Connection ~ 9400 10500
+Wire Wire Line
+	8850 10500 7800 10500
+Text Label 7800 10500 0    60   ~ 0
+LED_4_5V
+Wire Wire Line
+	8750 8750 8850 8750
+Wire Wire Line
+	8750 8200 8850 8200
+Wire Wire Line
+	8750 8750 8750 9300
+Wire Wire Line
+	8750 9300 8850 9300
+Connection ~ 8750 8750
+Wire Wire Line
+	8750 9300 8750 9850
+Wire Wire Line
+	8750 9850 8850 9850
+Connection ~ 8750 9300
+Wire Wire Line
+	8750 9850 8750 10400
+Wire Wire Line
+	8750 10400 8850 10400
+Connection ~ 8750 9850
+Wire Wire Line
+	8750 8200 8750 8750
+Connection ~ 9400 8750
+Wire Wire Line
+	9400 8750 9400 8300
+Connection ~ 9400 9300
+Connection ~ 9400 9850
+Connection ~ 9400 10400
+Wire Wire Line
+	9400 8850 9400 9300
+Wire Wire Line
+	9400 9400 9400 9850
+Wire Wire Line
+	9400 9950 9400 10400
+$Comp
+L Device:Fuse F2
+U 1 1 60692F95
+P 4750 6950
+F 0 "F2" V 4553 6950 50  0000 C CNN
+F 1 "LED_PWR_12V_B1" V 4644 6950 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Blade_Mini_Keystone_3568" V 4680 6950 50  0001 C CNN
+F 3 "~" H 4750 6950 50  0001 C CNN
+	1    4750 6950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J8
+U 1 1 60692F9B
+P 11050 8200
+F 0 "J8" H 11100 8000 50  0000 C CNN
+F 1 "LED_5" H 11100 8326 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 11050 8200 50  0001 C CNN
+F 3 "~" H 11050 8200 50  0001 C CNN
+	1    11050 8200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 10500 11400 10400
+Wire Wire Line
+	11400 8300 11350 8300
+Wire Wire Line
+	11400 8300 11400 8200
+Wire Wire Line
+	11400 8200 11350 8200
+Connection ~ 11400 8300
+Wire Wire Line
+	10850 8300 9800 8300
+Text Label 9800 8300 0    60   ~ 0
+LED_5_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J9
+U 1 1 60692FA9
+P 11050 8750
+F 0 "J9" H 11100 8550 50  0000 C CNN
+F 1 "LED_6" H 11100 8876 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 11050 8750 50  0001 C CNN
+F 3 "~" H 11050 8750 50  0001 C CNN
+	1    11050 8750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 8850 11350 8850
+Wire Wire Line
+	11400 8850 11400 8750
+Wire Wire Line
+	11400 8750 11350 8750
+Connection ~ 11400 8850
+Wire Wire Line
+	10850 8850 9800 8850
+Text Label 9800 8850 0    60   ~ 0
+LED_6_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J10
+U 1 1 60692FB5
+P 11050 9300
+F 0 "J10" H 11100 9100 50  0000 C CNN
+F 1 "LED_7" H 11100 9426 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 11050 9300 50  0001 C CNN
+F 3 "~" H 11050 9300 50  0001 C CNN
+	1    11050 9300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 9400 11350 9400
+Wire Wire Line
+	11400 9400 11400 9300
+Wire Wire Line
+	11400 9300 11350 9300
+Connection ~ 11400 9400
+Wire Wire Line
+	10850 9400 9800 9400
+Text Label 9800 9400 0    60   ~ 0
+LED_7_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J11
+U 1 1 60692FC1
+P 11050 9850
+F 0 "J11" H 11100 9650 50  0000 C CNN
+F 1 "LED_8" H 11100 9976 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 11050 9850 50  0001 C CNN
+F 3 "~" H 11050 9850 50  0001 C CNN
+	1    11050 9850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 9950 11350 9950
+Wire Wire Line
+	11400 9950 11400 9850
+Wire Wire Line
+	11400 9850 11350 9850
+Connection ~ 11400 9950
+Wire Wire Line
+	10850 9950 9800 9950
+Text Label 9800 9950 0    60   ~ 0
+LED_8_5V
+$Comp
+L Connector_Generic:Conn_02x02_Top_Bottom J12
+U 1 1 60692FCD
+P 11050 10400
+F 0 "J12" H 11100 10200 50  0000 C CNN
+F 1 "LED_9" H 11100 10526 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-04A1_2x02_P4.20mm_Horizontal" H 11050 10400 50  0001 C CNN
+F 3 "~" H 11050 10400 50  0001 C CNN
+	1    11050 10400
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR034
+U 1 1 60692FD3
+P 11400 10650
+F 0 "#PWR034" H 11400 10650 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 11400 10580 30  0001 C CNN
+F 2 "" H 11400 10650 60  0000 C CNN
+F 3 "" H 11400 10650 60  0000 C CNN
+	1    11400 10650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 10650 11400 10500
+Wire Wire Line
+	11400 10500 11350 10500
+Wire Wire Line
+	11400 10400 11350 10400
+Connection ~ 11400 10500
+Wire Wire Line
+	10850 10500 9800 10500
+Text Label 9800 10500 0    60   ~ 0
+LED_9_5V
+Wire Wire Line
+	10750 8750 10850 8750
+Wire Wire Line
+	10750 8200 10850 8200
+Wire Wire Line
+	10750 8750 10750 9300
+Wire Wire Line
+	10750 9300 10850 9300
+Connection ~ 10750 8750
+Wire Wire Line
+	10750 9300 10750 9850
+Wire Wire Line
+	10750 9850 10850 9850
+Connection ~ 10750 9300
+Wire Wire Line
+	10750 9850 10750 10400
+Wire Wire Line
+	10750 10400 10850 10400
+Connection ~ 10750 9850
+Wire Wire Line
+	10750 8200 10750 8750
+Connection ~ 11400 8750
+Wire Wire Line
+	11400 8750 11400 8300
+Connection ~ 11400 9300
+Connection ~ 11400 9850
+Connection ~ 11400 10400
+Wire Wire Line
+	11400 8850 11400 9300
+Wire Wire Line
+	11400 9400 11400 9850
+Wire Wire Line
+	11400 9950 11400 10400
+Text Label 7400 1900 2    60   ~ 0
+LED_3V3
+Entry Wire Line
+	6850 2100 6950 2200
+Entry Wire Line
+	6850 2250 6950 2350
+Entry Wire Line
+	6850 2350 6950 2450
+Entry Wire Line
+	6850 2450 6950 2550
+Entry Wire Line
+	6850 2550 6950 2650
+Entry Wire Line
+	6850 2650 6950 2750
+Entry Wire Line
+	6850 2750 6950 2850
+Entry Wire Line
+	6850 2850 6950 2950
+Entry Wire Line
+	6850 2950 6950 3050
+Entry Wire Line
+	8550 2000 8650 2100
+Entry Wire Line
+	8550 2100 8650 2200
+Entry Wire Line
+	8550 2200 8650 2300
+Entry Wire Line
+	8550 2300 8650 2400
+Entry Wire Line
+	8550 2400 8650 2500
+Entry Wire Line
+	8550 2500 8650 2600
+Entry Wire Line
+	8550 2600 8650 2700
+Entry Wire Line
+	8550 2700 8650 2800
+Entry Wire Line
+	8550 2800 8650 2900
+Entry Wire Line
+	8550 2900 8650 3000
+Wire Bus Line
+	8550 1900 8100 1900
+Text Label 8100 1900 0    60   ~ 0
+LED_3V3
+Wire Bus Line
+	6950 1900 7400 1900
+Wire Bus Line
+	15150 1900 15650 1900
+Text Label 15650 1900 2    60   ~ 0
+LED_5V0
+Entry Wire Line
+	15050 2100 15150 2200
+Entry Wire Line
+	15050 2200 15150 2300
+Entry Wire Line
+	15050 2300 15150 2400
+Entry Wire Line
+	15050 2400 15150 2500
+Entry Wire Line
+	15050 2500 15150 2600
+Entry Wire Line
+	15050 2600 15150 2700
+Entry Wire Line
+	15050 2700 15150 2800
+Entry Wire Line
+	15050 2800 15150 2900
+Entry Wire Line
+	15050 2900 15150 3000
+Entry Wire Line
+	15050 3000 15150 3100
+Wire Bus Line
+	6950 7800 7700 7800
+Wire Bus Line
+	7700 7800 9700 7800
+Connection ~ 7700 7800
+Text Label 6950 7800 0    60   ~ 0
+LED_5V0
+Entry Wire Line
+	7700 8200 7800 8300
+Entry Wire Line
+	7700 8750 7800 8850
+Entry Wire Line
+	7700 9300 7800 9400
+Entry Wire Line
+	7700 9850 7800 9950
+Entry Wire Line
+	7700 10400 7800 10500
+Entry Wire Line
+	9700 8200 9800 8300
+Entry Wire Line
+	9700 8750 9800 8850
+Entry Wire Line
+	9700 9300 9800 9400
+Entry Wire Line
+	9700 9850 9800 9950
+Entry Wire Line
+	9700 10400 9800 10500
+Text Notes 6850 6000 0    79   ~ 0
+LED Strip Connectors
+Wire Notes Line
+	11800 5800 11800 9950
+Wire Notes Line
+	500  5800 11800 5800
+Text Notes 4300 4150 0    79   ~ 0
+Unused Pin Breakout
+Wire Wire Line
+	5200 4750 4300 4750
+Wire Wire Line
+	4300 4850 5200 4850
+Text Label 4300 4750 0    60   ~ 0
+WKP
+Text Label 4300 4850 0    60   ~ 0
+DAC
+Text Notes 4500 7050 1    60   ~ 0
+20A
+Text Notes 4900 7050 1    60   ~ 0
+20A
+Text Notes 4100 6000 0    79   ~ 0
+LED Voltage Select
+Wire Wire Line
+	6950 7550 8750 7550
+$Comp
+L Device:Fuse F3
+U 1 1 604CC63A
+P 5300 6950
+F 0 "F3" V 5103 6950 50  0000 C CNN
+F 1 "LED_PWR_5V_B0" V 5194 6950 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Blade_Mini_Keystone_3568" V 5230 6950 50  0001 C CNN
+F 3 "~" H 5300 6950 50  0001 C CNN
+	1    5300 6950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Fuse F4
+U 1 1 604CC642
+P 5700 6950
+F 0 "F4" V 5503 6950 50  0000 C CNN
+F 1 "LED_PWR_5V_B1" V 5594 6950 50  0000 C CNN
+F 2 "Fuse:Fuseholder_Blade_Mini_Keystone_3568" V 5630 6950 50  0001 C CNN
+F 3 "~" H 5700 6950 50  0001 C CNN
+	1    5700 6950
+	1    0    0    -1  
+$EndComp
+Text Notes 5450 7050 1    60   ~ 0
+20A
+Text Notes 5850 7050 1    60   ~ 0
+20A
+$Comp
+L muse-rescue:+12V #PWR021
+U 1 1 604E1CD1
+P 4550 6450
+F 0 "#PWR021" H 4550 6400 20  0001 C CNN
+F 1 "+12V" H 4550 6588 30  0000 C CNN
+F 2 "" H 4550 6450 60  0000 C CNN
+F 3 "" H 4550 6450 60  0000 C CNN
+	1    4550 6450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 6550 4550 6550
+Wire Wire Line
+	4350 6550 4350 6800
+Wire Wire Line
+	4750 6550 4750 6800
+Wire Wire Line
+	4550 6450 4550 6550
+Connection ~ 4550 6550
+Wire Wire Line
+	4550 6550 4750 6550
+Text Label 6350 7350 2    60   ~ 0
+LED_PWR_B1
+$Comp
+L muse-rescue:+5V #PWR023
+U 1 1 60520EC3
+P 5500 6450
+F 0 "#PWR023" H 5500 6540 20  0001 C CNN
+F 1 "+5V" H 5496 6578 30  0000 C CNN
+F 2 "" H 5500 6450 60  0000 C CNN
+F 3 "" H 5500 6450 60  0000 C CNN
+	1    5500 6450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 6550 5500 6550
+Wire Wire Line
+	5500 6550 5500 6450
+Wire Wire Line
+	5300 6550 5300 6800
+Wire Wire Line
+	5700 6550 5500 6550
+Wire Wire Line
+	5700 6550 5700 6800
+Connection ~ 5500 6550
+Wire Wire Line
+	8750 8200 8750 7550
+Connection ~ 8750 8200
+Connection ~ 10750 8200
+Wire Notes Line
+	6600 3850 6600 11200
+Text Notes 4100 8100 0    79   ~ 0
+Indicators
+Wire Notes Line
+	3950 7700 6600 7700
+$Comp
+L Device:LED_ALT D1
+U 1 1 60648F01
+P 5050 8600
+F 0 "D1" H 5043 8345 50  0000 C CNN
+F 1 "PWR_OK" H 5043 8436 50  0000 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 5050 8600 50  0001 C CNN
+F 3 "~" H 5050 8600 50  0001 C CNN
+	1    5050 8600
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4200 8600 4900 8600
+Text Label 4200 8600 0    60   ~ 0
+ATX_PWR_OK
+$Comp
+L Device:R_Small R5
+U 1 1 606651D0
+P 5600 8600
+F 0 "R5" V 5796 8600 50  0000 C CNN
+F 1 "150" V 5705 8600 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" H 5600 8600 50  0001 C CNN
+F 3 "~" H 5600 8600 50  0001 C CNN
+	1    5600 8600
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5200 8600 5500 8600
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR027
+U 1 1 6067D11D
+P 6000 8700
+F 0 "#PWR027" H 6000 8700 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 6000 8630 30  0001 C CNN
+F 2 "" H 6000 8700 60  0000 C CNN
+F 3 "" H 6000 8700 60  0000 C CNN
+	1    6000 8700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 8700 6000 8600
+Wire Wire Line
+	6000 8600 5700 8600
+$Comp
+L Device:LED_ALT D2
+U 1 1 606959CD
+P 5050 9150
+F 0 "D2" H 5043 8895 50  0000 C CNN
+F 1 "+5VSB" H 5043 8986 50  0000 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 5050 9150 50  0001 C CNN
+F 3 "~" H 5050 9150 50  0001 C CNN
+	1    5050 9150
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_Small R6
+U 1 1 606959D5
+P 5600 9150
+F 0 "R6" V 5796 9150 50  0000 C CNN
+F 1 "150" V 5705 9150 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" H 5600 9150 50  0001 C CNN
+F 3 "~" H 5600 9150 50  0001 C CNN
+	1    5600 9150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5200 9150 5500 9150
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR028
+U 1 1 606959DC
+P 6000 9250
+F 0 "#PWR028" H 6000 9250 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 6000 9180 30  0001 C CNN
+F 2 "" H 6000 9250 60  0000 C CNN
+F 3 "" H 6000 9250 60  0000 C CNN
+	1    6000 9250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 9250 6000 9150
+Wire Wire Line
+	6000 9150 5700 9150
+$Comp
+L musev2:+5VSB #PWR015
+U 1 1 607006B2
+P 2600 950
+F 0 "#PWR015" H 2600 1040 20  0001 C CNN
+F 1 "+5VSB" H 2596 1078 30  0000 C CNN
+F 2 "" H 2600 950 60  0000 C CNN
+F 3 "" H 2600 950 60  0000 C CNN
+	1    2600 950 
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:+5VSB #PWR024
+U 1 1 60700968
+P 5700 1550
+F 0 "#PWR024" H 5700 1640 20  0001 C CNN
+F 1 "+5VSB" H 5696 1678 30  0000 C CNN
+F 2 "" H 5700 1550 60  0000 C CNN
+F 3 "" H 5700 1550 60  0000 C CNN
+	1    5700 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:3V3_REG #PWR026
+U 1 1 60701A03
+P 5900 1550
+F 0 "#PWR026" H 5900 1400 50  0001 C CNN
+F 1 "3V3_REG" H 5915 1723 50  0000 C CNN
+F 2 "" H 5900 1550 50  0000 C CNN
+F 3 "" H 5900 1550 50  0000 C CNN
+	1    5900 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:GTL2010 U4
+U 1 1 6070260D
+P 10250 1450
+F 0 "U4" H 10500 1637 60  0000 C CNN
+F 1 "GTL2010" H 10500 1531 60  0000 C CNN
+F 2 "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm" H 10050 1300 60  0001 C CNN
+F 3 "" H 10050 1300 60  0001 C CNN
+	1    10250 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:+5VSB #PWR020
+U 1 1 60703C92
+P 4100 9100
+F 0 "#PWR020" H 4100 9190 20  0001 C CNN
+F 1 "+5VSB" H 4096 9228 30  0000 C CNN
+F 2 "" H 4100 9100 60  0000 C CNN
+F 3 "" H 4100 9100 60  0000 C CNN
+	1    4100 9100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 9100 4100 9150
+Wire Wire Line
+	4100 9150 4900 9150
+$Comp
+L musev2:RCA_conn_x2 CON1
+U 1 1 6071FF60
+P 900 4800
+F 0 "CON1" H 895 5297 60  0000 C CNN
+F 1 "RCA_conn_x2" H 895 5191 60  0000 C CNN
+F 2 "PJRAS2X2S01X - Switchcraft:PJRAS2X2S01X" H 910 4800 60  0001 C CNN
+F 3 "" H 910 4800 60  0000 C CNN
+	1    900  4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:RCA_conn_x2 CON1
+U 2 1 60720989
+P 3150 4800
+F 0 "CON1" H 3300 5300 60  0000 R CNN
+F 1 "RCA_conn_x2" H 3450 5200 60  0000 R CNN
+F 2 "PJRAS2X2S01X - Switchcraft:PJRAS2X2S01X" H 3160 4800 60  0001 C CNN
+F 3 "" H 3160 4800 60  0000 C CNN
+	2    3150 4800
+	-1   0    0    -1  
+$EndComp
+Wire Notes Line
+	3950 9550 6600 9550
+Text Notes 4100 9750 0    60   ~ 0
+Microcontroller Reset
+$Comp
+L Switch:SW_DPST SW1
+U 1 1 607405D3
+P 5100 10500
+F 0 "SW1" H 5100 10825 50  0000 C CNN
+F 1 "MCU_RST" H 5100 10734 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_TH_Tactile_Omron_B3F-10xx" H 5100 10500 50  0001 C CNN
+F 3 "~" H 5100 10500 50  0001 C CNN
+	1    5100 10500
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:GND-RESCUE-muse #PWR022
+U 1 1 60759E93
+P 5450 10800
+F 0 "#PWR022" H 5450 10800 30  0001 C CNN
+F 1 "GND-RESCUE-muse" H 5450 10730 30  0001 C CNN
+F 2 "" H 5450 10800 60  0000 C CNN
+F 3 "" H 5450 10800 60  0000 C CNN
+	1    5450 10800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 10800 5450 10600
+Wire Wire Line
+	5450 10600 5300 10600
+Wire Wire Line
+	5450 10600 5450 10400
+Wire Wire Line
+	5450 10400 5300 10400
+Connection ~ 5450 10600
+Wire Wire Line
+	4200 10400 4700 10400
+Wire Wire Line
+	4900 10600 4700 10600
+Wire Wire Line
+	4700 10600 4700 10400
+Connection ~ 4700 10400
+Wire Wire Line
+	4700 10400 4900 10400
+Text Label 4200 10400 0    60   ~ 0
+~MCU_RST
+$Comp
+L muse-rescue:+3.3V #PWR016
+U 1 1 608728BD
+P 2750 950
+F 0 "#PWR016" H 2750 910 30  0001 C CNN
+F 1 "+3.3V" H 2759 1088 30  0000 C CNN
+F 2 "" H 2750 950 60  0000 C CNN
+F 3 "" H 2750 950 60  0000 C CNN
+	1    2750 950 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 950  2750 1800
+Wire Wire Line
+	2750 1800 2250 1800
+$Comp
+L Connector_Generic:Conn_01x02 J2
+U 1 1 608C1872
+P 5400 4750
+F 0 "J2" H 5480 4742 50  0000 L CNN
+F 1 "AUX" H 5480 4651 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5400 4750 50  0001 C CNN
+F 3 "~" H 5400 4750 50  0001 C CNN
+	1    5400 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:3V3_REG #PWR010
+U 1 1 608C22FB
+P 2300 6250
+F 0 "#PWR010" H 2300 6100 50  0001 C CNN
+F 1 "3V3_REG" H 2315 6423 50  0000 C CNN
+F 2 "" H 2300 6250 50  0000 C CNN
+F 3 "" H 2300 6250 50  0000 C CNN
+	1    2300 6250
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:3V3_REG #PWR011
+U 1 1 608C2DFA
+P 2300 8750
+F 0 "#PWR011" H 2300 8600 50  0001 C CNN
+F 1 "3V3_REG" H 2315 8923 50  0000 C CNN
+F 2 "" H 2300 8750 50  0000 C CNN
+F 3 "" H 2300 8750 50  0000 C CNN
+	1    2300 8750
+	1    0    0    -1  
+$EndComp
+$Comp
+L muse-rescue:MSGEQ7 U1
+U 1 1 55FEFBB8
+P 2200 7250
+F 0 "U1" H 2700 6900 60  0000 C CNN
+F 1 "MSGEQ7" H 1850 7900 60  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_LongPads" H 1900 7150 60  0001 C CNN
+F 3 "" H 1900 7150 60  0000 C CNN
+	1    2200 7250
+	1    0    0    -1  
+$EndComp
+Text Label 6350 7550 2    60   ~ 0
+LED_PWR_B0
+Wire Wire Line
+	4350 7100 4350 7550
+Wire Wire Line
+	4350 7550 5300 7550
+Wire Wire Line
+	5300 7100 5300 7550
+Connection ~ 5300 7550
+Wire Wire Line
+	5300 7550 6350 7550
+Wire Wire Line
+	4750 7100 4750 7350
+Wire Wire Line
+	4750 7350 5700 7350
+Wire Wire Line
+	5700 7100 5700 7350
+Connection ~ 5700 7350
+Wire Wire Line
+	5700 7350 6350 7350
+Wire Wire Line
+	6950 7350 10750 7350
+Wire Wire Line
+	10750 7350 10750 8200
+Text Label 6950 7350 0    60   ~ 0
+LED_PWR_B1
+$Comp
+L musev2:+5VSB #PWR0101
+U 1 1 6067D061
+P 800 7200
+F 0 "#PWR0101" H 800 7290 20  0001 C CNN
+F 1 "+5VSB" H 796 7328 30  0000 C CNN
+F 2 "" H 800 7200 60  0000 C CNN
+F 3 "" H 800 7200 60  0000 C CNN
+	1    800  7200
+	1    0    0    -1  
+$EndComp
+$Comp
+L musev2:+5VSB #PWR0102
+U 1 1 6067D6EE
+P 800 9700
+F 0 "#PWR0102" H 800 9790 20  0001 C CNN
+F 1 "+5VSB" H 796 9828 30  0000 C CNN
+F 2 "" H 800 9700 60  0000 C CNN
+F 3 "" H 800 9700 60  0000 C CNN
+	1    800  9700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 60640877
+P 7100 4250
+F 0 "H1" H 7200 4296 50  0000 L CNN
+F 1 "MountingHole" H 7200 4205 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 7100 4250 50  0001 C CNN
+F 3 "~" H 7100 4250 50  0001 C CNN
+	1    7100 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 606414DE
+P 7100 4500
+F 0 "H2" H 7200 4546 50  0000 L CNN
+F 1 "MountingHole" H 7200 4455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 7100 4500 50  0001 C CNN
+F 3 "~" H 7100 4500 50  0001 C CNN
+	1    7100 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 606417DB
+P 7100 4750
+F 0 "H3" H 7200 4796 50  0000 L CNN
+F 1 "MountingHole" H 7200 4705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 7100 4750 50  0001 C CNN
+F 3 "~" H 7100 4750 50  0001 C CNN
+	1    7100 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 60641AC7
+P 7100 5000
+F 0 "H4" H 7200 5046 50  0000 L CNN
+F 1 "MountingHole" H 7200 4955 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 7100 5000 50  0001 C CNN
+F 3 "~" H 7100 5000 50  0001 C CNN
+	1    7100 5000
+	1    0    0    -1  
+$EndComp
+Wire Bus Line
+	7700 7800 7700 10700
+Wire Bus Line
+	9700 7800 9700 10700
+Wire Bus Line
+	15150 1900 15150 3200
+Wire Bus Line
+	8550 1900 8550 3200
+Wire Bus Line
+	6950 1900 6950 3200
+$EndSCHEMATC

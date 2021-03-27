@@ -1,0 +1,11 @@
+(fp_lib_table
+  (lib (name Connectors_Molex)(type KiCad)(uri ${KIPRJMOD}/lib/Connectors_Molex.pretty)(options "")(descr ""))
+  (lib (name contrib-kicad_parts)(type KiCad)(uri ${KIPRJMOD}/lib/contrib-kicad_parts)(options "")(descr ""))
+  (lib (name MacroFab)(type KiCad)(uri ${KIPRJMOD}/lib/MacroFab)(options "")(descr ""))
+  (lib (name muse-v2-lib)(type KiCad)(uri ${KIPRJMOD}/lib/muse-v2-lib.pretty)(options "")(descr ""))
+  (lib (name muse-v3)(type KiCad)(uri ${KIPRJMOD}/lib/muse-v3.pretty)(options "")(descr ""))
+  (lib (name particle_lib)(type KiCad)(uri "/Users/jasonmerlo/Projects/muse/Hardware V1.3/lib/particle.pretty")(options "")(descr ""))
+  (lib (name particle)(type KiCad)(uri ${KIPRJMOD}/lib/particle.pretty)(options "")(descr ""))
+  (lib (name "PJRAS2X2S01X - Switchcraft")(type KiCad)(uri "${KIPRJMOD}/lib/PJRAS2X2S01X - Switchcraft")(options "")(descr ""))
+  (lib (name STX-4235-3_3-N)(type KiCad)(uri ${KIPRJMOD}/lib/STX-4235-3_3-N)(options "")(descr ""))
+)
