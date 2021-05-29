@@ -895,8 +895,6 @@ F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 11900 1750 50  0001 C CNN
 	1    11900 1750
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	11050 1550 11400 1550
 $Comp
 L Device:R_Pack05_SIP RN3
 U 1 1 60AED563
@@ -1925,6 +1923,19 @@ F 3 "~" H 7100 5000 50  0001 C CNN
 	1    7100 5000
 	1    0    0    -1  
 $EndComp
+$Comp
+L muse-rescue:+5V #PWR?
+U 1 1 60B29207
+P 11400 1000
+F 0 "#PWR?" H 11400 1090 20  0001 C CNN
+F 1 "+5V" H 11396 1128 30  0000 C CNN
+F 2 "" H 11400 1000 60  0000 C CNN
+F 3 "" H 11400 1000 60  0000 C CNN
+	1    11400 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11400 1000 11400 1550
 Wire Bus Line
 	7700 7800 7700 10700
 Wire Bus Line

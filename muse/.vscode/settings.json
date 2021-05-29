@@ -1,0 +1,10 @@
+{
+    "extensions.ignoreRecommendations": true,
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core",
+    "cortex-debug.openocdPath": "${command:particle.getDebuggerOpenocdPath}",
+    "files.associations": {
+        "*.ino": "cpp"
+    },
+    "particle.targetDevice": "muse-v1.3-s1",
+    "particle.firmwareVersion": "3.0.0"
+}
