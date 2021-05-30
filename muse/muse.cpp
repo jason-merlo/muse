@@ -40,7 +40,7 @@ static const char audio_l = A0;
 static struct audio_bins bins;
 
 // Declare matrix pins
-static const char matrix_pins[10] = {TX, RX, D7, D6, D5, D4, D3, D2, D1, D0};
+static const char matrix_pins[10] = {D4, D3, D2, D1, D0, TX, RX, D7, D6, D5};
 //static const char matrix_pins[8] = {D7, D6, D5, D4, D3, D2, D1, D0};
 
 #if ENABLE_BARS

@@ -246,20 +246,20 @@ void Bar_Matrix::tick(audio_bins * bins, int visualizer_type) {
 
         // Tests and misc
         case BOUNCING_LINES:
-          bouncing_lines();
-          break;
+            bouncing_lines();
+            break;
         case SNAKE_LINES:
             snake_lines(0.75);
             break;
         case BAR_TEST:
-          bar_test();
-          break;
+            bar_test();
+            break;
         case PIXEL_TEST:
-          pixel_test();
-          break;
+            pixel_test();
+            break;
         case AMBIENT_LIGHTING:
-          ambient_lighting(Color_Value(255,0,0));//(200, 150, 100));
-          break;
+            ambient_lighting(Color_Value(200, 150, 100));
+            break;
     }
 
     bd->frame_ticked();
@@ -393,37 +393,37 @@ void Bar_Matrix::pixel_test() {
             level = bins->right[RIGHT_160];
             break;
         }
-       } else if (disp_width == 10) {
-         switch(i) {
+        } else if (disp_width == 10) {
+            switch(i) {
             case 0:
-            level = bins->left[LEFT_160];
+            level = bins->left[LEFT_63];
             break;
             case 1:
-            level = bins->left[LEFT_400];
+            level = bins->left[LEFT_160];
             break;
             case 2:
-            level = bins->left[LEFT_1000];
+            level = bins->left[LEFT_400];
             break;
             case 3:
-            level = bins->left[LEFT_6250];
+            level = bins->left[LEFT_1000];
             break;
             case 4:
-            level = bins->left[LEFT_16000];
+            level = bins->left[LEFT_6250];
             break;
             case 5:
-            level = bins->right[RIGHT_16000];
-            break;
-            case 6:
             level = bins->right[RIGHT_6250];
             break;
-            case 7:
+            case 6:
             level = bins->right[RIGHT_1000];
             break;
-            case 8:
+            case 7:
             level = bins->right[RIGHT_400];
             break;
-            case 9:
+            case 8:
             level = bins->right[RIGHT_160];
+            break;
+            case 9:
+            level = bins->right[RIGHT_63];
             break;
         }  
        }
@@ -489,15 +489,66 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
             // get bin
             // Set bar levels
             int level = 0;
-            switch(i) {
-                case 0: level = bins->left[LEFT_63];    break;
-                case 1: level = bins->left[LEFT_160];   break;
-                case 2: level = bins->left[LEFT_400];   break;
-                case 3: level = bins->left[LEFT_1000];  break;
-                case 4: level = bins->left[LEFT_2500];  break;
-                case 5: level = bins->left[LEFT_6250];  break;
-                case 6: level = bins->left[LEFT_1000];  break;
-                case 7: level = bins->left[LEFT_16000]; break;
+            if (disp_width == 8) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_16000];
+                    break;
+                    case 4:
+                    level = bins->right[RIGHT_16000];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_160];
+                    break;
+                }
+            } else if (disp_width == 10) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_63];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_400];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 4:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_400];
+                    break;
+                    case 8:
+                    level = bins->right[RIGHT_160];
+                    break;
+                    case 9:
+                    level = bins->right[RIGHT_63];
+                    break;
+                }  
             }
             level *= FREQ_GAIN;
             // set bar
@@ -515,15 +566,66 @@ void Bar_Matrix::visualizer_bars_middle(audio_bins* bins, float in_factor, float
         for (char j = STRIP_LENGTH/2; j < STRIP_LENGTH; j++) {
             // get bin
             int level = 0;
-            switch(i) {
-                case 0: level = bins->right[RIGHT_63];    break;
-                case 1: level = bins->right[RIGHT_160];   break;
-                case 2: level = bins->right[RIGHT_400];   break;
-                case 3: level = bins->right[RIGHT_1000];  break;
-                case 4: level = bins->right[RIGHT_2500];  break;
-                case 5: level = bins->right[RIGHT_6250];  break;
-                case 6: level = bins->right[RIGHT_1000];  break;
-                case 7: level = bins->right[RIGHT_16000]; break;
+            if (disp_width == 8) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_16000];
+                    break;
+                    case 4:
+                    level = bins->right[RIGHT_16000];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_160];
+                    break;
+                }
+            } else if (disp_width == 10) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_63];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_400];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 4:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_400];
+                    break;
+                    case 8:
+                    level = bins->right[RIGHT_160];
+                    break;
+                    case 9:
+                    level = bins->right[RIGHT_63];
+                    break;
+                }  
             }
             level *= FREQ_GAIN;
             // set bar
@@ -677,16 +779,67 @@ void Bar_Matrix::visualizer_plasma(audio_bins* bins, float in_factor, float out_
 
         // Set bar levels
         int level = 0;
-        switch(i) {
-            case 0: level = bins->left[LEFT_160];       break;
-            case 1: level = bins->left[LEFT_1000];      break;
-            case 2: level = bins->left[LEFT_6250];      break;
-            case 3: level = bins->left[LEFT_16000];     break;
-            case 4: level = bins->right[RIGHT_16000];   break;
-            case 5: level = bins->right[RIGHT_6250];    break;
-            case 6: level = bins->right[RIGHT_1000];    break;
-            case 7: level = bins->right[RIGHT_160];     break;
-        }
+        if (disp_width == 8) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_16000];
+                    break;
+                    case 4:
+                    level = bins->right[RIGHT_16000];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_160];
+                    break;
+                }
+            } else if (disp_width == 10) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_63];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_400];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 4:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_400];
+                    break;
+                    case 8:
+                    level = bins->right[RIGHT_160];
+                    break;
+                    case 9:
+                    level = bins->right[RIGHT_63];
+                    break;
+                }  
+            }
 
         level *= FREQ_GAIN;
         // set bar
@@ -813,31 +966,66 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
         for (char j = 0; j < STRIP_LENGTH/4; j++) {
             // get bin
             int level = 0;//bins->left[i%(NUM_BARS-1)];
-            switch(i) {
-                case 0:
-                level = bins->left[LEFT_63]; //1kHz
-                break;
-                case 1:
-                level = bins->left[LEFT_160]; //6.25kHz
-                break;
-                case 2:
-                level = bins->left[LEFT_400]; //63Hz
-                break;
-                case 3:
-                level = bins->left[LEFT_1000]; //400Hz
-                break;
-                case 4:
-                level = bins->left[LEFT_2500]; //400Hz
-                break;
-                case 5:
-                level = bins->left[LEFT_6250]; //63Hz
-                break;
-                case 6:
-                level = bins->left[LEFT_1000]; //6.25kHz
-                break;
-                case 7:
-                level = bins->left[LEFT_16000]; //1kHz
-                break;
+            if (disp_width == 8) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_16000];
+                    break;
+                    case 4:
+                    level = bins->right[RIGHT_16000];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_160];
+                    break;
+                }
+            } else if (disp_width == 10) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_63];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_400];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 4:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_400];
+                    break;
+                    case 8:
+                    level = bins->right[RIGHT_160];
+                    break;
+                    case 9:
+                    level = bins->right[RIGHT_63];
+                    break;
+                }  
             }
             level *= FREQ_GAIN;
 
@@ -852,31 +1040,66 @@ void Bar_Matrix::visualizer_rainbow(audio_bins* bins, float in_factor, float out
         for (char j = STRIP_LENGTH/2; j < STRIP_LENGTH*0.75f; j++) {
             // get bin
             int level = 0;
-            switch(i) {
-                case 0:
-                level = bins->right[LEFT_63]; //1kHz
-                break;
-                case 1:
-                level = bins->right[LEFT_160]; //6.25kHz
-                break;
-                case 2:
-                level = bins->right[LEFT_400]; //63Hz
-                break;
-                case 3:
-                level = bins->right[LEFT_1000]; //400Hz
-                break;
-                case 4:
-                level = bins->right[LEFT_2500]; //400Hz
-                break;
-                case 5:
-                level = bins->right[LEFT_6250]; //63Hz
-                break;
-                case 6:
-                level = bins->right[LEFT_1000]; //6.25kHz
-                break;
-                case 7:
-                level = bins->right[LEFT_16000]; //1kHz
-                break;
+            if (disp_width == 8) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_16000];
+                    break;
+                    case 4:
+                    level = bins->right[RIGHT_16000];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_160];
+                    break;
+                }
+            } else if (disp_width == 10) {
+                switch(i) {
+                    case 0:
+                    level = bins->left[LEFT_63];
+                    break;
+                    case 1:
+                    level = bins->left[LEFT_160];
+                    break;
+                    case 2:
+                    level = bins->left[LEFT_400];
+                    break;
+                    case 3:
+                    level = bins->left[LEFT_1000];
+                    break;
+                    case 4:
+                    level = bins->left[LEFT_6250];
+                    break;
+                    case 5:
+                    level = bins->right[RIGHT_6250];
+                    break;
+                    case 6:
+                    level = bins->right[RIGHT_1000];
+                    break;
+                    case 7:
+                    level = bins->right[RIGHT_400];
+                    break;
+                    case 8:
+                    level = bins->right[RIGHT_160];
+                    break;
+                    case 9:
+                    level = bins->right[RIGHT_63];
+                    break;
+                }  
             }
             level *= FREQ_GAIN;
             // set bar

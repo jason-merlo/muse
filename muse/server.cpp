@@ -138,10 +138,13 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                 switch (type) {
                     case VISUALIZER_BARS:
                     case VISUALIZER_BARS_MIDDLE:
-                    case VISUALIZER_PULSE:
                     case VISUALIZER_PLASMA:
                     case VISUALIZER_RAINBOW:
                     case VISUALIZER_WHEEL:
+                    case VISUALIZER_CLASSIC:
+                    case VISUALIZER_PONG:
+                    case VISUALIZER_BASS_MIDDLE:
+                    case VISUALIZER_BASS_SLIDE:
                         s->set_visualizer(type); break;
                     default:
                         s->set_visualizer(VISUALIZER_BARS); break;
@@ -151,6 +154,7 @@ void web_input(WebServer &server, WebServer::ConnectionType type, char * c, bool
                 // Ensure type is valid, default to BOUNCING_LINES
                 switch (type) {
                     case BOUNCING_LINES:
+                    case SNAKE_LINES:
                     case BAR_TEST:
                     case PIXEL_TEST:
                     case AMBIENT_LIGHTING:
